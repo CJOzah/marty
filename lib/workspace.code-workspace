@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "shopplift",
+			"path": ".."
+		},
+		{
+			"name": "images",
+			"path": "..\\..\\shoplift\\images"
+		}
+	],
+	"settings": {}
+}
