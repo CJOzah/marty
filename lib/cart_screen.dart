@@ -32,195 +32,199 @@ class _CartScreenState extends State<CartScreen> {
       bottomSheet: (showBottomSheet == true)
           ? Container(
               decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.only(
                     topRight: Radius.circular(SizeConfig.sH! * 50),
                     topLeft: Radius.circular(SizeConfig.sH! * 50)),
               ),
-              height: h / 2,
+              height: SizeConfig.sH! * 50,
               child: Card(
+                color: Colors.white,
                 elevation: 50,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(SizeConfig.sH! * 3),
-                      topLeft: Radius.circular(SizeConfig.sH! * 3)),
+                      topRight: Radius.circular(SizeConfig.sH! * 6),
+                      topLeft: Radius.circular(SizeConfig.sH! * 6)),
                 ),
                 semanticContainer: true,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.all(SizeConfig.sH! * 1.5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: SizeConfig.sH! * 2,
-                                bottom: SizeConfig.sH! * 1.5,
-                                left: SizeConfig.sW! * 25),
-                            child: Text(
-                              "Order Summary",
-                              style: TextStyle(
-                                fontSize: SizeConfig.sW! * 5,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                              left: SizeConfig.sW! * 10,
-                            ),
-                            height: SizeConfig.sH! * 6,
-                            width: SizeConfig.sW! * 10.5,
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade900,
-                              borderRadius:
-                                  BorderRadius.circular(SizeConfig.sW! * 20),
-                            ),
-                            child: IconButton(
-                              icon: Icon(
-                                FontAwesomeIcons.arrowDown,
-                                size: SizeConfig.sW! * 6,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  showBottomSheet = false;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    HorizontalLine(
-                      width: double.infinity,
-                      height: SizeConfig.sH! * 0.12,
-                      color: Colors.grey,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(SizeConfig.sW! * 3),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SummaryTexts(
-                            w: SizeConfig.sW!,
-                            h: SizeConfig.sH!,
-                            text1: "Subtotoal",
-                            text2:
-                                "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
-                          ),
-                          SummaryTexts(
-                            w: SizeConfig.sW!,
-                            h: SizeConfig.sH!,
-                            text1: "VAT",
-                            text2: "5%",
-                          ),
-                          SummaryTexts(
-                            w: SizeConfig.sW!,
-                            h: SizeConfig.sH!,
-                            text1: "Discount",
-                            text2: "₦0",
-                          ),
-                          SummaryTexts(
-                            w: SizeConfig.sW!,
-                            h: SizeConfig.sH!,
-                            text1: "Delivery",
-                            text2: "Free",
-                          ),
-                          SummaryTexts(
-                            w: SizeConfig.sW!,
-                            h: SizeConfig.sH!,
-                            text1: "Total",
-                            text2: "₦$total",
-                          ),
-                          Padding(
-                            padding:
-                                EdgeInsets.only(bottom: SizeConfig.sH! * 1),
-                            child: RoundedRectTextField(
-                              height: SizeConfig.sH! * 4.5,
-                              hintText: "Enter Voucher Code",
-                              withHint: true,
-                              borderColor: (active)
-                                  ? Colors.blue.shade900
-                                  : Colors.grey.shade100,
-                              textInputType: TextInputType.text,
-                              onTap: () {
-                                setState(() {
-                                  if (active == false) {
-                                    active = true;
-                                  } else
-                                    active = false;
-                                });
-                              },
-                              onchanged: (value) {},
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    HorizontalLine(
-                      width: double.infinity,
-                      height: SizeConfig.sH! * 0.12,
-                      color: Colors.grey,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: SizeConfig.sH! * 1.2,
-                        bottom: SizeConfig.sH! * 1.5,
-                        left: SizeConfig.sW! * 2,
-                        right: SizeConfig.sW! * 2,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Total",
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(SizeConfig.sH! * 1.5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: SizeConfig.sH! * 2,
+                                  bottom: SizeConfig.sH! * 1.5,
+                                  left: SizeConfig.sW! * 25),
+                              child: Text(
+                                "Order Summary",
                                 style: TextStyle(
-                                  fontSize: SizeConfig.sW! * 4,
-                                  color: Colors.black,
+                                  fontSize: SizeConfig.sH! * 4,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(
-                                height: SizeConfig.sH! * 1,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                left: SizeConfig.sW! * 10,
                               ),
-                              Text(
-                                "₦$total",
-                                style: TextStyle(
+                              height: SizeConfig.sH! * 6.5,
+                              width: SizeConfig.sW! * 10.5,
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade900,
+                                borderRadius:
+                                    BorderRadius.circular(SizeConfig.sH! * 30),
+                              ),
+                              child: IconButton(
+                                icon: Icon(
+                                  FontAwesomeIcons.arrowDown,
+                                  size: SizeConfig.sH! * 3,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    showBottomSheet = false;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      HorizontalLine(
+                        width: double.infinity,
+                        height: SizeConfig.sH! * 0.12,
+                        color: Colors.grey,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(SizeConfig.sH! * 2),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            SummaryTexts(
+                              w: SizeConfig.sW!,
+                              h: SizeConfig.sH!,
+                              text1: "Subtotoal",
+                              text2:
+                                  "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
+                            ),
+                            SummaryTexts(
+                              w: SizeConfig.sW!,
+                              h: SizeConfig.sH!,
+                              text1: "VAT",
+                              text2: "5%",
+                            ),
+                            SummaryTexts(
+                              w: SizeConfig.sW!,
+                              h: SizeConfig.sH!,
+                              text1: "Discount",
+                              text2: "₦0",
+                            ),
+                            SummaryTexts(
+                              w: SizeConfig.sW!,
+                              h: SizeConfig.sH!,
+                              text1: "Delivery",
+                              text2: "Free",
+                            ),
+                            SummaryTexts(
+                              w: SizeConfig.sW!,
+                              h: SizeConfig.sH!,
+                              text1: "Total",
+                              text2: "₦$total",
+                            ),
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(bottom: SizeConfig.sH! * 1),
+                              child: RoundedRectTextField(
+                                height: SizeConfig.sH! * 4.5,
+                                hintText: "Enter Voucher Code",
+                                withHint: true,
+                                borderColor: (active)
+                                    ? Colors.blue.shade900
+                                    : Colors.grey.shade100,
+                                textInputType: TextInputType.text,
+                                onTap: () {
+                                  setState(() {
+                                    if (active == false) {
+                                      active = true;
+                                    } else
+                                      active = false;
+                                  });
+                                },
+                                onchanged: (value) {},
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      HorizontalLine(
+                        width: double.infinity,
+                        height: SizeConfig.sH! * 0.12,
+                        color: Colors.grey,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: SizeConfig.sH! * 1.2,
+                          bottom: SizeConfig.sH! * 1.5,
+                          left: SizeConfig.sW! * 2,
+                          right: SizeConfig.sW! * 2,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Total",
+                                  style: TextStyle(
                                     fontSize: SizeConfig.sW! * 4,
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: SizeConfig.sH! * 1,
+                                ),
+                                Text(
+                                  "₦$total",
+                                  style: TextStyle(
+                                      fontSize: SizeConfig.sW! * 4,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            MaterialButton(
+                              height: SizeConfig.sH! * 6.5,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  SizeConfig.sW! * 6,
+                                ),
                               ),
-                            ],
-                          ),
-                          MaterialButton(
-                            height: SizeConfig.sH! * 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                SizeConfig.sW! * 6,
+                              minWidth: SizeConfig.sW! * 30,
+                              color: Colors.blue.shade900,
+                              onPressed: () {
+                                Navigator.pushNamed(context, CheckOutScreen.id);
+                              },
+                              child: Text(
+                                "Checkout",
+                                style: TextStyle(
+                                    fontSize: SizeConfig.sW! * 4,
+                                    color: Colors.white),
                               ),
                             ),
-                            minWidth: SizeConfig.sW! * 30,
-                            color: Colors.blue.shade900,
-                            onPressed: () {
-                              Navigator.pushNamed(context, CheckOutScreen.id);
-                            },
-                            child: Text(
-                              "Checkout",
-                              style: TextStyle(
-                                  fontSize: SizeConfig.sW! * 4,
-                                  color: Colors.white),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             )
@@ -261,7 +265,7 @@ class _CartScreenState extends State<CartScreen> {
                           icon: Icon(
                             Icons.arrow_back_sharp,
                             color: Colors.black,
-                            size: SizeConfig.sW! * 9,
+                            size: SizeConfig.sH! * 6,
                           ),
                           onPressed: () {
                             Navigator.pushNamedAndRemoveUntil(
@@ -283,14 +287,14 @@ class _CartScreenState extends State<CartScreen> {
                                 Text(
                                   "Shopping",
                                   style: TextStyle(
-                                    fontSize: SizeConfig.sW! * 8,
+                                    fontSize: SizeConfig.sH! * 5,
                                     color: Colors.black,
                                   ),
                                 ),
                                 Text(
                                   "Cart",
                                   style: TextStyle(
-                                    fontSize: SizeConfig.sW! * 8,
+                                    fontSize: SizeConfig.sH! * 5,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                   ),
@@ -304,7 +308,7 @@ class _CartScreenState extends State<CartScreen> {
                               child: IconButton(
                                   icon: Icon(
                                     FontAwesomeIcons.trash,
-                                    size: SizeConfig.sW! * 8,
+                                    size: SizeConfig.sH! * 5,
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
@@ -325,7 +329,7 @@ class _CartScreenState extends State<CartScreen> {
                         margin: EdgeInsets.only(
                           bottom: SizeConfig.sH! * 1.3,
                         ),
-                        height: SizeConfig.sH! * 55,
+                        height: SizeConfig.sH! * 50,
                         width: double.infinity,
                         child: ListView.builder(
                             shrinkWrap: true,
@@ -525,7 +529,7 @@ class _CartScreenState extends State<CartScreen> {
                         padding: EdgeInsets.only(
                           left: SizeConfig.sW! * 10,
                           bottom: SizeConfig.sH! * 4,
-                          right: SizeConfig.sH! * 3,
+                          right: SizeConfig.sW! * 6,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,

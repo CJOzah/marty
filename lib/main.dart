@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shopplift/cart_screen.dart';
 import 'package:shopplift/checkout_screen.dart';
 import 'package:shopplift/fav_screen.dart';
+import 'package:shopplift/transfer_success_dialogue.dart';
 import 'home.dart';
 
 void main() {
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
             FavScreen.id: (context) => FavScreen(),
             CheckOutScreen.id: (context) => CheckOutScreen(),
             CartScreen.id: (context) => CartScreen(),
+            TransferSuccessDialogue.id: (context) => TransferSuccessDialogue(),
           }),
     );
   }

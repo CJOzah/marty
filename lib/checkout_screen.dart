@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shopplift/size_config.dart';
+import 'package:shopplift/transfer_success_dialogue.dart';
 
 import 'cart.dart';
 
@@ -15,6 +17,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     double total = Provider.of<CartData>(context).getTotal() * 0.05 +
         Provider.of<CartData>(context).getTotal();
     final s = MediaQuery.of(context).size;
@@ -26,27 +29,38 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(
-                left: w / 30, right: w / 30, top: h / 60, bottom: h / 40),
+              left: SizeConfig.sW! * 3,
+              right: SizeConfig.sW! * 3,
+              top: SizeConfig.sH! * 1,
+              bottom: SizeConfig.sH! * 2,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: h / 50, bottom: h / 50),
+                  padding: EdgeInsets.only(
+                    left: SizeConfig.sW! * 1,
+                    top: SizeConfig.sH! * 3,
+                    bottom: SizeConfig.sW! * 3,
+                  ),
                   child: Text(
                     "Payment Details",
                     style: TextStyle(
                         color: Colors.black,
-                        fontSize: w / 15,
+                        fontSize: SizeConfig.sH! * 5,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: h / 40),
+                  padding: EdgeInsets.only(
+                    left: SizeConfig.sW! * 1,
+                    bottom: SizeConfig.sH! * 1,
+                  ),
                   child: Text(
                     "Complete your purchase by providing your payment details",
                     style: TextStyle(
-                      fontSize: w / 27,
+                      fontSize: SizeConfig.sH! * 3,
                     ),
                   ),
                 ),
@@ -55,7 +69,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   text: "Email Address",
                 ),
                 RoundedRectTextField(
-                  height: h / 18,
+                  height: SizeConfig.sH!,
                   hintText: "someone@gmail.com",
                   withHint: true,
                   borderColor: (active) ? Colors.blue.shade900 : Colors.grey,
@@ -136,7 +150,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     RoundedRectTextField(
                       height: h / 18,
                       hintText: "MM/DD",
-                      width: w / 3,
+                      width: SizeConfig.sW! * 30,
                       withHint: true,
                       borderColor:
                           (active) ? Colors.blue.shade900 : Colors.grey,
@@ -154,7 +168,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     RoundedRectTextField(
                       height: h / 18,
                       hintText: "CVV",
-                      width: w / 3,
+                      width: SizeConfig.sW! * 30,
                       withHint: true,
                       borderColor:
                           (active) ? Colors.blue.shade900 : Colors.grey,
@@ -198,20 +212,23 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: h / 30),
+                          padding: EdgeInsets.only(
+                            left: SizeConfig.sH! * 1,
+                            top: SizeConfig.sH! * 3,
+                          ),
                           child: Text(
                             "Subtotal",
                             style: TextStyle(
-                              fontSize: w / 23,
+                              fontSize: SizeConfig.sH! * 3.5,
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: h / 30),
+                          padding: EdgeInsets.only(top: SizeConfig.sH! * 3),
                           child: Text(
                             "₦${Provider.of<CartData>(context).getTotal()}",
                             style: TextStyle(
-                              fontSize: w / 23,
+                              fontSize: SizeConfig.sH! * 3,
                             ),
                           ),
                         ),
@@ -221,20 +238,24 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: h / 40),
+                          padding: EdgeInsets.only(
+                              left: SizeConfig.sH! * 1,
+                              top: SizeConfig.sH! * 3),
                           child: Text(
                             "VAT(5%)",
                             style: TextStyle(
-                              fontSize: w / 23,
+                              fontSize: SizeConfig.sH! * 3.5,
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: h / 30),
+                          padding: EdgeInsets.only(
+                            top: SizeConfig.sH! * 3,
+                          ),
                           child: Text(
                             "₦${Provider.of<CartData>(context).getTotal() * 0.05}",
                             style: TextStyle(
-                              fontSize: w / 23,
+                              fontSize: SizeConfig.sH! * 3,
                             ),
                           ),
                         ),
@@ -244,21 +265,27 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(top: h / 40, bottom: h / 40),
+                          padding: EdgeInsets.only(
+                              left: SizeConfig.sH! * 1,
+                              top: SizeConfig.sH! * 3,
+                              bottom: h / 40),
                           child: Text(
                             "Total",
                             style: TextStyle(
-                              fontSize: w / 22,
+                              fontSize: SizeConfig.sH! * 4,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(top: h / 40, bottom: h / 40),
+                          padding: EdgeInsets.only(
+                            top: SizeConfig.sH! * 3,
+                            bottom: SizeConfig.sH! * 5,
+                          ),
                           child: Text(
                             "₦$total",
                             style: TextStyle(
-                              fontSize: w / 22,
+                              fontSize: SizeConfig.sH! * 3.5,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -268,22 +295,32 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   ],
                 ),
                 MaterialButton(
-                  height: h / 16,
+                  height: SizeConfig.sH! * 7,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(h / 30),
                   ),
                   minWidth: w,
                   color: Colors.blue.shade900,
                   onPressed: () {
-                    Navigator.popUntil(context, (route) => true);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TransferSuccessDialogue(),
+                        ));
                   },
                   child: Text(
                     "Pay ₦$total",
-                    style: TextStyle(fontSize: w / 25, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: SizeConfig.sW! * 4, color: Colors.white),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: h / 30, bottom: h / 30),
+                  padding: EdgeInsets.only(
+                    left: SizeConfig.sW! * 1,
+                    right: SizeConfig.sW! * 1,
+                    top: SizeConfig.sH! * 4,
+                    bottom: SizeConfig.sW! * 4,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -320,15 +357,20 @@ class HeadlineText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     final s = MediaQuery.of(context).size;
     final h = s.height;
     return Padding(
-      padding: EdgeInsets.only(top: h / 50, bottom: h / 50),
+      padding: EdgeInsets.only(
+        left: SizeConfig.sH!,
+        top: SizeConfig.sH! * 2.2,
+        bottom: SizeConfig.sH! * 0.2,
+      ),
       child: Text(
         text,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: w / 27,
+          fontSize: SizeConfig.sH! * 2.8,
         ),
       ),
     );
@@ -370,18 +412,21 @@ class RoundedRectTextField extends StatelessWidget {
     final s = MediaQuery.of(context).size;
     final h = s.height;
     final w = s.width;
+    SizeConfig().init(context);
     return Card(
       elevation: 2.0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(w / 40),
+        borderRadius: BorderRadius.circular(SizeConfig.sH! * 4),
       ),
       child: Container(
-        height: height,
+        height: SizeConfig.sH! * 6,
         width: width,
         decoration: BoxDecoration(
           border: Border.all(
-              style: BorderStyle.solid, width: w / 300, color: borderColor!),
-          borderRadius: BorderRadius.circular(w / 40),
+              style: BorderStyle.solid,
+              width: SizeConfig.sW! * 0.2,
+              color: borderColor!),
+          borderRadius: BorderRadius.circular(SizeConfig.sH! * 8),
         ),
         child: TextFormField(
           maxLength: maxLength,
@@ -389,15 +434,19 @@ class RoundedRectTextField extends StatelessWidget {
           controller: controller,
           decoration: InputDecoration(
               hintText: hintText,
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: TextStyle(
+                color: Colors.grey,
+                fontSize: SizeConfig.sH! * 3.6,
+              ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(left: w / 30, bottom: h / 90)),
+              contentPadding: EdgeInsets.only(
+                  left: SizeConfig.sW! * 3, bottom: SizeConfig.sH! * 2.5)),
           keyboardType: textInputType,
           cursorColor: Colors.black,
           textAlign: (withHint == true) ? TextAlign.start : TextAlign.center,
           style: TextStyle(
             color: Colors.black,
-            fontSize: w / 22,
+            fontSize: SizeConfig.sH! * 4,
           ),
           validator: validator as String? Function(String?)?,
           onChanged: onchanged as void Function(String)?,
