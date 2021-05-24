@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shopplift/cart.dart';
 import 'package:shopplift/cart_screen.dart';
 import 'package:shopplift/size_config.dart';
+import 'package:shopplift/utils.dart';
 import 'clothes.dart';
 import 'fav_screen.dart';
 import 'cart_screen.dart';
@@ -65,7 +66,12 @@ class _ThirdLayerState extends State<ThirdLayer> {
       child: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.transparent,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/BubbleDesign.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: Column(
@@ -166,41 +172,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     clothes.clear();
     clothes.addAll(cloth);
   }
-
-  // FToast fToast;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fToast = FToast();
-  //   fToast.init(context);
-  // }
-
-  // _showToast(String text) {
-  //   Widget toast = Container(
-  //     padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(25.0),
-  //       color: Colors.lightBlue.shade50.withOpacity(0.5),
-  //     ),
-  //     child: Row(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         Icon(Icons.check),
-  //         SizedBox(
-  //           width: 12.0,
-  //         ),
-  //         Text(text),
-  //       ],
-  //     ),
-  //   );
-
-  //   fToast.showToast(
-  //     child: toast,
-  //     gravity: ToastGravity.BOTTOM,
-  //     toastDuration: Duration(seconds: 2),
-  //   );
-  // }
 
   String cat = "All Products";
   double xoffSet = 0;
@@ -520,15 +491,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                       listen: false)
                                                   .removeFromFav(
                                                       clothes[index]);
-                                              // _showToast(
-                                              //     "Item Removed to Favorites");
+                                              showInSnackBar(
+                                                  "${item.name} Removed from Favorites",
+                                                  context);
                                             } else {
                                               clothes[index].favbutton = true;
                                               Provider.of<CartData>(context,
                                                       listen: false)
                                                   .addToFav(clothes[index]);
-                                              // _showToast(
-                                              //     "Item Added to Favorites");
+                                              showInSnackBar(
+                                                  "${item.name} Added to Favorites",
+                                                  context);
                                             }
                                           });
                                         },
@@ -541,9 +514,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                           color: item.cartbutton!
                                               ? Colors.black
                                               : Colors.green,
-                                          // size: item.cartbutton!
-                                          //     ? SizeConfig.sW! * 6
-                                          //     : SizeConfig.sW! * 5,
                                         ),
                                         onTap: () {
                                           setState(() {
@@ -557,7 +527,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               Provider.of<CartData>(context,
                                                       listen: false)
                                                   .addToTotal(item.price!);
-                                              // _showToast("Item Added to Cart");
+                                              showInSnackBar(
+                                                  "${item.name} Added to Cart",
+                                                  context);
                                             } else {
                                               clothes[index].cartbutton = true;
                                               item.setQuantity(1);
@@ -572,8 +544,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                       listen: false)
                                                   .decreaseTotal(
                                                       clothes[index].price!);
-
-                                              // _showToast("Item Removed to Cart");
+                                              showInSnackBar(
+                                                  "${item.name} Removed from Cart",
+                                                  context);
                                             }
                                           });
                                         },

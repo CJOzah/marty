@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/size_config.dart';
 import 'package:shopplift/transfer_success_dialogue.dart';
+import 'package:shopplift/utils.dart';
 
 import 'cart.dart';
 
@@ -342,115 +343,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class HeadlineText extends StatelessWidget {
-  const HeadlineText({Key? key, required this.w, required this.text})
-      : super(key: key);
-
-  final double w;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    final s = MediaQuery.of(context).size;
-    final h = s.height;
-    return Padding(
-      padding: EdgeInsets.only(
-        left: SizeConfig.sH!,
-        top: SizeConfig.sH! * 2.2,
-        bottom: SizeConfig.sH! * 0.2,
-      ),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: SizeConfig.sH! * 2.8,
-        ),
-      ),
-    );
-  }
-}
-
-class RoundedRectTextField extends StatelessWidget {
-  const RoundedRectTextField({
-    Key? key,
-    this.width,
-    this.onchanged,
-    this.hintText,
-    this.withHint,
-    required this.height,
-    this.borderColor,
-    this.controller,
-    this.onTap,
-    this.textInputType,
-    this.maxLength,
-    this.validator,
-    this.onSaved,
-  }) : super(key: key);
-
-  final double? width;
-  final double height;
-  final String? hintText;
-  final Function? onchanged;
-  final bool? withHint;
-  final Color? borderColor;
-  final TextEditingController? controller;
-  final Function? onTap;
-  final TextInputType? textInputType;
-  final int? maxLength;
-  final Function? validator;
-  final Function? onSaved;
-
-  @override
-  Widget build(BuildContext context) {
-    final s = MediaQuery.of(context).size;
-    final h = s.height;
-    final w = s.width;
-    SizeConfig().init(context);
-    return Card(
-      elevation: 2.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(SizeConfig.sH! * 4),
-      ),
-      child: Container(
-        height: SizeConfig.sH! * 6,
-        width: width,
-        decoration: BoxDecoration(
-          border: Border.all(
-              style: BorderStyle.solid,
-              width: SizeConfig.sW! * 0.2,
-              color: borderColor!),
-          borderRadius: BorderRadius.circular(SizeConfig.sH! * 8),
-        ),
-        child: TextFormField(
-          maxLength: maxLength,
-          onTap: onTap as void Function()?,
-          controller: controller,
-          decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: TextStyle(
-                color: Colors.grey,
-                fontSize: SizeConfig.sH! * 3.6,
-              ),
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.only(
-                  left: SizeConfig.sW! * 3, bottom: SizeConfig.sH! * 2.5)),
-          keyboardType: textInputType,
-          cursorColor: Colors.black,
-          textAlign: (withHint == true) ? TextAlign.start : TextAlign.center,
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: SizeConfig.sH! * 4,
-          ),
-          validator: validator as String? Function(String?)?,
-          onChanged: onchanged as void Function(String)?,
-          onSaved: onSaved as void Function(String?)?,
         ),
       ),
     );

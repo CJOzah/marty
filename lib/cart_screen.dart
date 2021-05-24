@@ -64,13 +64,14 @@ class _CartScreenState extends State<CartScreen> {
                               child: Text(
                                 "Order Summary",
                                 style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 4,
+                                  fontSize: SizeConfig.sW! * 5,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                             Container(
                               margin: EdgeInsets.only(
+                                top: SizeConfig.sW! * 4,
                                 left: SizeConfig.sW! * 10,
                               ),
                               height: SizeConfig.sH! * 6.5,
@@ -83,7 +84,7 @@ class _CartScreenState extends State<CartScreen> {
                               child: IconButton(
                                 icon: Icon(
                                   FontAwesomeIcons.arrowDown,
-                                  size: SizeConfig.sH! * 3,
+                                  size: SizeConfig.sW! * 5,
                                   color: Colors.white,
                                 ),
                                 onPressed: () {

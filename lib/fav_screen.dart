@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shopplift/utils.dart';
 import 'cart.dart';
 import 'home.dart';
 
@@ -188,6 +189,9 @@ class _FavScreenState extends State<FavScreen> {
                                                                       listen:
                                                                           false)
                                                                   .getFavItems()[inDex]);
+                                                          showInSnackBar(
+                                                              "${item.name} Removed from Cart",
+                                                              context);
                                                         });
                                                       },
                                                     ),
@@ -280,6 +284,7 @@ class _FavScreenState extends State<FavScreen> {
                         Provider.of<CartData>(context, listen: false).addToCart(
                             Provider.of<CartData>(context, listen: false)
                                 .getFavItems()[inDex]);
+                        showInSnackBar("Added to Cart", context);
                         Provider.of<CartData>(context, listen: false)
                             .removeFromFav(
                                 Provider.of<CartData>(context, listen: false)
