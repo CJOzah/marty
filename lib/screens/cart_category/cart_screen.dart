@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shopplift/checkout_screen.dart';
-import 'package:shopplift/size_config.dart';
-import 'package:shopplift/utils.dart';
-import 'home.dart';
-
-import 'cart.dart';
+import 'package:shopplift/screens/cart_category/checkout_screen.dart';
+import 'package:shopplift/utils/cart.dart';
+import 'package:shopplift/utils/size_config.dart';
+import 'package:shopplift/utils/utils.dart';
+import '../../home.dart';
 
 class CartScreen extends StatefulWidget {
   static String id = 'CartScreen';
@@ -269,8 +268,7 @@ class _CartScreenState extends State<CartScreen> {
                             size: SizeConfig.sH! * 6,
                           ),
                           onPressed: () {
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, FancyDraw.id, (route) => false);
+                            Navigator.pop(context);
                           },
                         ),
                       ),

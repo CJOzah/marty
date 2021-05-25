@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shopplift/size_config.dart';
-import 'package:shopplift/transfer_success_dialogue.dart';
-import 'package:shopplift/utils.dart';
-
-import 'cart.dart';
+import 'package:shopplift/screens/cart_category/transfer_success_dialogue.dart';
+import 'package:shopplift/utils/cart.dart';
+import 'package:shopplift/utils/size_config.dart';
+import 'package:shopplift/utils/utils.dart';
 
 class CheckOutScreen extends StatefulWidget {
   static String id = 'CheckOutScreen';

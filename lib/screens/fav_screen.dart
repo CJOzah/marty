@@ -2,9 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:shopplift/utils.dart';
-import 'cart.dart';
-import 'home.dart';
+import 'package:shopplift/utils/cart.dart';
+import 'package:shopplift/utils/utils.dart';
+import '../home.dart';
 
 class FavScreen extends StatefulWidget {
   static String id = 'FavScreen';

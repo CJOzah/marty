@@ -4,13 +4,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
-import 'package:shopplift/cart.dart';
-import 'package:shopplift/cart_screen.dart';
-import 'package:shopplift/size_config.dart';
-import 'package:shopplift/utils.dart';
-import 'clothes.dart';
-import 'fav_screen.dart';
-import 'cart_screen.dart';
+import 'package:shopplift/screens/product_desc_screen.dart';
+import 'package:shopplift/screens/profile_screen/profile_screen.dart';
+import 'package:shopplift/utils/cart.dart';
+import 'package:shopplift/screens/cart_category/cart_screen.dart';
+import 'package:shopplift/utils/size_config.dart';
+import 'package:shopplift/utils/utils.dart';
+import 'utils/clothes.dart';
+import 'screens/fav_screen.dart';
+import 'screens/cart_category/cart_screen.dart';
 
 class FancyDraw extends StatefulWidget {
   static String id = 'Drawer';
@@ -59,9 +61,7 @@ class ThirdLayer extends StatefulWidget {
 class _ThirdLayerState extends State<ThirdLayer> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final height = size.height;
-    final width = size.width;
+    SizeConfig().init(context);
     return SafeArea(
       child: Container(
         height: MediaQuery.of(context).size.height,
@@ -75,62 +75,55 @@ class _ThirdLayerState extends State<ThirdLayer> {
         child: Padding(
           padding: const EdgeInsets.only(left: 15.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: height / 30),
-                child: Row(
+                padding: EdgeInsets.only(
+                    left: SizeConfig.sW! * 4, top: SizeConfig.sH! * 15),
+                child: Text(
+                  "Marty",
+                  style: TextStyle(
+                    fontSize: SizeConfig.sH! * 4,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(
-                      FontAwesomeIcons.shoppingCart,
-                      size: width / 15,
-                      color: Colors.white,
+                    MenuListTile(
+                      leading: Icons.home_outlined,
+                      title: "Home",
+                      ontap: FancyDraw.id,
                     ),
-                    SizedBox(
-                      width: width / 30,
+                    MenuListTile(
+                      leading: Icons.shopping_cart_outlined,
+                      title: "Cart",
+                      ontap: CartScreen.id,
                     ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          Navigator.pushNamed(context, CartScreen.id);
-                        });
-                      },
-                      child: Text(
-                        "Cart",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width / 15),
-                      ),
+                    MenuListTile(
+                      leading: Icons.person_outline,
+                      title: "Profile",
+                      ontap: ProfileScreen.id,
+                    ),
+                    MenuListTile(
+                      leading: FontAwesomeIcons.heartbeat,
+                      title: "Wishlist",
+                      ontap: FavScreen.id,
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: height / 30),
-                child: Row(
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.heart,
-                      size: width / 15,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: width / 30,
-                    ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          Navigator.pushNamed(context, FavScreen.id)
-                              .then((value) => setState(() {}));
-                        });
-                      },
-                      child: Text(
-                        "WishList",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: width / 15),
-                      ),
-                    ),
-                  ],
+                padding: EdgeInsets.only(top: SizeConfig.sH! * 25),
+                child: MenuListTile(
+                  leading: Icons.logout,
+                  title: "Log In",
+                  ontap: FancyDraw.id,
                 ),
               ),
             ],
@@ -436,12 +429,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
-                                    height: SizeConfig.sH! * 30,
-                                    width: double.infinity,
-                                    child: Image(
-                                      image: AssetImage("${item.image}"),
-                                      fit: BoxFit.cover,
+                                  InkWell(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ProductDescScreen(item)),
+                                    ),
+                                    child: Container(
+                                      height: SizeConfig.sH! * 30,
+                                      width: double.infinity,
+                                      child: Image(
+                                        image: AssetImage("${item.image}"),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                   Text(
@@ -733,7 +734,7 @@ class SecondLayerState extends State<SecondLayer> {
         duration: Duration(milliseconds: 550),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.blueGrey.shade900.withOpacity(0.3)),
+            color: Colors.blueGrey.shade900.withOpacity(0.9)),
         child: Column(
           children: [
             Row(

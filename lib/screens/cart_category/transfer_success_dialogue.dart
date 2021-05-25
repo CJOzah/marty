@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shopplift/size_config.dart';
-import 'home.dart';
+import 'package:shopplift/utils/size_config.dart';
+import '../../home.dart';
 
 class TransferSuccessDialogue extends StatefulWidget {
   static String id = 'TransferSuccessDialogue';
