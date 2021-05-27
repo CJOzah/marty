@@ -120,7 +120,6 @@ class RoundedRectTextField extends StatelessWidget {
           onTap: onTap as void Function()?,
           controller: controller,
           decoration: InputDecoration(
-              hintText: hintText,
               hintStyle: TextStyle(
                 color: Colors.grey,
                 fontSize: SizeConfig.sH! * 3.6,

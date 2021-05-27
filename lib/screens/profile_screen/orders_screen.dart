@@ -6,15 +6,6 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_outlined,
-              size: SizeConfig.sH! * 5,
-              color: Colors.white,
-            ),
-            onPressed: () => Navigator.pop(context)),
-      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
@@ -22,14 +13,36 @@ class OrderScreen extends StatelessWidget {
           image: DecorationImage(
               image: AssetImage("images/BubbleDesign.png"), fit: BoxFit.cover),
         ),
-        child: Center(
-          child: Text(
-            "No Orders yet",
-            style: TextStyle(
-              fontSize: SizeConfig.sH! * 5,
-              color: Colors.white,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: SizeConfig.sH! * 40,
+                  top: SizeConfig.sH! * 4,
+                  right: SizeConfig.sW! * 80),
+              child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_outlined,
+                    size: SizeConfig.sH! * 5,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pop(context)),
             ),
-          ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    "No Orders yet",
+                    style: TextStyle(
+                      fontSize: SizeConfig.sH! * 5,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

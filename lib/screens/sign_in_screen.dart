@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopplift/main.dart';
+import 'package:shopplift/screens/sign_up_screen.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
 
@@ -99,7 +100,8 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () =>
+                            Navigator.pushNamed(context, SignUpScreen.id),
                         child: Center(
                           child: Text(
                             "LOG IN",
@@ -120,11 +122,15 @@ class _SignInScreenState extends State<SignInScreen> {
                             color: Colors.black,
                           ),
                         ),
-                        Text(
-                          "Sign Up",
-                          style: TextStyle(
-                              fontSize: SizeConfig.sH! * 3,
-                              color: Color(0xffB541C6)),
+                        InkWell(
+                          onTap: () =>
+                              Navigator.pushNamed(context, SignUpScreen.id),
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                                fontSize: SizeConfig.sH! * 3,
+                                color: Color(0xffB541C6)),
+                          ),
                         ),
                       ],
                     ),

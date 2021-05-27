@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/cart_category/checkout_screen.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
-import '../../home.dart';
 
 class CartScreen extends StatefulWidget {
   static String id = 'CartScreen';
@@ -23,7 +23,6 @@ class _CartScreenState extends State<CartScreen> {
     double total = Provider.of<CartData>(context).getTotal() * 0.05 +
         Provider.of<CartData>(context).getTotal();
     final s = MediaQuery.of(context).size;
-    final h = s.height;
     final w = s.width;
 
     return Scaffold(
@@ -46,192 +45,22 @@ class _CartScreenState extends State<CartScreen> {
                       topLeft: Radius.circular(SizeConfig.sH! * 6)),
                 ),
                 semanticContainer: true,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(SizeConfig.sH! * 1.5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: SizeConfig.sH! * 2,
-                                  bottom: SizeConfig.sH! * 1.5,
-                                  left: SizeConfig.sW! * 25),
-                              child: Text(
-                                "Order Summary",
-                                style: TextStyle(
-                                  fontSize: SizeConfig.sW! * 5,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: SizeConfig.sW! * 4,
-                                left: SizeConfig.sW! * 10,
-                              ),
-                              height: SizeConfig.sH! * 6.5,
-                              width: SizeConfig.sW! * 10.5,
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade900,
-                                borderRadius:
-                                    BorderRadius.circular(SizeConfig.sH! * 30),
-                              ),
-                              child: IconButton(
-                                icon: Icon(
-                                  FontAwesomeIcons.arrowDown,
-                                  size: SizeConfig.sW! * 5,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    showBottomSheet = false;
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      HorizontalLine(
-                        width: double.infinity,
-                        height: SizeConfig.sH! * 0.12,
-                        color: Colors.grey,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(SizeConfig.sH! * 2),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            SummaryTexts(
-                              w: SizeConfig.sW!,
-                              h: SizeConfig.sH!,
-                              text1: "Subtotoal",
-                              text2:
-                                  "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
-                            ),
-                            SummaryTexts(
-                              w: SizeConfig.sW!,
-                              h: SizeConfig.sH!,
-                              text1: "VAT",
-                              text2: "5%",
-                            ),
-                            SummaryTexts(
-                              w: SizeConfig.sW!,
-                              h: SizeConfig.sH!,
-                              text1: "Discount",
-                              text2: "₦0",
-                            ),
-                            SummaryTexts(
-                              w: SizeConfig.sW!,
-                              h: SizeConfig.sH!,
-                              text1: "Delivery",
-                              text2: "Free",
-                            ),
-                            SummaryTexts(
-                              w: SizeConfig.sW!,
-                              h: SizeConfig.sH!,
-                              text1: "Total",
-                              text2: "₦$total",
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsets.only(bottom: SizeConfig.sH! * 1),
-                              child: RoundedRectTextField(
-                                height: SizeConfig.sH! * 4.5,
-                                hintText: "Enter Voucher Code",
-                                withHint: true,
-                                borderColor: (active)
-                                    ? Colors.blue.shade900
-                                    : Colors.grey.shade100,
-                                textInputType: TextInputType.text,
-                                onTap: () {
-                                  setState(() {
-                                    if (active == false) {
-                                      active = true;
-                                    } else
-                                      active = false;
-                                  });
-                                },
-                                onchanged: (value) {},
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      HorizontalLine(
-                        width: double.infinity,
-                        height: SizeConfig.sH! * 0.12,
-                        color: Colors.grey,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: SizeConfig.sH! * 1.2,
-                          bottom: SizeConfig.sH! * 1.5,
-                          left: SizeConfig.sW! * 2,
-                          right: SizeConfig.sW! * 2,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Total",
-                                  style: TextStyle(
-                                    fontSize: SizeConfig.sW! * 4,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: SizeConfig.sH! * 1,
-                                ),
-                                Text(
-                                  "₦$total",
-                                  style: TextStyle(
-                                      fontSize: SizeConfig.sW! * 4,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            MaterialButton(
-                              height: SizeConfig.sH! * 6.5,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  SizeConfig.sW! * 6,
-                                ),
-                              ),
-                              minWidth: SizeConfig.sW! * 30,
-                              color: Colors.blue.shade900,
-                              onPressed: () {
-                                Navigator.pushNamed(context, CheckOutScreen.id);
-                              },
-                              child: Text(
-                                "Checkout",
-                                style: TextStyle(
-                                    fontSize: SizeConfig.sW! * 4,
-                                    color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                child: SingleChildScrollView(),
               ),
             )
           : SizedBox(),
       body: SafeArea(
         child: Container(
-          color: Colors.blue.shade900,
+          height: SizeConfig.sH! * 120,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                colors: [
+                  primary,
+                  secondary,
+                ]),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -562,16 +391,184 @@ class _CartScreenState extends State<CartScreen> {
                 elevation: 0,
                 height: SizeConfig.sH! * 6,
                 minWidth: w,
-                color: Colors.blue.shade900,
                 onPressed: () {
                   setState(() {
-                    showBottomSheet = true;
+                    showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: SizeConfig.sH! * 55,
+                          color: Colors.white,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        bottom: SizeConfig.sH! * 4,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: SizeConfig.sH! * 1.5,
+                                                left: SizeConfig.sW! * 18),
+                                            child: Text(
+                                              "Order Summary",
+                                              style: TextStyle(
+                                                fontSize: SizeConfig.sH! * 4,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              top: SizeConfig.sW! * 4,
+                                              left: SizeConfig.sW! * 10,
+                                            ),
+                                            height: SizeConfig.sH! * 6.5,
+                                            width: SizeConfig.sH! * 6.5,
+                                            decoration: BoxDecoration(
+                                              color: primary,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      SizeConfig.sH! * 30),
+                                            ),
+                                            child: IconButton(
+                                              icon: Icon(
+                                                FontAwesomeIcons.arrowDown,
+                                                size: SizeConfig.sW! * 5,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  Navigator.pop(context);
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    HorizontalLine(
+                                      width: double.infinity,
+                                      height: SizeConfig.sH! * 0.12,
+                                      color: Colors.grey,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.all(SizeConfig.sH! * 2),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          SummaryTexts(
+                                            w: SizeConfig.sW!,
+                                            h: SizeConfig.sH!,
+                                            text1: "Subtotoal",
+                                            text2:
+                                                "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
+                                          ),
+                                          SummaryTexts(
+                                            w: SizeConfig.sW!,
+                                            h: SizeConfig.sH!,
+                                            text1: "VAT",
+                                            text2: "5%",
+                                          ),
+                                          SummaryTexts(
+                                            w: SizeConfig.sW!,
+                                            h: SizeConfig.sH!,
+                                            text1: "Discount",
+                                            text2: "₦0",
+                                          ),
+                                          SummaryTexts(
+                                            w: SizeConfig.sW!,
+                                            h: SizeConfig.sH!,
+                                            text1: "Delivery",
+                                            text2: "Free",
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    HorizontalLine(
+                                      width: double.infinity,
+                                      height: SizeConfig.sH! * 0.12,
+                                      color: Colors.grey,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: SizeConfig.sH! * 2.2,
+                                        bottom: SizeConfig.sH! * 2.5,
+                                        left: SizeConfig.sW! * 2,
+                                        right: SizeConfig.sW! * 2,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Total",
+                                            style: TextStyle(
+                                              fontSize: SizeConfig.sH! * 3,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: SizeConfig.sH! * 1,
+                                          ),
+                                          Text(
+                                            "₦$total",
+                                            style: TextStyle(
+                                                fontSize: SizeConfig.sH! * 4,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    MaterialButton(
+                                      height: SizeConfig.sH! * 7,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          SizeConfig.sW! * 6,
+                                        ),
+                                      ),
+                                      minWidth: SizeConfig.sW! * 90,
+                                      color: primary,
+                                      onPressed: () {
+                                        Navigator.pushNamed(
+                                            context, CheckOutScreen.id);
+                                      },
+                                      child: Text(
+                                        "Checkout",
+                                        style: TextStyle(
+                                            fontSize: SizeConfig.sH! * 3.5,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   });
                 },
                 child: Text(
                   "Proceed to Summary",
                   style: TextStyle(
-                      fontSize: SizeConfig.sW! * 5, color: Colors.white),
+                      fontSize: SizeConfig.sH! * 3.5, color: Colors.white),
                 ),
               ),
             ],
@@ -608,14 +605,14 @@ class SummaryTexts extends StatelessWidget {
             text1,
             style: TextStyle(
               color: Colors.black,
-              fontSize: w * 4.2,
+              fontSize: w * 4.8,
             ),
           ),
           Text(
             text2,
             style: TextStyle(
               color: Colors.black,
-              fontSize: w * 4.2,
+              fontSize: w * 4.8,
             ),
           ),
         ],

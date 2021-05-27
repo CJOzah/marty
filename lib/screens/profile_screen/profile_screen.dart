@@ -3,8 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
+import 'package:shopplift/screens/fav_screen.dart';
 import 'package:shopplift/screens/profile_screen/address_book_screen.dart';
 import 'package:shopplift/screens/profile_screen/details_screen.dart';
+import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
@@ -90,32 +92,36 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top: SizeConfig.sH! * 4,
-                                  bottom: SizeConfig.sH! * 2),
-                              height: SizeConfig.sH! * 8,
-                              width: SizeConfig.sW! * 30,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(SizeConfig.sH! * 1),
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomLeft,
-                                  end: Alignment.topRight,
-                                  colors: [
-                                    primary,
-                                    secondary,
-                                  ],
+                            InkWell(
+                              onTap: () =>
+                                  Navigator.pushNamed(context, SignInScreen.id),
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                    top: SizeConfig.sH! * 4,
+                                    bottom: SizeConfig.sH! * 2),
+                                height: SizeConfig.sH! * 8,
+                                width: SizeConfig.sW! * 30,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(SizeConfig.sH! * 1),
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomLeft,
+                                    end: Alignment.topRight,
+                                    colors: [
+                                      primary,
+                                      secondary,
+                                    ],
+                                  ),
                                 ),
+                                child: Center(
+                                    child: Text(
+                                  "LOGIN",
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.sH! * 3,
+                                    color: Colors.white,
+                                  ),
+                                )),
                               ),
-                              child: Center(
-                                  child: Text(
-                                "LOGIN",
-                                style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3,
-                                  color: Colors.white,
-                                ),
-                              )),
                             ),
                           ],
                         ),
@@ -144,6 +150,7 @@ class ProfileScreen extends StatelessWidget {
               ),
               ProfileListTile(
                 leading: FontAwesomeIcons.heart,
+                ontap: FavScreen.id,
                 title: "WishList",
                 trailing: Icons.arrow_forward_ios_outlined,
               ),
@@ -155,18 +162,18 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(
                 height: SizeConfig.sH! * 4,
               ),
-              Center(
-                child: InkWell(
-                  onTap: () {},
-                  child: Text(
-                    "LOGIN",
-                    style: TextStyle(
-                      fontSize: SizeConfig.sH! * 3,
-                      color: primaryDark,
-                    ),
-                  ),
-                ),
-              ),
+              // Center(
+              //   child: InkWell(
+              //     onTap: () {},
+              //     child: Text(
+              //       "LOGIN",
+              //       style: TextStyle(
+              //         fontSize: SizeConfig.sH! * 3,
+              //         color: primaryDark,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
