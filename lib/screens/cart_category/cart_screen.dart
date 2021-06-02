@@ -207,7 +207,7 @@ class _CartScreenState extends State<CartScreen> {
                                           height: SizeConfig.sH! * 1,
                                         ),
                                         Text(
-                                          "Size: ${item.size![index]}",
+                                          "Size: ${item.selectedSize}",
                                           style: TextStyle(
                                               fontSize: SizeConfig.sW! * 3.5,
                                               fontWeight: FontWeight.bold,
@@ -259,35 +259,6 @@ class _CartScreenState extends State<CartScreen> {
                                                               : Colors.white),
                                                       onTap: () {
                                                         setState(() {
-                                                          // if (item.quantity! ==
-                                                          //     0) {
-                                                          //   showDialog(
-                                                          //     context: context,
-                                                          //     builder:
-                                                          //         (context) =>
-                                                          //             Container(
-                                                          //       color: Colors
-                                                          //           .white
-                                                          //           .withOpacity(
-                                                          //               0.70),
-                                                          //       child: Theme(
-                                                          //         data: Theme.of(
-                                                          //                 context)
-                                                          //             .copyWith(
-                                                          //                 primaryColor: Colors
-                                                          //                     .blue
-                                                          //                     .shade900),
-                                                          //         child: Column(
-                                                          //           mainAxisAlignment:
-                                                          //               MainAxisAlignment
-                                                          //                   .center,
-                                                          //           children: <
-                                                          //               Widget>[],
-                                                          //         ),
-                                                          //       ),
-                                                          //     ),
-                                                          //   );
-                                                          // }
                                                           if (item.quantity! >
                                                               1) {
                                                             item.setQuantity(

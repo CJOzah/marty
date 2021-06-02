@@ -32,6 +32,12 @@ class ClothesModel {
     cartbutton = true;
   }
 
+  void addtocartWithQuantity(bool? cart, int? quant, String? sizeSelected) {
+    cartbutton = true;
+    quantity = quantity! + quant!;
+    selectedSize = sizeSelected;
+  }
+
   void removefromcart(bool cart) {
     cartbutton = false;
   }

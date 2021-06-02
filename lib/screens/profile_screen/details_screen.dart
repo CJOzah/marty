@@ -91,6 +91,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               ),
             ),
             GradientButton(
+              ontap: () {},
               text: "Save",
             ),
           ],
@@ -102,38 +103,43 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
 class GradientButton extends StatelessWidget {
   final String text;
+  final Function() ontap;
   const GradientButton({
     Key? key,
     required this.text,
+    required this.ontap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-          top: SizeConfig.sH! * 2,
-          left: SizeConfig.sW! * 3,
-          right: SizeConfig.sW! * 3),
-      height: SizeConfig.sH! * 8.5,
-      width: double.infinity,
-      padding: EdgeInsets.all(SizeConfig.sH! * 2),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomLeft,
-          end: Alignment.topRight,
-          colors: [
-            primary,
-            secondary,
-          ],
+    return InkWell(
+      onTap: ontap,
+      child: Container(
+        margin: EdgeInsets.only(
+            top: SizeConfig.sH! * 2,
+            left: SizeConfig.sW! * 3,
+            right: SizeConfig.sW! * 3),
+        height: SizeConfig.sH! * 8.5,
+        width: double.infinity,
+        padding: EdgeInsets.all(SizeConfig.sH! * 2),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            colors: [
+              primary,
+              secondary,
+            ],
+          ),
         ),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: TextStyle(
-              fontSize: SizeConfig.sH! * 3,
-              fontWeight: FontWeight.bold,
-              color: Colors.white),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: SizeConfig.sH! * 3,
+                fontWeight: FontWeight.bold,
+                color: Colors.white),
+          ),
         ),
       ),
     );

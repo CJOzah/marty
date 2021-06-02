@@ -14,7 +14,6 @@ class CartData extends ChangeNotifier {
   }
   // void addToCartWithSize(ClothesModel clothes, String size) {
   //   _cart.add(clothes);
-  //   _cart.
   //   notifyListeners();
   // }
 
