@@ -99,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
                                 margin: EdgeInsets.only(
                                     top: SizeConfig.sH! * 4,
                                     bottom: SizeConfig.sH! * 2),
-                                height: SizeConfig.sH! * 8,
+                                height: SizeConfig.sH! * 6,
                                 width: SizeConfig.sW! * 30,
                                 decoration: BoxDecoration(
                                   borderRadius:

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
+import 'package:shopplift/screens/profile_screen/details_screen.dart';
+import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
 
 import '../main.dart';
+import 'cart.dart';
 
 class HorizontalLine extends StatelessWidget {
   final double? width;
@@ -31,7 +36,7 @@ void showInSnackBar(String value, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: new Text(value),
     backgroundColor: Colors.blue.shade900,
-    duration: Duration(seconds: 2),
+    duration: Duration(seconds: 1),
   ));
 }
 
@@ -46,7 +51,6 @@ class HeadlineText extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final s = MediaQuery.of(context).size;
-    final h = s.height;
     return Padding(
       padding: EdgeInsets.only(
         left: SizeConfig.sH!,
@@ -633,4 +637,272 @@ class ProfileListTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
+    StateSetter setState, List<int> quantity) {
+  if (Provider.of<CartData>(context, listen: false).getCartItems().isEmpty) {
+    Provider.of<CartData>(context, listen: false).clearTotal();
+    // quantity.clear();
+  }
+  return showModalBottomSheet<void>(
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    context: context,
+    builder: (BuildContext context) {
+      print(quantity);
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+        return Wrap(
+          children: [
+            Container(
+              margin: EdgeInsets.only(
+                  left: SizeConfig.sW! * 6,
+                  right: SizeConfig.sW! * 6,
+                  bottom: SizeConfig.sH! * 4),
+              padding: EdgeInsets.all(SizeConfig.sH! * 2),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(SizeConfig.sH! * 2),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  EdgeInsets.only(left: SizeConfig.sW! * 4),
+                              child: Text(
+                                "Select Options",
+                                style: TextStyle(
+                                  fontSize: SizeConfig.sH! * 3,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.pop(context);
+                                });
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.times,
+                                size: SizeConfig.sH! * 4,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: SizeConfig.sH! * 2,
+                        ),
+                        ListView.builder(
+                            itemCount: widget!.size!.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final item = widget.size;
+                              final items = widget;
+                              return Container(
+                                height: SizeConfig.sH! * 10,
+                                width: double.infinity,
+                                child: ListTile(
+                                  title: Text(
+                                    "${item![index]}",
+                                    style: TextStyle(
+                                        fontSize: SizeConfig.sH! * 3,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  ),
+                                  subtitle: Padding(
+                                    padding: EdgeInsets.only(
+                                        top: SizeConfig.sH! * 1,
+                                        bottom: SizeConfig.sH! * 2),
+                                    child: Text(
+                                      "₦ ${widget.price}",
+                                      style: TextStyle(
+                                          fontSize: SizeConfig.sH! * 2.5,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  trailing: Container(
+                                    height: SizeConfig.sH! * 6,
+                                    width: SizeConfig.sW! * 34,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Container(
+                                            height: SizeConfig.sH! * 6,
+                                            width: SizeConfig.sH! * 6,
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                begin: Alignment.bottomLeft,
+                                                end: Alignment.topRight,
+                                                colors: [
+                                                  primary,
+                                                  secondary,
+                                                ],
+                                              ),
+                                              color: primary,
+                                            ),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setModalState(() {
+                                                    if (quantity[index] > 0) {
+                                                      quantity[index]--;
+                                                      items.setQuantity(
+                                                          0 - quantity[index]);
+                                                      Provider.of<CartData>(
+                                                              context,
+                                                              listen: false)
+                                                          .removeFromCart(
+                                                              items);
+                                                      Provider.of<CartData>(
+                                                              context,
+                                                              listen: false)
+                                                          .decreaseTotal(
+                                                              items.price!);
+                                                      setModalState(() {
+                                                        showInSnackBar(
+                                                            "${items.name} Removed to Cart",
+                                                            context);
+                                                      });
+                                                      print(
+                                                          Provider.of<CartData>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .getCartItems()
+                                                              .length);
+                                                      if (quantity[index] > 0)
+                                                        print(Provider.of<
+                                                                    CartData>(
+                                                                context,
+                                                                listen: false)
+                                                            .getCartItem(Provider.of<
+                                                                            CartData>(
+                                                                        context,
+                                                                        listen:
+                                                                            false)
+                                                                    .getCartItems()
+                                                                    .length -
+                                                                1)
+                                                            .selectedSize);
+                                                    }
+                                                    print(quantity);
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  FontAwesomeIcons.minus,
+                                                  color: Colors.white,
+                                                  size: SizeConfig.sH! * 3,
+                                                ))),
+                                        Container(
+                                            height: SizeConfig.sH! * 6,
+                                            width: SizeConfig.sH! * 6,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white),
+                                            child: Center(
+                                              child: Text(
+                                                "${quantity[index]}",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: SizeConfig.sH! * 3,
+                                                ),
+                                              ),
+                                            )),
+                                        Container(
+                                            height: SizeConfig.sH! * 6,
+                                            width: SizeConfig.sH! * 6,
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                begin: Alignment.bottomLeft,
+                                                end: Alignment.topRight,
+                                                colors: [
+                                                  primary,
+                                                  secondary,
+                                                ],
+                                              ),
+                                              color: primary,
+                                            ),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  setModalState(() {
+                                                    quantity[index]++;
+                                                    print(quantity);
+                                                    items.selectedSize =
+                                                        item[index];
+                                                    items.setSizeQuantity(
+                                                        quantity[index]);
+                                                    Provider.of<CartData>(
+                                                            context,
+                                                            listen: false)
+                                                        .addToCart(items);
+
+                                                    Provider.of<CartData>(
+                                                            context,
+                                                            listen: false)
+                                                        .addToTotal(
+                                                            items.price!);
+                                                    showInSnackBar(
+                                                        "${items.name} Added to Cart",
+                                                        context);
+                                                    if (quantity[index] > 0)
+                                                      print(Provider.of<
+                                                                  CartData>(
+                                                              context,
+                                                              listen: false)
+                                                          .getCartItem(Provider.of<
+                                                                          CartData>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .getCartItems()
+                                                                  .length -
+                                                              1)
+                                                          .selectedSize);
+                                                    print(Provider.of<CartData>(
+                                                            context,
+                                                            listen: false)
+                                                        .getCartItems()
+                                                        .length);
+                                                    print(quantity);
+                                                  });
+                                                },
+                                                icon: Icon(
+                                                  FontAwesomeIcons.plus,
+                                                  color: Colors.white,
+                                                  size: SizeConfig.sH! * 3,
+                                                ))),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                        GradientButton(
+                            text: "VIEW CART",
+                            ontap: () {
+                              setModalState(() {
+                                Navigator.popAndPushNamed(
+                                    context, CartScreen.id);
+                              });
+                            }),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      });
+    },
+  );
 }

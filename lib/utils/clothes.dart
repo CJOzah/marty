@@ -47,6 +47,11 @@ class ClothesModel {
     print(quantity);
   }
 
+  void setSizeQuantity(int quant) {
+    quantity = quant;
+    print(quantity);
+  }
+
   int? getQuantity() {
     return quantity;
   }
@@ -227,7 +232,7 @@ List<ClothesModel> watches = [
     favbutton: false,
     image: "images/watch1.jpg",
     price: 5000,
-    size: ["32", "33", "34", "35", "36"],
+    size: [],
     color: "Silver",
     gender: "Unisex",
     ratings: "7.98",
@@ -238,7 +243,7 @@ List<ClothesModel> watches = [
     name: " Elegant Watch ",
     id: "02",
     image: "images/watch2.jpg",
-    size: ["32", "33", "34", "35", "36"],
+    size: [],
     selectedSize: "M",
     quantity: 0,
     price: 4990,
@@ -255,7 +260,7 @@ List<ClothesModel> watches = [
     id: "03",
     selectedSize: "M",
     quantity: 0,
-    size: ["32", "33", "34", "35", "36"],
+    size: [],
     image: "images/watch3.jpg",
     price: 14000,
     cartbutton: true,
@@ -273,7 +278,7 @@ List<ClothesModel> watches = [
     selectedSize: "M",
     quantity: 0,
     price: 20000,
-    size: ["32", "33", "34", "35", "36"],
+    size: [],
     color: "Black",
     gender: "Unisex",
     cartbutton: true,
@@ -289,7 +294,7 @@ List<ClothesModel> watches = [
     cartbutton: true,
     favbutton: false,
     selectedSize: "M",
-    size: ["32", "33", "34", "35", "36"],
+    size: [],
     quantity: 0,
     price: 9999,
     color: "Light Brown",

@@ -54,8 +54,8 @@ class _CartScreenState extends State<CartScreen> {
           height: SizeConfig.sH! * 120,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-                begin: Alignment.bottomLeft,
-                end: Alignment.topRight,
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
                 colors: [
                   primary,
                   secondary,
@@ -170,6 +170,12 @@ class _CartScreenState extends State<CartScreen> {
                               final item =
                                   Provider.of<CartData>(context, listen: false)
                                       .getCartItems()[index];
+                              if (Provider.of<CartData>(context, listen: false)
+                                  .getCartItems()
+                                  .isEmpty) {
+                                Provider.of<CartData>(context, listen: false)
+                                    .clearTotal();
+                              }
                               return Container(
                                 margin: EdgeInsets.only(
                                   bottom: SizeConfig.sH! * 1,
@@ -239,7 +245,14 @@ class _CartScreenState extends State<CartScreen> {
                                                       BorderRadius.circular(
                                                     SizeConfig.sH! * 5,
                                                   ),
-                                                  color: Colors.blue.shade900,
+                                                  gradient: LinearGradient(
+                                                    begin: Alignment.bottomLeft,
+                                                    end: Alignment.topRight,
+                                                    colors: [
+                                                      primary,
+                                                      secondary
+                                                    ],
+                                                  ),
                                                 ),
                                                 child: Row(
                                                   mainAxisAlignment:
@@ -294,7 +307,7 @@ class _CartScreenState extends State<CartScreen> {
                                                           Provider.of<CartData>(
                                                                   context,
                                                                   listen: false)
-                                                              .increaseTotal(
+                                                              .addToTotal(
                                                                   item.price!);
                                                         });
                                                       },
@@ -365,175 +378,231 @@ class _CartScreenState extends State<CartScreen> {
                 onPressed: () {
                   setState(() {
                     showModalBottomSheet<void>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          height: SizeConfig.sH! * 55,
-                          color: Colors.white,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        bottom: SizeConfig.sH! * 4,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                bottom: SizeConfig.sH! * 1.5,
-                                                left: SizeConfig.sW! * 18),
-                                            child: Text(
-                                              "Order Summary",
-                                              style: TextStyle(
-                                                fontSize: SizeConfig.sH! * 4,
-                                                fontWeight: FontWeight.bold,
+                        backgroundColor: Colors.transparent,
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(builder: (BuildContext context,
+                              StateSetter setModalState) {
+                            return Wrap(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: SizeConfig.sW! * 6,
+                                      right: SizeConfig.sW! * 6,
+                                      bottom: SizeConfig.sH! * 4),
+                                  padding: EdgeInsets.all(SizeConfig.sH! * 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(
+                                        SizeConfig.sH! * 2),
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                bottom: SizeConfig.sH! * 4,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: SizeConfig.sH! *
+                                                            1.5,
+                                                        left: SizeConfig.sW! *
+                                                            18),
+                                                    child: Text(
+                                                      "Order Summary",
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            SizeConfig.sH! *
+                                                                3.5,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                      left: SizeConfig.sW! * 6,
+                                                    ),
+                                                    height: SizeConfig.sH! * 6,
+                                                    width: SizeConfig.sH! * 6,
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                        begin: Alignment
+                                                            .bottomLeft,
+                                                        end: Alignment.topRight,
+                                                        colors: [
+                                                          primary,
+                                                          secondary,
+                                                        ],
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              SizeConfig.sH! *
+                                                                  30),
+                                                    ),
+                                                    child: IconButton(
+                                                      icon: Icon(
+                                                        FontAwesomeIcons
+                                                            .arrowDown,
+                                                        size:
+                                                            SizeConfig.sW! * 5,
+                                                        color: Colors.white,
+                                                      ),
+                                                      onPressed: () {
+                                                        setState(() {
+                                                          Navigator.pop(
+                                                              context);
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                            margin: EdgeInsets.only(
-                                              top: SizeConfig.sW! * 4,
-                                              left: SizeConfig.sW! * 10,
+                                            HorizontalLine(
+                                              width: double.infinity,
+                                              height: SizeConfig.sH! * 0.12,
+                                              color: Colors.grey,
                                             ),
-                                            height: SizeConfig.sH! * 6.5,
-                                            width: SizeConfig.sH! * 6.5,
-                                            decoration: BoxDecoration(
-                                              color: primary,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      SizeConfig.sH! * 30),
-                                            ),
-                                            child: IconButton(
-                                              icon: Icon(
-                                                FontAwesomeIcons.arrowDown,
-                                                size: SizeConfig.sW! * 5,
-                                                color: Colors.white,
+                                            Padding(
+                                              padding: EdgeInsets.all(
+                                                  SizeConfig.sH! * 2),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  SummaryTexts(
+                                                    w: SizeConfig.sW!,
+                                                    h: SizeConfig.sH!,
+                                                    text1: "Subtotoal",
+                                                    text2:
+                                                        "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
+                                                  ),
+                                                  SummaryTexts(
+                                                    w: SizeConfig.sW!,
+                                                    h: SizeConfig.sH!,
+                                                    text1: "VAT",
+                                                    text2: "5%",
+                                                  ),
+                                                  SummaryTexts(
+                                                    w: SizeConfig.sW!,
+                                                    h: SizeConfig.sH!,
+                                                    text1: "Discount",
+                                                    text2: "₦0",
+                                                  ),
+                                                  SummaryTexts(
+                                                    w: SizeConfig.sW!,
+                                                    h: SizeConfig.sH!,
+                                                    text1: "Delivery",
+                                                    text2: "Free",
+                                                  ),
+                                                ],
                                               ),
-                                              onPressed: () {
-                                                setState(() {
-                                                  Navigator.pop(context);
-                                                });
-                                              },
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    HorizontalLine(
-                                      width: double.infinity,
-                                      height: SizeConfig.sH! * 0.12,
-                                      color: Colors.grey,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.all(SizeConfig.sH! * 2),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          SummaryTexts(
-                                            w: SizeConfig.sW!,
-                                            h: SizeConfig.sH!,
-                                            text1: "Subtotoal",
-                                            text2:
-                                                "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
-                                          ),
-                                          SummaryTexts(
-                                            w: SizeConfig.sW!,
-                                            h: SizeConfig.sH!,
-                                            text1: "VAT",
-                                            text2: "5%",
-                                          ),
-                                          SummaryTexts(
-                                            w: SizeConfig.sW!,
-                                            h: SizeConfig.sH!,
-                                            text1: "Discount",
-                                            text2: "₦0",
-                                          ),
-                                          SummaryTexts(
-                                            w: SizeConfig.sW!,
-                                            h: SizeConfig.sH!,
-                                            text1: "Delivery",
-                                            text2: "Free",
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    HorizontalLine(
-                                      width: double.infinity,
-                                      height: SizeConfig.sH! * 0.12,
-                                      color: Colors.grey,
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: SizeConfig.sH! * 2.2,
-                                        bottom: SizeConfig.sH! * 2.5,
-                                        left: SizeConfig.sW! * 2,
-                                        right: SizeConfig.sW! * 2,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Total",
-                                            style: TextStyle(
-                                              fontSize: SizeConfig.sH! * 3,
-                                              color: Colors.black,
+                                            HorizontalLine(
+                                              width: double.infinity,
+                                              height: SizeConfig.sH! * 0.12,
+                                              color: Colors.grey,
                                             ),
-                                          ),
-                                          SizedBox(
-                                            height: SizeConfig.sH! * 1,
-                                          ),
-                                          Text(
-                                            "₦$total",
-                                            style: TextStyle(
-                                                fontSize: SizeConfig.sH! * 4,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    MaterialButton(
-                                      height: SizeConfig.sH! * 7,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          SizeConfig.sW! * 6,
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                top: SizeConfig.sH! * 2.2,
+                                                bottom: SizeConfig.sH! * 2.5,
+                                                left: SizeConfig.sW! * 2,
+                                                right: SizeConfig.sW! * 2,
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Total",
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          SizeConfig.sH! * 3,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: SizeConfig.sH! * 1,
+                                                  ),
+                                                  Text(
+                                                    "₦$total",
+                                                    style: TextStyle(
+                                                        fontSize:
+                                                            SizeConfig.sH! * 4,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: SizeConfig.sW! * 50,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  SizeConfig.sW! * 6,
+                                                ),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  end: Alignment.topRight,
+                                                  colors: [
+                                                    primary,
+                                                    secondary,
+                                                  ],
+                                                ),
+                                              ),
+                                              child: MaterialButton(
+                                                height: SizeConfig.sH! * 7,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    SizeConfig.sW! * 6,
+                                                  ),
+                                                ),
+                                                minWidth: SizeConfig.sW! * 50,
+                                                onPressed: () {
+                                                  Navigator.pushNamed(context,
+                                                      CheckOutScreen.id);
+                                                },
+                                                child: Text(
+                                                  "Checkout",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          SizeConfig.sH! * 3.5,
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      minWidth: SizeConfig.sW! * 90,
-                                      color: primary,
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                            context, CheckOutScreen.id);
-                                      },
-                                      child: Text(
-                                        "Checkout",
-                                        style: TextStyle(
-                                            fontSize: SizeConfig.sH! * 3.5,
-                                            color: Colors.white),
-                                      ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
+                            );
+                          });
+                        });
                   });
                 },
                 child: Text(

@@ -184,6 +184,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  List<int> quantity = List<int>.filled(5, 0, growable: true);
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -518,36 +520,39 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         ),
                                         onTap: () {
                                           setState(() {
-                                            if (item.cartbutton == true) {
-                                              item.cartbutton = false;
-                                              item.quantity = 1;
-                                              item.selectedSize = item.size![0];
-                                              Provider.of<CartData>(context,
-                                                      listen: false)
-                                                  .addToCart(clothes[index]);
-                                              Provider.of<CartData>(context,
-                                                      listen: false)
-                                                  .addToTotal(item.price!);
-                                              showInSnackBar(
-                                                  "${item.name} Added to Cart",
-                                                  context);
-                                            } else {
-                                              clothes[index].cartbutton = true;
-                                              item.setQuantity(1);
-                                              item.setSelectedSize(
-                                                  item.size![0]);
+                                            if (item.size!.isEmpty) {
+                                              if (item.cartbutton == true) {
+                                                item.cartbutton = false;
+                                                item.quantity = 1;
+                                                Provider.of<CartData>(context,
+                                                        listen: false)
+                                                    .addToCart(clothes[index]);
+                                                Provider.of<CartData>(context,
+                                                        listen: false)
+                                                    .addToTotal(item.price!);
+                                                showInSnackBar(
+                                                    "${item.name} Added to Cart",
+                                                    context);
+                                              } else {
+                                                clothes[index].cartbutton =
+                                                    true;
+                                                item.setQuantity(1);
 
-                                              Provider.of<CartData>(context,
-                                                      listen: false)
-                                                  .removeFromCart(
-                                                      clothes[index]);
-                                              Provider.of<CartData>(context,
-                                                      listen: false)
-                                                  .decreaseTotal(
-                                                      clothes[index].price!);
-                                              showInSnackBar(
-                                                  "${item.name} Removed from Cart",
-                                                  context);
+                                                Provider.of<CartData>(context,
+                                                        listen: false)
+                                                    .removeFromCart(
+                                                        clothes[index]);
+                                                Provider.of<CartData>(context,
+                                                        listen: false)
+                                                    .decreaseTotal(
+                                                        clothes[index].price!);
+                                                showInSnackBar(
+                                                    "${item.name} Removed from Cart",
+                                                    context);
+                                              }
+                                            } else {
+                                              showSizeSheet(context, item,
+                                                  setState, quantity);
                                             }
                                           });
                                         },
