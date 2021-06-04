@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopplift/screens/profile_screen/details_screen.dart';
+import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
@@ -28,7 +31,6 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
             children: [
               Container(
                 padding: EdgeInsets.only(
-                  bottom: SizeConfig.sH! * 32,
                   right: SizeConfig.sW! * 82,
                 ),
                 height: SizeConfig.sH! * 50,
@@ -65,7 +67,10 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.all(SizeConfig.sH! * 4),
+                margin: EdgeInsets.only(
+                    left: SizeConfig.sW! * 4,
+                    right: SizeConfig.sW! * 4,
+                    top: SizeConfig.sH! * 2),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -78,11 +83,63 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                     SizedBox(
                       height: SizeConfig.sH! * 2,
                     ),
-                    Text(
-                      "(${widget.item!.ratings}) ratings",
-                      style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3,
-                      ),
+                    Row(
+                      children: [
+                        Icon(
+                          ((widget.item!.ratings!) <= 2)
+                              ? Icons.star_outline_sharp
+                              : Icons.star,
+                          size: SizeConfig.sH! * 5,
+                          color: ((widget.item!.ratings!) <= 2)
+                              ? Colors.black
+                              : Colors.yellow,
+                        ),
+                        Icon(
+                          (widget.item!.ratings!) <= 4
+                              ? Icons.star_outline_sharp
+                              : Icons.star,
+                          size: SizeConfig.sH! * 5,
+                          color: ((widget.item!.ratings!) <= 4)
+                              ? Colors.black
+                              : Colors.yellow,
+                        ),
+                        Icon(
+                          (widget.item!.ratings!) <= 6
+                              ? Icons.star_outline_sharp
+                              : Icons.star,
+                          size: SizeConfig.sH! * 5,
+                          color: ((widget.item!.ratings!) <= 6)
+                              ? Colors.black
+                              : Colors.yellow,
+                        ),
+                        Icon(
+                          (widget.item!.ratings!) <= 8
+                              ? Icons.star_outline_sharp
+                              : Icons.star,
+                          size: SizeConfig.sH! * 5,
+                          color: ((widget.item!.ratings!) <= 8)
+                              ? Colors.black
+                              : Colors.yellow,
+                        ),
+                        Icon(
+                          (widget.item!.ratings!) <= 10
+                              ? Icons.star_outline_sharp
+                              : Icons.star,
+                          size: SizeConfig.sH! * 5,
+                          color: ((widget.item!.ratings!) <= 10)
+                              ? Colors.black
+                              : Colors.yellow,
+                        ),
+                        SizedBox(
+                          width: SizeConfig.sW! * 6,
+                        ),
+                        Text(
+                          "(${widget.item!.ratings} ratings)",
+                          style: TextStyle(
+                            fontSize: SizeConfig.sH! * 3,
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(
                       height: SizeConfig.sH! * 2,
@@ -129,9 +186,6 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                       height: SizeConfig.sH! * 3,
                     ),
                     Container(
-                      margin: EdgeInsets.only(
-                        bottom: SizeConfig.sH! * 1.3,
-                      ),
                       height: SizeConfig.sH! * 12,
                       width: double.infinity,
                       child: ListView.builder(
@@ -179,6 +233,38 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                     ),
                   ],
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: SizeConfig.sH! * 2,
+                  left: SizeConfig.sW! * 2,
+                  right: SizeConfig.sW! * 2,
+                ),
+                child: GradientButton(
+                    text: "Add to cart",
+                    ontap: () {
+                      setState(() {
+                        if (Provider.of<CartData>(context, listen: false)
+                            .getCartItems()
+                            .contains(widget.item!)) {
+                          showInSnackBar(
+                              "${widget.item!.name} Already added to cart",
+                              context);
+                        } else {
+                          if (widget.item!.quantity! > 0) {
+                            widget.item!.setQuantity(-1);
+                          }
+                          widget.item!.setQuantity(1);
+                          Provider.of<CartData>(context, listen: false)
+                              .addToCart(widget.item!);
+
+                          Provider.of<CartData>(context, listen: false)
+                              .addToTotal(widget.item!.price!);
+                          showInSnackBar(
+                              "${widget.item!.name} Added to cart", context);
+                        }
+                      });
+                    }),
               ),
             ],
           ),

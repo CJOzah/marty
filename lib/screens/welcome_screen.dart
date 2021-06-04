@@ -37,7 +37,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _controller1 = AnimationController(
       duration: const Duration(milliseconds: 1600),
       vsync: this,
-    )..repeat(reverse: true);
+    )..repeat(reverse: false);
     _offsetAnimation = Tween<Offset>(
       begin: Offset(-0.05, 5.0),
       end: const Offset(-0.05, 3.4),
@@ -45,7 +45,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller1!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2400), () {
+    Future.delayed(Duration(milliseconds: 1600), () {
       _controller1!.stop();
     });
 
@@ -60,7 +60,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller2!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2600), () {
+    Future.delayed(Duration(milliseconds: 1800), () {
       _controller2!.stop();
     });
 
@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller3!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2600), () {
+    Future.delayed(Duration(milliseconds: 2000), () {
       _controller3!.stop();
     });
     // Future.delayed(Duration(milliseconds: 2600), () {
@@ -93,7 +93,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller4!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2800), () {
+    Future.delayed(Duration(milliseconds: 2000), () {
       _controller4!.stop();
     });
 

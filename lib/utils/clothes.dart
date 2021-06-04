@@ -2,7 +2,7 @@ class ClothesModel {
   String? id;
   String? image;
   String? name;
-  String? ratings;
+  double? ratings;
   int? quantity;
   String? selectedSize;
   int? price;
@@ -74,7 +74,7 @@ List<ClothesModel> cloth = [
       color: "pink",
       size: ["M", "L", "XL", "XXL"],
       gender: "Male",
-      ratings: "7.98",
+      ratings: 7.98,
       description:
           "For formal or casual wear, this shirt is a perfectly tailored choice. Wear this with pant trousers, chino trousers, or denim and be sure to look professional, daring and in charge. Match with a nicely patterned tie for the truly corporate look."),
   ClothesModel(
@@ -89,7 +89,7 @@ List<ClothesModel> cloth = [
       color: "Blue, White, Light Brown",
       size: ["M", "L", "XL", "XXL"],
       gender: "Male",
-      ratings: "8.98",
+      ratings: 8.98,
       description:
           "For formal or casual wear, this shirt is a perfectly tailored choice. Wear this with pant trousers, chino trousers, or denim and be sure to look professional, daring and in charge. Match with a nicely patterned tie for the truly corporate look."),
   ClothesModel(
@@ -104,7 +104,7 @@ List<ClothesModel> cloth = [
       color: "Light Blue, Light Pink",
       size: ["M", "L", "XL", "XXL"],
       gender: "Male",
-      ratings: "5.98",
+      ratings: 5.98,
       description:
           "For formal or casual wear, this shirt is a perfectly tailored choice. Wear this with pant trousers, chino trousers, or denim and be sure to look professional, daring and in charge. Match with a nicely patterned tie for the truly corporate look."),
   ClothesModel(
@@ -119,7 +119,7 @@ List<ClothesModel> cloth = [
       color: "Blue",
       size: ["M", "L", "XL", "XXL", "XXXL"],
       gender: "Male",
-      ratings: "5.58",
+      ratings: 5.58,
       description:
           "Whether formally dressed or in casuals, style should never be compromised. Jumia provides you with fashion items and accessories that fit your everyday lifestyle, from the workplace to the bar, all proven durable and of superior quality. Men's sports suit & trouser set Fabric material: Cotton Color: Grey Breathable and comfortable T-shirt & trousers set Style: Sports/casual Hello there! welcome to our shop! The preferential price of quality products is our top priority. From delicate looks to meticulous stitching and cotton-rich materials, these are important things."),
   ClothesModel(
@@ -134,7 +134,7 @@ List<ClothesModel> cloth = [
       color: "Dark Blue",
       size: ["M", "L", "XL", "XXL", "XXXL"],
       gender: "Male",
-      ratings: "9.58",
+      ratings: 9.58,
       description:
           "Whether formally dressed or in casuals, style should never be compromised. Jumia provides you with fashion items and accessories that fit your everyday lifestyle, from the workplace to the bar, all proven durable and of superior quality. Men's sports suit & trouser set Fabric material: Cotton Color: Grey Breathable and comfortable T-shirt & trousers set Style: Sports/casual Hello there! welcome to our shop! The preferential price of quality products is our top priority. From delicate looks to meticulous stitching and cotton-rich materials, these are important things."),
 ];
@@ -152,7 +152,7 @@ List<ClothesModel> shoes = [
     color: "Red",
     size: ["32", "33", "34", "35", "36"],
     gender: "Male",
-    ratings: "7.98",
+    ratings: 7.98,
     description:
         "We will be glad to hear from you with any positive or negative suggestions to improve our product design and service. We are looking forward to build long business with Africa marketplace and worldwide. And wish you all best and have fun everyday, life is wonderful to each one.",
   ),
@@ -168,7 +168,7 @@ List<ClothesModel> shoes = [
     color: "White",
     size: ["32", "33", "34", "35", "36"],
     gender: "Male",
-    ratings: "6.98",
+    ratings: 6.98,
     description:
         "We will be glad to hear from you with any positive or negative suggestions to improve our product design and service. We are looking forward to build long business with Africa marketplace and worldwide. And wish you all best and have fun everyday, life is wonderful to each one.",
   ),
@@ -184,7 +184,7 @@ List<ClothesModel> shoes = [
     color: "White and Blue",
     size: ["32", "33", "34", "35", "36"],
     gender: "Male",
-    ratings: "9.98",
+    ratings: 9.98,
     description:
         "We will be glad to hear from you with any positive or negative suggestions to improve our product design and service. We are looking forward to build long business with Africa marketplace and worldwide. And wish you all best and have fun everyday, life is wonderful to each one.",
   ),
@@ -200,7 +200,7 @@ List<ClothesModel> shoes = [
     color: "Black",
     size: ["32", "33", "34", "35", "36"],
     gender: "Male",
-    ratings: "7.98",
+    ratings: 7.98,
     description:
         "We will be glad to hear from you with any positive or negative suggestions to improve our product design and service. We are looking forward to build long business with Africa marketplace and worldwide. And wish you all best and have fun everyday, life is wonderful to each one.",
   ),
@@ -216,7 +216,7 @@ List<ClothesModel> shoes = [
     favbutton: false,
     size: ["32", "33", "34", "35", "36"],
     gender: "Male",
-    ratings: "4.98",
+    ratings: 4.98,
     description:
         "We will be glad to hear from you with any positive or negative suggestions to improve our product design and service. We are looking forward to build long business with Africa marketplace and worldwide. And wish you all best and have fun everyday, life is wonderful to each one.",
   ),
@@ -235,7 +235,7 @@ List<ClothesModel> watches = [
     size: [],
     color: "Silver",
     gender: "Unisex",
-    ratings: "7.98",
+    ratings: 7.98,
     description:
         " Package included: 1 x Quartz Watch \n 1 x Manual \n 1 x Gift Box \nSpecification: \nColor: Dark Blue,Gold,Red \nMaterial Type:Glass \nMovement:Quartz \nStyle: Fashion & Dress & CasualFeature:Stop Watch \nGender: Female & Male \nWaterproof: Yes \nWaterproof Depth: 30",
   ),
@@ -251,7 +251,7 @@ List<ClothesModel> watches = [
     gender: "Unisex",
     cartbutton: true,
     favbutton: false,
-    ratings: "4.98",
+    ratings: 4.98,
     description:
         " Package included: 1 x Quartz Watch \n 1 x Manual \n 1 x Gift Box \nSpecification: \nColor: Dark Blue,Gold,Red \nMaterial Type:Glass \nMovement:Quartz \nStyle: Fashion & Dress & CasualFeature:Stop Watch \nGender: Female & Male \nWaterproof: Yes \nWaterproof Depth: 30",
   ),
@@ -267,7 +267,7 @@ List<ClothesModel> watches = [
     favbutton: false,
     color: "Blueish Purple",
     gender: "Unisex",
-    ratings: "9.98",
+    ratings: 9.98,
     description:
         " Package included: 1 x Quartz Watch \n 1 x Manual \n 1 x Gift Box \nSpecification: \nColor: Dark Blue,Gold,Red \nMaterial Type:Glass \nMovement:Quartz \nStyle: Fashion & Dress & CasualFeature:Stop Watch \nGender: Female & Male \nWaterproof: Yes \nWaterproof Depth: 30",
   ),
@@ -283,7 +283,7 @@ List<ClothesModel> watches = [
     gender: "Unisex",
     cartbutton: true,
     favbutton: false,
-    ratings: "9.98",
+    ratings: 9.98,
     description:
         " Package included: 1 x Quartz Watch \n 1 x Manual \n 1 x Gift Box \nSpecification: \nColor: Dark Blue,Gold,Red \nMaterial Type:Glass \nMovement:Quartz \nStyle: Fashion & Dress & CasualFeature:Stop Watch \nGender: Female & Male \nWaterproof: Yes \nWaterproof Depth: 30",
   ),
@@ -299,7 +299,7 @@ List<ClothesModel> watches = [
     price: 9999,
     color: "Light Brown",
     gender: "Unisex",
-    ratings: "7.98",
+    ratings: 7.98,
     description:
         " Package included: 1 x Quartz Watch \n 1 x Manual \n 1 x Gift Box \nSpecification: \nColor: Dark Blue,Gold,Red \nMaterial Type:Glass \nMovement:Quartz \nStyle: Fashion & Dress & CasualFeature:Stop Watch \nGender: Female & Male \nWaterproof: Yes \nWaterproof Depth: 30",
   ),

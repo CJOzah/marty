@@ -318,7 +318,6 @@ class _FavScreenState extends State<FavScreen> {
                                     items = Provider.of<CartData>(context,
                                             listen: false)
                                         .getFavItems()[index];
-                                    ;
                                   });
                                 }),
                           ),

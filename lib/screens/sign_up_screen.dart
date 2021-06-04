@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/utils/size_config.dart';

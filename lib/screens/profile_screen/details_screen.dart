@@ -123,6 +123,7 @@ class GradientButton extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(SizeConfig.sH! * 2),
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(SizeConfig.sH! * 2),
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,

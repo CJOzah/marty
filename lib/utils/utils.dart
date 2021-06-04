@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
+import 'package:shopplift/screens/fav_screen.dart';
 import 'package:shopplift/screens/profile_screen/details_screen.dart';
+import 'package:shopplift/screens/profile_screen/profile_screen.dart';
+import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
-import 'package:shopplift/screens/sign_in_screen.dart';
 
+import '../home.dart';
 import '../main.dart';
 import 'cart.dart';
 
@@ -50,7 +54,6 @@ class HeadlineText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final s = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(
         left: SizeConfig.sH!,
@@ -100,9 +103,6 @@ class RoundedRectTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = MediaQuery.of(context).size;
-    final h = s.height;
-    final w = s.width;
     SizeConfig().init(context);
     return Card(
       elevation: 2.0,
@@ -742,6 +742,9 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                                             height: SizeConfig.sH! * 6,
                                             width: SizeConfig.sH! * 6,
                                             decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      SizeConfig.sH! * 1),
                                               gradient: LinearGradient(
                                                 begin: Alignment.bottomLeft,
                                                 end: Alignment.topRight,
@@ -821,6 +824,9 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                                             height: SizeConfig.sH! * 6,
                                             width: SizeConfig.sH! * 6,
                                             decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      SizeConfig.sH! * 1),
                                               gradient: LinearGradient(
                                                 begin: Alignment.bottomLeft,
                                                 end: Alignment.topRight,
@@ -905,4 +911,279 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
       });
     },
   );
+}
+
+class CatCard extends StatelessWidget {
+  const CatCard(
+      {Key? key,
+      required this.height,
+      required this.icon,
+      required this.onpressed,
+      required this.text})
+      : super(key: key);
+
+  final double height;
+  final IconData icon;
+  final String text;
+  final Function onpressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onpressed as void Function()?,
+      child: Container(
+        height: SizeConfig.sH! * 11,
+        width: SizeConfig.sW! * 21.8,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(
+            SizeConfig.sH! * 1.5,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              icon,
+              size: SizeConfig.sH! * 5.5,
+              color: Colors.black,
+            ),
+            Text(
+              text,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: SizeConfig.sH! * 2,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondLayer extends StatefulWidget {
+  @override
+  SecondLayerState createState() => SecondLayerState();
+}
+
+late SecondLayerState secondLayerState;
+
+class SecondLayerState extends State<SecondLayer> {
+  // SecondLayerState secondLayerState;
+  double xoffSet = 0;
+  double yoffSet = 0;
+  double angle = 0;
+  bool isOpen = false;
+  @override
+  Widget build(BuildContext context) {
+    secondLayerState = this;
+    return AnimatedContainer(
+        transform: Matrix4Transform()
+            .translate(x: xoffSet, y: yoffSet)
+            .rotate(angle)
+            .matrix4,
+        duration: Duration(milliseconds: 550),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Colors.blueGrey.shade900.withOpacity(0.9)),
+        child: Column(
+          children: [
+            Row(
+              children: [],
+            )
+          ],
+        ));
+  }
+}
+
+class HomeCarousel extends StatelessWidget {
+  const HomeCarousel({
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.text1,
+    required this.text2,
+    required this.textColor,
+    this.backgroundColor,
+    this.imagePath,
+    this.text2Color,
+    this.text3Color,
+  }) : super(key: key);
+
+  final double height;
+  final double width;
+  final String text1;
+  final String text2;
+  final Color? text2Color;
+  final Color? text3Color;
+  final Color textColor;
+  final Color? backgroundColor;
+  final String? imagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                  top: SizeConfig.sH! * 3,
+                  left: SizeConfig.sW! * 3,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      text1,
+                      style: TextStyle(
+                        color: text2Color,
+                        fontSize: SizeConfig.sH! * 3.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: SizeConfig.sH! * 2,
+                        bottom: SizeConfig.sH! * 2,
+                      ),
+                      child: Text(
+                        text2,
+                        style: TextStyle(
+                          color: text3Color,
+                          fontSize: SizeConfig.sH! * 2,
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      child: Text(
+                        "Discover Collection ->",
+                        style: TextStyle(
+                            fontSize: SizeConfig.sH! * 2.8,
+                            fontWeight: FontWeight.bold,
+                            color: textColor),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: SizeConfig.sH! * 1),
+                height: SizeConfig.sH! * 15,
+                width: SizeConfig.sW! * 35,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(imagePath!), fit: BoxFit.cover),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FirstLayer extends StatefulWidget {
+  @override
+  _FirstLayerState createState() => _FirstLayerState();
+}
+
+class _FirstLayerState extends State<FirstLayer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(color: Colors.blue.shade900),
+    );
+  }
+}
+
+class ThirdLayer extends StatefulWidget {
+  @override
+  _ThirdLayerState createState() => _ThirdLayerState();
+}
+
+class _ThirdLayerState extends State<ThirdLayer> {
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    return SafeArea(
+      child: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/BubbleDesign.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: SizeConfig.sW! * 4, top: SizeConfig.sH! * 15),
+                child: Text(
+                  "Marty",
+                  style: TextStyle(
+                    fontSize: SizeConfig.sH! * 4,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    MenuListTile(
+                      leading: Icons.home_outlined,
+                      title: "Home",
+                      ontap: FancyDraw.id,
+                    ),
+                    MenuListTile(
+                      leading: Icons.shopping_cart_outlined,
+                      title: "Cart",
+                      ontap: CartScreen.id,
+                    ),
+                    MenuListTile(
+                      leading: Icons.person_outline,
+                      title: "Profile",
+                      ontap: ProfileScreen.id,
+                    ),
+                    MenuListTile(
+                      leading: FontAwesomeIcons.heartbeat,
+                      title: "Wishlist",
+                      ontap: FavScreen.id,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.sH! * 25),
+                child: MenuListTile(
+                  leading: Icons.logout,
+                  title: "Log In",
+                  ontap: SignInScreen.id,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -166,7 +166,7 @@ class _TransferSuccessDialogueState extends State<TransferSuccessDialogue>
                         right: SizeConfig.sW! * 5.5,
                         bottom: SizeConfig.sH! * 6,
                       ),
-                      child: FlatButton(
+                      child: MaterialButton(
                         height: SizeConfig.sH! * 12,
                         minWidth: double.infinity,
                         color: Colors.blue.shade900,
