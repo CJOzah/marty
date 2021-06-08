@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "75752782069",
+    "project_id": "marty-6fd2e",
+    "storage_bucket": "marty-6fd2e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:75752782069:android:83fe2ef49d86a19737adbc",
+        "android_client_info": {
+          "package_name": "com.example.marty_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "75752782069-okfl6u7be1g2e4l40dp24b24cqubctjh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk_E63oHf1g4-3sl75mnA5MdXkf2zGU58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "75752782069-okfl6u7be1g2e4l40dp24b24cqubctjh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
