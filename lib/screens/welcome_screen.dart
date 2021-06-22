@@ -45,24 +45,36 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller1!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 1600), () {
-      _controller1!.stop();
-    });
+    // Future.delayed(Duration(milliseconds: 1600), () {
+    //   _controller1!.stop();
+    // });
 
     _controller2 = AnimationController(
-      duration: const Duration(milliseconds: 1800),
+      lowerBound: 0.25,
+      upperBound: 1.0,
+      duration: const Duration(milliseconds: 3500),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation1 = Tween<Offset>(
       begin: Offset(0.0, 7.0),
-      end: const Offset(0.0, 4.2),
+      end: const Offset(0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: _controller2!,
-      curve: Curves.elasticInOut,
+      curve: Curves.linear,
     ));
-    Future.delayed(Duration(milliseconds: 1800), () {
-      _controller2!.stop();
+
+    _controller2!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller2!.reset();
+      } else if (status == AnimationStatus.dismissed) {
+        _controller2!.forward();
+      }
     });
+
+    _controller2!.forward();
+    // Future.delayed(Duration(milliseconds: 1800), () {
+    //   _controller2!.stop();
+    // });
 
     _controller3 = AnimationController(
       duration: const Duration(milliseconds: 1800),
@@ -75,15 +87,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller3!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2000), () {
-      _controller3!.stop();
-    });
+    // Future.delayed(Duration(milliseconds: 2000), () {
+    //   _controller3!.stop();
+    // });
     // Future.delayed(Duration(milliseconds: 2600), () {
     //   _controller3!.stop();
     // });
 
     _controller4 = AnimationController(
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 3000),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation3 = Tween<Offset>(
@@ -93,12 +105,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller4!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2000), () {
-      _controller4!.stop();
-    });
+    // Future.delayed(Duration(milliseconds: 2000), () {
+    //   _controller4!.stop();
+    // });
 
     _controller5 = AnimationController(
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 3000),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation4 = Tween<Offset>(
@@ -108,9 +120,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _controller5!,
       curve: Curves.elasticInOut,
     ));
-    Future.delayed(Duration(milliseconds: 2800), () {
-      _controller5!.stop();
-    });
+    // Future.delayed(Duration(milliseconds: 2800), () {
+    //   _controller5!.stop();
+    // });
   }
 
   double? h;
@@ -143,119 +155,118 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SlideTransition(
-                    position: _offsetAnimation!,
-                    child: FractionalTranslation(
-                      child: Transform.rotate(
-                        angle: 0,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.sW! * 0,
-                              bottom: SizeConfig.sH! * 0),
-                          child: Bubbles(
-                            radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                            heigth: SizeConfig.sH! * 21,
-                            width: SizeConfig.sH! * 21,
-                            innerColor: Color(0xffBA97F5),
-                            outerColor: Color(0xff774EBD),
-                          ),
-                        ),
-                      ),
-                      translation:
-                          Offset(SizeConfig.sW! / -11, SizeConfig.sH! / 15),
-                    ),
-                  ),
-                  SlideTransition(
-                    position: _offsetAnimation1!,
-                    child: FractionalTranslation(
-                      child: Transform.rotate(
-                        angle: 0,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.sW! * 0,
-                              bottom: SizeConfig.sH! * 0),
-                          child: Bubbles(
-                            radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                            heigth: SizeConfig.sH! * 11,
-                            width: SizeConfig.sH! * 11,
-                            innerColor: Color(0xffBA97F5),
-                            outerColor: Color(0xff774EBD),
-                          ),
-                        ),
-                      ),
-                      translation:
-                          Offset(SizeConfig.sW! / -12, SizeConfig.sH! / 21),
-                    ),
-                  ),
-                  SlideTransition(
-                    position: _offsetAnimation2!,
-                    child: FractionalTranslation(
-                      child: Transform.rotate(
-                        angle: 0,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.sW! * 0,
-                              bottom: SizeConfig.sH! * 0),
-                          child: Bubbles(
-                            radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                            heigth: SizeConfig.sH! * 31,
-                            width: SizeConfig.sH! * 31,
-                            innerColor: Color(0xffEBC8FD),
-                            outerColor: Color(0xffB770D1),
-                          ),
-                        ),
-                      ),
-                      translation:
-                          Offset(SizeConfig.sW! / 14, SizeConfig.sH! / 16),
-                    ),
-                  ),
-                  SlideTransition(
-                    position: _offsetAnimation3!,
-                    child: FractionalTranslation(
-                      child: Transform.rotate(
-                        angle: 0,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.sW! * 0,
-                              bottom: SizeConfig.sH! * 0),
-                          child: Bubbles(
-                            radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                            heigth: SizeConfig.sH! * 7,
-                            width: SizeConfig.sH! * 7,
-                            innerColor: Color(0xffEBC8FD),
-                            outerColor: Color(0xffB770D1),
-                          ),
-                        ),
-                      ),
-                      translation:
-                          Offset(SizeConfig.sW! / 10, SizeConfig.sH! / 34),
-                    ),
-                  ),
-                  SlideTransition(
-                    position: _offsetAnimation4!,
-                    child: FractionalTranslation(
-                      child: Transform.rotate(
-                        angle: 0,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: SizeConfig.sW! * 0,
-                              bottom: SizeConfig.sH! * 0),
-                          child: Bubbles(
-                            radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                            heigth: SizeConfig.sH! * 17,
-                            width: SizeConfig.sH! * 17,
-                            innerColor: Color(0xffEBC8FD),
-                            outerColor: Color(0xffB770D1),
-                          ),
-                        ),
-                      ),
-                      translation:
-                          Offset(SizeConfig.sW! / 90.5, SizeConfig.sH! / 25),
-                    ),
-                  ),
+                  // SlideTransition(
+                  //   position: _offsetAnimation!,
+                  //   child: FractionalTranslation(
+                  //     child: Transform.rotate(
+                  //       angle: 0,
+                  //       child: Padding(
+                  //         padding: EdgeInsets.only(
+                  //             left: SizeConfig.sW! * 0,
+                  //             bottom: SizeConfig.sH! * 0),
+                  //         child: Bubbles(
+                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
+                  //           heigth: SizeConfig.sH! * 21,
+                  //           width: SizeConfig.sH! * 21,
+                  //           innerColor: Color(0xffBA97F5),
+                  //           outerColor: Color(0xff774EBD),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     translation:
+                  //         Offset(SizeConfig.sW! / -11, SizeConfig.sH! / 15),
+                  //   ),
+                  // ),
+                  buildSlideTransition(),
+                  // SlideTransition(
+                  //   position: _offsetAnimation2!,
+                  //   child: FractionalTranslation(
+                  //     child: Transform.rotate(
+                  //       angle: 0,
+                  //       child: Padding(
+                  //         padding: EdgeInsets.only(
+                  //             left: SizeConfig.sW! * 0,
+                  //             bottom: SizeConfig.sH! * 0),
+                  //         child: Bubbles(
+                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
+                  //           heigth: SizeConfig.sH! * 31,
+                  //           width: SizeConfig.sH! * 31,
+                  //           innerColor: Color(0xffEBC8FD),
+                  //           outerColor: Color(0xffB770D1),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     translation:
+                  //         Offset(SizeConfig.sW! / 14, SizeConfig.sH! / 16),
+                  //   ),
+                  // ),
+                  // SlideTransition(
+                  //   position: _offsetAnimation3!,
+                  //   child: FractionalTranslation(
+                  //     child: Transform.rotate(
+                  //       angle: 0,
+                  //       child: Padding(
+                  //         padding: EdgeInsets.only(
+                  //             left: SizeConfig.sW! * 0,
+                  //             bottom: SizeConfig.sH! * 0),
+                  //         child: Bubbles(
+                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
+                  //           heigth: SizeConfig.sH! * 7,
+                  //           width: SizeConfig.sH! * 7,
+                  //           innerColor: Color(0xffEBC8FD),
+                  //           outerColor: Color(0xffB770D1),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     translation:
+                  //         Offset(SizeConfig.sW! / 10, SizeConfig.sH! / 34),
+                  //   ),
+                  // ),
+                  // SlideTransition(
+                  //   position: _offsetAnimation4!,
+                  //   child: FractionalTranslation(
+                  //     child: Transform.rotate(
+                  //       angle: 0,
+                  //       child: Padding(
+                  //         padding: EdgeInsets.only(
+                  //             left: SizeConfig.sW! * 0,
+                  //             bottom: SizeConfig.sH! * 0),
+                  //         child: Bubbles(
+                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
+                  //           heigth: SizeConfig.sH! * 17,
+                  //           width: SizeConfig.sH! * 17,
+                  //           innerColor: Color(0xffEBC8FD),
+                  //           outerColor: Color(0xffB770D1),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     translation:
+                  //         Offset(SizeConfig.sW! / 90.5, SizeConfig.sH! / 25),
+                  //   ),
+                  // ),
                 ],
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  SlideTransition buildSlideTransition() {
+    return SlideTransition(
+      position: _offsetAnimation1!,
+      child: Padding(
+        padding: EdgeInsets.only(
+            left: SizeConfig.sW! * 0, bottom: SizeConfig.sH! * 0),
+        child: Opacity(
+          opacity: _controller2!.value,
+          child: Bubbles(
+            radius: BorderRadius.circular(SizeConfig.sH! * 30),
+            heigth: SizeConfig.sH! * 11,
+            width: SizeConfig.sH! * 11,
+            innerColor: Color(0xffBA97F5),
+            outerColor: Color(0xff774EBD),
           ),
         ),
       ),

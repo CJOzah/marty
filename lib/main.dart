@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (BuildContext context) => CartData(),
       child: MaterialApp(
-          initialRoute: FancyDraw.id,
+          initialRoute: WelcomeScreen.id,
           debugShowCheckedModeBanner: false,
           theme: _appTheme(),
           routes: {
