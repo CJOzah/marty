@@ -26,6 +26,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   AnimationController? _controller5;
   Animation<Offset>? _offsetAnimation4;
 
+  AnimationController? _controller6;
+  Animation<Offset>? _offsetAnimation5;
+
   late final AnimationController? _opacity;
   late final AnimationController? _opacity1;
   late final AnimationController? _opacity2;
@@ -44,88 +47,90 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
 
     _controller1 = AnimationController(
-      duration: const Duration(milliseconds: 1600),
+      duration: const Duration(milliseconds: 4500),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation = Tween<Offset>(
-      begin: Offset(-0.05, 5.0),
-      end: const Offset(-0.05, 3.4),
+      begin: Offset(-0.05, 0.6),
+      end: const Offset(-0.05, 0.1),
     ).animate(CurvedAnimation(
       parent: _controller1!,
-      curve: Curves.elasticInOut,
+      curve: Curves.easeIn,
     ));
     // Future.delayed(Duration(milliseconds: 1600), () {
     //   _controller1!.stop();
     // });
 
     _controller2 = AnimationController(
-      duration: const Duration(milliseconds: 3500),
+      duration: const Duration(milliseconds: 4500),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation1 = Tween<Offset>(
-      begin: Offset(0.0, 9.0),
-      end: const Offset(0.0, 3.0),
+      begin: Offset(-0.3, 0.6),
+      end: const Offset(-0.3, 0.1),
     ).animate(CurvedAnimation(
       parent: _controller2!,
       curve: Curves.linear,
     ));
 
-    // Future.delayed(Duration(milliseconds: 1800), () {
-    //   _controller2!.stop();
-    // });
-
     _controller3 = AnimationController(
-      duration: const Duration(milliseconds: 3800),
+      duration: const Duration(milliseconds: 4200),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation2 = Tween<Offset>(
-      begin: Offset(0.05, 3.0),
-      end: const Offset(0.05, -0.7),
+      begin: Offset(0.3, 0.7),
+      end: const Offset(0.3, 0.1),
     ).animate(CurvedAnimation(
       parent: _controller3!,
       curve: Curves.linear,
     ));
-    // Future.delayed(Duration(milliseconds: 2000), () {
-    //   _controller3!.stop();
-    // });
-    // Future.delayed(Duration(milliseconds: 2600), () {
-    //   _controller3!.stop();
-    // });
 
     _controller4 = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 4000),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation3 = Tween<Offset>(
-      begin: Offset(0.0, 4),
-      end: const Offset(0.0, 0.0),
+      begin: Offset(-0.2, 0.7),
+      end: const Offset(-0.2, 0.1),
     ).animate(CurvedAnimation(
       parent: _controller4!,
-      curve: Curves.elasticInOut,
+      curve: Curves.easeIn,
     ));
     // Future.delayed(Duration(milliseconds: 2000), () {
     //   _controller4!.stop();
     // });
 
     _controller5 = AnimationController(
-      duration: const Duration(milliseconds: 3000),
+      duration: const Duration(milliseconds: 4100),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation4 = Tween<Offset>(
-      begin: Offset(0.0, 1.7),
-      end: const Offset(0.0, -1.0),
+      begin: Offset(-0.5, 0.6),
+      end: const Offset(-0.5, 0.1),
     ).animate(CurvedAnimation(
       parent: _controller5!,
-      curve: Curves.elasticInOut,
+      curve: Curves.easeIn,
     ));
     // Future.delayed(Duration(milliseconds: 2800), () {
     //   _controller5!.stop();
     // });
 
-    _opacity = AnimationController(
-      duration: Duration(milliseconds: 3500),
+    _controller6 = AnimationController(
+      duration: const Duration(milliseconds: 4800),
       vsync: this,
-    )..repeat(reverse: true, period: Duration(milliseconds: 3500));
+    )..repeat(reverse: false);
+    _offsetAnimation5 = Tween<Offset>(
+      begin: Offset(0.4, 0.7),
+      end: const Offset(0.4, 0.1),
+    ).animate(CurvedAnimation(
+      parent: _controller6!,
+      curve: Curves.easeIn,
+    ));
+
+    _opacity = AnimationController(
+      duration: Duration(milliseconds: 4500),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 4500));
     late final Animation<double> _animation = CurvedAnimation(
       parent: _opacity!,
       curve: Curves.easeIn,
@@ -141,9 +146,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     });
 
     _opacity1 = AnimationController(
-      duration: Duration(milliseconds: 3800),
+      duration: Duration(milliseconds: 4200),
       vsync: this,
-    )..repeat(reverse: true, period: Duration(milliseconds: 3800));
+    )..repeat(reverse: true, period: Duration(milliseconds: 4200));
     late final Animation<double> _animation1 = CurvedAnimation(
       parent: _opacity1!,
       curve: Curves.easeIn,
@@ -154,6 +159,78 @@ class _WelcomeScreenState extends State<WelcomeScreen>
         setState(() {
           _opacity1!.reverse(from: 1);
           print(_opacity1!.value);
+        });
+      }
+    });
+
+    _opacity2 = AnimationController(
+      duration: Duration(milliseconds: 4000),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 4000));
+    late final Animation<double> _animation2 = CurvedAnimation(
+      parent: _opacity2!,
+      curve: Curves.easeIn,
+    );
+    _opacity2!.reverse(from: 1);
+    _animation2.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _opacity2!.reverse(from: 1);
+          print(_opacity2!.value);
+        });
+      }
+    });
+
+    _opacity3 = AnimationController(
+      duration: Duration(milliseconds: 4100),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 4100));
+    late final Animation<double> _animation3 = CurvedAnimation(
+      parent: _opacity3!,
+      curve: Curves.easeIn,
+    );
+    _opacity3!.reverse(from: 1);
+    _animation3.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _opacity3!.reverse(from: 1);
+          print(_opacity3!.value);
+        });
+      }
+    });
+
+    _opacity4 = AnimationController(
+      duration: Duration(milliseconds: 4500),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 4500));
+    late final Animation<double> _animation4 = CurvedAnimation(
+      parent: _opacity4!,
+      curve: Curves.easeIn,
+    );
+    _opacity4!.reverse(from: 1);
+    _animation4.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _opacity4!.reverse(from: 1);
+          print(_opacity4!.value);
+        });
+      }
+    });
+
+    _opacity5 = AnimationController(
+      duration: Duration(milliseconds: 4800),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 4800));
+    late final Animation<double> _animation5 = CurvedAnimation(
+      parent: _opacity5!,
+      curve: Curves.easeIn,
+    );
+    _opacity5!.reverse(from: 1);
+    _animation5.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _opacity5!.reverse(from: 1);
+          print(_opacity5!.value);
         });
       }
     });
@@ -187,116 +264,59 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // SlideTransition(
-                  //   position: _offsetAnimation!,
-                  //   child: FractionalTranslation(
-                  //     child: Transform.rotate(
-                  //       angle: 0,
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only(
-                  //             left: SizeConfig.sW! * 0,
-                  //             bottom: SizeConfig.sH! * 0),
-                  //         child: Bubbles(
-                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                  //           heigth: SizeConfig.sH! * 21,
-                  //           width: SizeConfig.sH! * 21,
-                  //           innerColor: Color(0xffBA97F5),
-                  //           outerColor: Color(0xff774EBD),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     translation:
-                  //         Offset(SizeConfig.sW! / -11, SizeConfig.sH! / 15),
-                  //   ),
-                  // ),
-                  buildSlideTransition(
-                    Color(0xffBA97F5),
-                    Color(0xff774EBD),
-                    SizeConfig.sH! * 11,
-                    SizeConfig.sH! * 11,
-                    _opacity!,
-                    _offsetAnimation1!,
-                    BorderRadius.circular(SizeConfig.sH! * 30),
-                  ),
-                  buildSlideTransition(
-                    Color(0xffBA97F5),
-                    Color(0xff774EBD),
-                    SizeConfig.sH! * 31,
-                    SizeConfig.sH! * 31,
-                    _opacity1!,
-                    _offsetAnimation2!,
-                    BorderRadius.circular(SizeConfig.sH! * 30),
-                  ),
-                  // SlideTransition(
-                  //   position: _offsetAnimation2!,
-                  //   child: FractionalTranslation(
-                  //     child: Transform.rotate(
-                  //       angle: 0,
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only(
-                  //             left: SizeConfig.sW! * 0,
-                  //             bottom: SizeConfig.sH! * 0),
-                  //         child: Bubbles(
-                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                  //           heigth: SizeConfig.sH! * 31,
-                  //           width: SizeConfig.sH! * 31,
-                  //           innerColor: Color(0xffEBC8FD),
-                  //           outerColor: Color(0xffB770D1),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     translation:
-                  //         Offset(SizeConfig.sW! / 14, SizeConfig.sH! / 16),
-                  //   ),
-                  // ),
-                  // SlideTransition(
-                  //   position: _offsetAnimation3!,
-                  //   child: FractionalTranslation(
-                  //     child: Transform.rotate(
-                  //       angle: 0,
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only(
-                  //             left: SizeConfig.sW! * 0,
-                  //             bottom: SizeConfig.sH! * 0),
-                  //         child: Bubbles(
-                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                  //           heigth: SizeConfig.sH! * 7,
-                  //           width: SizeConfig.sH! * 7,
-                  //           innerColor: Color(0xffEBC8FD),
-                  //           outerColor: Color(0xffB770D1),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     translation:
-                  //         Offset(SizeConfig.sW! / 10, SizeConfig.sH! / 34),
-                  //   ),
-                  // ),
-                  // SlideTransition(
-                  //   position: _offsetAnimation4!,
-                  //   child: FractionalTranslation(
-                  //     child: Transform.rotate(
-                  //       angle: 0,
-                  //       child: Padding(
-                  //         padding: EdgeInsets.only(
-                  //             left: SizeConfig.sW! * 0,
-                  //             bottom: SizeConfig.sH! * 0),
-                  //         child: Bubbles(
-                  //           radius: BorderRadius.circular(SizeConfig.sH! * 30),
-                  //           heigth: SizeConfig.sH! * 17,
-                  //           width: SizeConfig.sH! * 17,
-                  //           innerColor: Color(0xffEBC8FD),
-                  //           outerColor: Color(0xffB770D1),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     translation:
-                  //         Offset(SizeConfig.sW! / 90.5, SizeConfig.sH! / 25),
-                  //   ),
-                  // ),
-                ],
+              buildSlideTransition(
+                Color(0xffBA97F5),
+                Color(0xff774EBD),
+                SizeConfig.sH! * 21,
+                SizeConfig.sH! * 21,
+                _opacity4!,
+                _offsetAnimation!,
+                BorderRadius.circular(SizeConfig.sH! * 30),
+              ),
+              buildSlideTransition(
+                Color(0xffBA97F5),
+                Color(0xff774EBD),
+                SizeConfig.sH! * 11,
+                SizeConfig.sH! * 11,
+                _opacity!,
+                _offsetAnimation1!,
+                BorderRadius.circular(SizeConfig.sH! * 30),
+              ),
+              buildSlideTransition(
+                Color(0xffBA97F5),
+                Color(0xff774EBD),
+                SizeConfig.sH! * 31,
+                SizeConfig.sH! * 31,
+                _opacity1!,
+                _offsetAnimation2!,
+                BorderRadius.circular(SizeConfig.sH! * 30),
+              ),
+              buildSlideTransition(
+                Color(0xffEBC8FD),
+                Color(0xffB770D1),
+                SizeConfig.sH! * 7,
+                SizeConfig.sH! * 7,
+                _opacity2!,
+                _offsetAnimation3!,
+                BorderRadius.circular(SizeConfig.sH! * 30),
+              ),
+              buildSlideTransition(
+                Color(0xffEBC8FD),
+                Color(0xffB770D1),
+                SizeConfig.sH! * 17,
+                SizeConfig.sH! * 17,
+                _opacity3!,
+                _offsetAnimation4!,
+                BorderRadius.circular(SizeConfig.sH! * 30),
+              ),
+              buildSlideTransition(
+                Color(0xffEBC8FD),
+                Color(0xffB770D1),
+                SizeConfig.sH! * 27,
+                SizeConfig.sH! * 27,
+                _opacity5!,
+                _offsetAnimation5!,
+                BorderRadius.circular(SizeConfig.sH! * 30),
               ),
             ],
           ),
