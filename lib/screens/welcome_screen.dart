@@ -26,6 +26,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   AnimationController? _controller5;
   Animation<Offset>? _offsetAnimation4;
 
+  late final AnimationController? _opacity;
+  late final AnimationController? _opacity1;
+  late final AnimationController? _opacity2;
+  late final AnimationController? _opacity3;
+  late final AnimationController? _opacity4;
+  late final AnimationController? _opacity5;
+
+  double opacity = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -50,42 +59,31 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     // });
 
     _controller2 = AnimationController(
-      lowerBound: 0.25,
-      upperBound: 1.0,
       duration: const Duration(milliseconds: 3500),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation1 = Tween<Offset>(
-      begin: Offset(0.0, 7.0),
-      end: const Offset(0.0, 0.0),
+      begin: Offset(0.0, 9.0),
+      end: const Offset(0.0, 3.0),
     ).animate(CurvedAnimation(
       parent: _controller2!,
       curve: Curves.linear,
     ));
 
-    _controller2!.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller2!.reset();
-      } else if (status == AnimationStatus.dismissed) {
-        _controller2!.forward();
-      }
-    });
-
-    _controller2!.forward();
     // Future.delayed(Duration(milliseconds: 1800), () {
     //   _controller2!.stop();
     // });
 
     _controller3 = AnimationController(
-      duration: const Duration(milliseconds: 1800),
+      duration: const Duration(milliseconds: 3800),
       vsync: this,
     )..repeat(reverse: false);
     _offsetAnimation2 = Tween<Offset>(
       begin: Offset(0.05, 3.0),
-      end: const Offset(0.05, 0.7),
+      end: const Offset(0.05, -0.7),
     ).animate(CurvedAnimation(
       parent: _controller3!,
-      curve: Curves.elasticInOut,
+      curve: Curves.linear,
     ));
     // Future.delayed(Duration(milliseconds: 2000), () {
     //   _controller3!.stop();
@@ -100,7 +98,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation3 = Tween<Offset>(
       begin: Offset(0.0, 4),
-      end: const Offset(0.0, -1.0),
+      end: const Offset(0.0, 0.0),
     ).animate(CurvedAnimation(
       parent: _controller4!,
       curve: Curves.elasticInOut,
@@ -123,6 +121,42 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     // Future.delayed(Duration(milliseconds: 2800), () {
     //   _controller5!.stop();
     // });
+
+    _opacity = AnimationController(
+      duration: Duration(milliseconds: 3500),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 3500));
+    late final Animation<double> _animation = CurvedAnimation(
+      parent: _opacity!,
+      curve: Curves.easeIn,
+    );
+    _opacity!.reverse(from: 1);
+    _animation.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _opacity!.reverse(from: 1);
+          print(_opacity!.value);
+        });
+      }
+    });
+
+    _opacity1 = AnimationController(
+      duration: Duration(milliseconds: 3800),
+      vsync: this,
+    )..repeat(reverse: true, period: Duration(milliseconds: 3800));
+    late final Animation<double> _animation1 = CurvedAnimation(
+      parent: _opacity1!,
+      curve: Curves.easeIn,
+    );
+    _opacity1!.reverse(from: 1);
+    _animation1.addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _opacity1!.reverse(from: 1);
+          print(_opacity1!.value);
+        });
+      }
+    });
   }
 
   double? h;
@@ -136,6 +170,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _controller3!.dispose();
     _controller4!.dispose();
     _controller5!.dispose();
+    _opacity!.dispose();
     super.dispose();
   }
 
@@ -177,7 +212,24 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   //         Offset(SizeConfig.sW! / -11, SizeConfig.sH! / 15),
                   //   ),
                   // ),
-                  buildSlideTransition(),
+                  buildSlideTransition(
+                    Color(0xffBA97F5),
+                    Color(0xff774EBD),
+                    SizeConfig.sH! * 11,
+                    SizeConfig.sH! * 11,
+                    _opacity!,
+                    _offsetAnimation1!,
+                    BorderRadius.circular(SizeConfig.sH! * 30),
+                  ),
+                  buildSlideTransition(
+                    Color(0xffBA97F5),
+                    Color(0xff774EBD),
+                    SizeConfig.sH! * 31,
+                    SizeConfig.sH! * 31,
+                    _opacity1!,
+                    _offsetAnimation2!,
+                    BorderRadius.circular(SizeConfig.sH! * 30),
+                  ),
                   // SlideTransition(
                   //   position: _offsetAnimation2!,
                   //   child: FractionalTranslation(
@@ -253,20 +305,28 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
   }
 
-  SlideTransition buildSlideTransition() {
-    return SlideTransition(
-      position: _offsetAnimation1!,
-      child: Padding(
-        padding: EdgeInsets.only(
-            left: SizeConfig.sW! * 0, bottom: SizeConfig.sH! * 0),
-        child: Opacity(
-          opacity: _controller2!.value,
+  FadeTransition buildSlideTransition(
+      Color? innerColor,
+      Color? outerColor,
+      double? height,
+      double? width,
+      Animation<double>? opacity,
+      Animation<Offset>? position,
+      BorderRadius? radius) {
+    print(_controller2!.value);
+    return FadeTransition(
+      opacity: opacity!,
+      child: SlideTransition(
+        position: position!,
+        child: Padding(
+          padding: EdgeInsets.only(
+              left: SizeConfig.sW! * 0, bottom: SizeConfig.sH! * 0),
           child: Bubbles(
-            radius: BorderRadius.circular(SizeConfig.sH! * 30),
-            heigth: SizeConfig.sH! * 11,
-            width: SizeConfig.sH! * 11,
-            innerColor: Color(0xffBA97F5),
-            outerColor: Color(0xff774EBD),
+            radius: radius,
+            heigth: height,
+            width: width,
+            innerColor: innerColor,
+            outerColor: outerColor,
           ),
         ),
       ),
