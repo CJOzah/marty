@@ -34,6 +34,8 @@ dependencies:
   flurry_navigation: ^0.1.2
   matrix4_transform: ^2.0.0
   lottie: ^1.0.1
+  animated_text_kit: ^4.2.1
+  page_transition: ^2.0.2
 
 dev_dependencies:
   flutter_test:

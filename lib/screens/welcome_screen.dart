@@ -1,6 +1,16 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:shopplift/home.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
+
+const colorizeColors = [
+  Colors.purple,
+  Colors.blue,
+  Colors.yellow,
+  Colors.red,
+];
 
 class WelcomeScreen extends StatefulWidget {
   static String id = 'WelcomeScreen.id';
@@ -29,6 +39,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   AnimationController? _controller6;
   Animation<Offset>? _offsetAnimation5;
 
+  AnimationController? _imageController;
+  Animation<Offset>? _imageOffsetAnimation;
+
   late final AnimationController? _opacity;
   late final AnimationController? _opacity1;
   late final AnimationController? _opacity2;
@@ -36,7 +49,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   late final AnimationController? _opacity4;
   late final AnimationController? _opacity5;
 
-  double opacity = 0.0;
+  late final AnimationController? _image;
+
+  double opacity = 1.0;
 
   @override
   void initState() {
@@ -52,10 +67,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation = Tween<Offset>(
       begin: Offset(-0.05, 0.6),
-      end: const Offset(-0.05, 0.1),
+      end: const Offset(-0.05, 0.2),
     ).animate(CurvedAnimation(
       parent: _controller1!,
-      curve: Curves.easeIn,
+      curve: Curves.linear,
     ));
     // Future.delayed(Duration(milliseconds: 1600), () {
     //   _controller1!.stop();
@@ -67,7 +82,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation1 = Tween<Offset>(
       begin: Offset(-0.3, 0.6),
-      end: const Offset(-0.3, 0.1),
+      end: const Offset(-0.3, 0.2),
     ).animate(CurvedAnimation(
       parent: _controller2!,
       curve: Curves.linear,
@@ -79,7 +94,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation2 = Tween<Offset>(
       begin: Offset(0.3, 0.7),
-      end: const Offset(0.3, 0.1),
+      end: const Offset(0.3, 0.2),
     ).animate(CurvedAnimation(
       parent: _controller3!,
       curve: Curves.linear,
@@ -91,10 +106,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation3 = Tween<Offset>(
       begin: Offset(-0.2, 0.7),
-      end: const Offset(-0.2, 0.1),
+      end: const Offset(-0.2, 0.2),
     ).animate(CurvedAnimation(
       parent: _controller4!,
-      curve: Curves.easeIn,
+      curve: Curves.linear,
     ));
     // Future.delayed(Duration(milliseconds: 2000), () {
     //   _controller4!.stop();
@@ -106,10 +121,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation4 = Tween<Offset>(
       begin: Offset(-0.5, 0.6),
-      end: const Offset(-0.5, 0.1),
+      end: const Offset(-0.5, 0.2),
     ).animate(CurvedAnimation(
       parent: _controller5!,
-      curve: Curves.easeIn,
+      curve: Curves.linear,
     ));
     // Future.delayed(Duration(milliseconds: 2800), () {
     //   _controller5!.stop();
@@ -121,10 +136,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     )..repeat(reverse: false);
     _offsetAnimation5 = Tween<Offset>(
       begin: Offset(0.4, 0.7),
-      end: const Offset(0.4, 0.1),
+      end: const Offset(0.4, 0.2),
     ).animate(CurvedAnimation(
       parent: _controller6!,
-      curve: Curves.easeIn,
+      curve: Curves.linear,
     ));
 
     _opacity = AnimationController(
@@ -140,7 +155,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (status == AnimationStatus.dismissed) {
         setState(() {
           _opacity!.reverse(from: 1);
-          print(_opacity!.value);
         });
       }
     });
@@ -158,7 +172,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (status == AnimationStatus.dismissed) {
         setState(() {
           _opacity1!.reverse(from: 1);
-          print(_opacity1!.value);
         });
       }
     });
@@ -176,7 +189,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (status == AnimationStatus.dismissed) {
         setState(() {
           _opacity2!.reverse(from: 1);
-          print(_opacity2!.value);
         });
       }
     });
@@ -194,7 +206,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (status == AnimationStatus.dismissed) {
         setState(() {
           _opacity3!.reverse(from: 1);
-          print(_opacity3!.value);
         });
       }
     });
@@ -212,7 +223,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (status == AnimationStatus.dismissed) {
         setState(() {
           _opacity4!.reverse(from: 1);
-          print(_opacity4!.value);
         });
       }
     });
@@ -230,9 +240,43 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       if (status == AnimationStatus.dismissed) {
         setState(() {
           _opacity5!.reverse(from: 1);
-          print(_opacity5!.value);
         });
       }
+    });
+
+    _imageController = AnimationController(
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    )..animateTo(1);
+    _imageOffsetAnimation = Tween<Offset>(
+      begin: Offset(-0.9, 0.0),
+      end: const Offset(0.0, 0.0),
+    ).animate(CurvedAnimation(
+      parent: _imageController!,
+      curve: Curves.bounceIn,
+    ));
+
+    //   Future.delayed(Duration(milliseconds: 2800), () {
+    //   _controller5!.stop();
+    // });
+
+    _image = AnimationController(
+      duration: Duration(milliseconds: 4800),
+      vsync: this,
+    )
+      ..animateTo(2)
+      ..repeat(reverse: true);
+    late final Animation<double> _imageAnimation = CurvedAnimation(
+      parent: _image!,
+      curve: Curves.easeIn,
+    );
+
+    Future.delayed(Duration(milliseconds: 20000), () {
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.rightToLeftWithFade,
+              child: FancyDraw()));
     });
   }
 
@@ -247,7 +291,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     _controller3!.dispose();
     _controller4!.dispose();
     _controller5!.dispose();
+    _controller6!.dispose();
     _opacity!.dispose();
+    _opacity1!.dispose();
+    _opacity2!.dispose();
+    _opacity3!.dispose();
+    _opacity4!.dispose();
+    _opacity5!.dispose();
+    _imageController!.dispose();
+    _image!.dispose();
     super.dispose();
   }
 
@@ -264,6 +316,42 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           child: Stack(
             alignment: Alignment.center,
             children: [
+              SlideTransition(
+                position: _imageOffsetAnimation!,
+                child: FadeTransition(
+                  opacity: _image!,
+                  child: Image(
+                    fit: BoxFit.cover,
+                    image: AssetImage("images/LOGO.png"),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: SizeConfig.sH! * 20),
+                child: Center(
+                  child: SizedBox(
+                    width: SizeConfig.sW! * 80,
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        ColorizeAnimatedText(
+                          'All the best for a whole lot less.',
+                          textStyle: TextStyle(
+                            fontSize: SizeConfig.sH! * 3,
+                            fontWeight: FontWeight.w800,
+                            fontFamily: 'Horizon',
+                          ),
+                          colors: colorizeColors,
+                          speed: Duration(milliseconds: 800),
+                        ),
+                      ],
+                      isRepeatingAnimation: true,
+                      onTap: () {
+                        print("Tap Event");
+                      },
+                    ),
+                  ),
+                ),
+              ),
               buildSlideTransition(
                 Color(0xffBA97F5),
                 Color(0xff774EBD),
@@ -333,7 +421,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       Animation<double>? opacity,
       Animation<Offset>? position,
       BorderRadius? radius) {
-    print(_controller2!.value);
     return FadeTransition(
       opacity: opacity!,
       child: SlideTransition(

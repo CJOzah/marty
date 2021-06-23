@@ -388,8 +388,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         ),
                                         onTap: () {
                                           setState(() {
-                                            Navigator.pushNamed(
-                                                context, WelcomeScreen.id);
                                             if (item.favbutton == true) {
                                               clothes[index].favbutton = false;
                                               Provider.of<CartData>(context,
