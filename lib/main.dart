@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
@@ -14,7 +15,9 @@ import 'package:shopplift/screens/welcome_screen.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'home.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -55,7 +58,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (BuildContext context) => CartData(),
       child: MaterialApp(
-          initialRoute: WelcomeScreen.id,
+          initialRoute: FancyDraw.id,
           debugShowCheckedModeBanner: false,
           theme: _appTheme(),
           routes: {

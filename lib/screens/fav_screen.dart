@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class FavScreen extends StatefulWidget {
 class _FavScreenState extends State<FavScreen> {
   bool butColor = true;
   int inDex = 0;
-  ClothesModel? items;
+  late QueryDocumentSnapshot<Object?> items;
 
   int addtoIndex = 1;
   Color text = Colors.black;
@@ -183,8 +184,8 @@ class _FavScreenState extends State<FavScreen> {
                                                                           .sH! *
                                                                       2)),
                                                   image: DecorationImage(
-                                                    image: AssetImage(
-                                                        '${item.image}'),
+                                                    image: NetworkImage(
+                                                        item["url"]),
                                                     fit: BoxFit.fill,
                                                   ),
                                                 ),
@@ -231,7 +232,7 @@ class _FavScreenState extends State<FavScreen> {
                                                                             false)
                                                                     .getFavItems()[inDex]);
                                                             showInSnackBar(
-                                                                "${item.name} Removed from Cart",
+                                                                "${item["name"]} Removed from Cart",
                                                                 context);
                                                           });
                                                         },
@@ -252,7 +253,7 @@ class _FavScreenState extends State<FavScreen> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      "${item.name}",
+                                                      "${item["name"]}",
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize:
@@ -265,7 +266,7 @@ class _FavScreenState extends State<FavScreen> {
                                                       padding:
                                                           EdgeInsets.only(),
                                                       child: Text(
-                                                        "${item.color}",
+                                                        "${item["color"]}",
                                                         style: TextStyle(
                                                           color: Colors.grey,
                                                           fontSize:
@@ -282,7 +283,7 @@ class _FavScreenState extends State<FavScreen> {
                                                               SizeConfig.sH! *
                                                                   2),
                                                       child: Text(
-                                                        "₦${item.price}",
+                                                        "₦${item["price"]}",
                                                         style: TextStyle(
                                                           color: Colors.black,
                                                           fontWeight:
@@ -347,25 +348,25 @@ class _FavScreenState extends State<FavScreen> {
                                       .isEmpty) {
                                   } else {
                                     if (inDex >= 1) inDex--;
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .addToCart(Provider.of<CartData>(
-                                                context,
-                                                listen: false)
-                                            .getFavItems()[inDex]);
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .addToCart(Provider.of<CartData>(
+                                    //             context,
+                                    //             listen: false)
+                                    //         .getFavItems()[inDex]);
 
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .addToTotal(Provider.of<CartData>(
-                                                context,
-                                                listen: false)
-                                            .getFavItems()[inDex]
-                                            .price!);
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .addToTotal(Provider.of<CartData>(
+                                    //             context,
+                                    //             listen: false)
+                                    //         .getFavItems()[inDex]
+                                    //         .price!);
 
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .getFavItems()[inDex]
-                                        .setQuantity(1);
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .getFavItems()[inDex]
+                                    //     .setQuantity(1);
 
                                     showInSnackBar("Added to Cart", context);
                                     Provider.of<CartData>(context,

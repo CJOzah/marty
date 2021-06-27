@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'clothes.dart';
@@ -6,7 +7,7 @@ class CartData extends ChangeNotifier {
   int _total = 0;
 
   List<ClothesModel> _cart = [];
-  List<ClothesModel> _fav = [];
+  List<QueryDocumentSnapshot<Object?>> _fav = [];
 
   void addToCart(ClothesModel clothes) {
     _cart.add(clothes);
@@ -27,12 +28,12 @@ class CartData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addToFav(ClothesModel clothes) {
+  void addToFav(QueryDocumentSnapshot<Object?> clothes) {
     _fav.add(clothes);
     notifyListeners();
   }
 
-  void removeFromFav(ClothesModel clothes) {
+  void removeFromFav(QueryDocumentSnapshot<Object?> clothes) {
     _fav.remove(clothes);
     notifyListeners();
   }
@@ -45,7 +46,7 @@ class CartData extends ChangeNotifier {
     return _cart[index];
   }
 
-  List<ClothesModel> getFavItems() {
+  List<QueryDocumentSnapshot<Object?>> getFavItems() {
     return _fav;
   }
 
