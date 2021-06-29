@@ -43,20 +43,21 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool cartbutton = false;
-  List<bool> favbutton = [false];
+  List<bool>? favbutton;
+  int? prodLength = 0;
 
   var update = FirebaseFirestore.instance.collection("all_products");
   //gets all the products stored in the firebase
   Future<QuerySnapshot<Map<String, dynamic>>> getProducts() {
     var get = FirebaseFirestore.instance;
 
-    print(get.app);
-
     return get.collection("all_products").get();
   }
 
   late Future<QuerySnapshot<Map<String, dynamic>>> products;
   List<ClothesModel> clothes = [];
+
+  void fillIcons() {}
 
   void shoesCat() {
     clothes.clear();
@@ -92,7 +93,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     allCat();
     products = getProducts();
-
     super.initState();
   }
 
@@ -319,10 +319,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           future: products,
                           builder:
                               (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            favbutton = List<bool>.filled(
-                                snapshot.data!.docs.length, false,
-                                growable: false);
-                            // print(snapshot.data!.docs.length);
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               return GridView.builder(
@@ -336,21 +332,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   scrollDirection: Axis.vertical,
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  // itemCount: clothes.length,
                                   itemCount: snapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
-                                    // favbutton[index] = false;
-                                    print(snapshot.data!.docs[index]["name"]);
-                                    // final item = clothes[index];
                                     final item = snapshot.data!.docs[index];
-                                    // if (Provider.of<CartData>(context,
-                                    //             listen: false)
-                                    //         .getFavItems()
-                                    //         .contains(item) ==
-                                    //     false) {
-                                    //   favbutton[index] = false;
+                                    favbutton = List<bool>.filled(
+                                        snapshot.data!.docs.length, false,
+                                        growable: false);
+
+                                    // these lines check to see if there's any item in the favorite or cart lists and toggle the icon respectively
+                                    Provider.of<CartData>(context,
+                                            listen: false)
+                                        .getFavItems()
+                                        .forEach((element) {
+                                      print(element.get("id"));
+                                      if (element.get("id") == item["id"]) {
+                                        favbutton![index] = true;
+                                      } else if (element.get("id") !=
+                                          item["id"]) {
+                                        favbutton![index] = false;
+                                      }
+                                    });
+                                    if (Provider.of<CartData>(context,
+                                            listen: false)
+                                        .getFavItems()
+                                        .isEmpty) favbutton![index] = false;
+                                    // favbutton![index] = true;
                                     // } else
-                                    //   favbutton[index] = true;
+                                    //   favbutton![index] = false;
                                     // if (Provider.of<CartData>(context,
                                     //             listen: false)
                                     //         .getCartItems()
@@ -378,7 +386,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             child: Container(
                                               height: SizeConfig.sH! * 30,
                                               width: double.infinity,
-                                              child: Image.network(item["url"]),
+                                              child: Image.network(item["url"],
+                                                  fit: BoxFit.cover),
                                             ),
                                           ),
                                           Text(
@@ -414,33 +423,38 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                               ),
                                               InkWell(
                                                 child: Icon(
-                                                  favbutton[index] == true
+                                                  favbutton![index] == true
                                                       ? FontAwesomeIcons
                                                           .solidHeart
                                                       : FontAwesomeIcons.heart,
-                                                  color: favbutton[index]
-                                                      ? Colors.red
-                                                      : Colors.black,
+                                                  color:
+                                                      favbutton![index] == true
+                                                          ? Colors.red
+                                                          : Colors.black,
                                                   size: SizeConfig.sW! * 6,
                                                 ),
                                                 onTap: () {
                                                   setState(() {
-                                                    if (favbutton[index] ==
+                                                    if (favbutton![index] ==
                                                         true) {
-                                                      favbutton[index] = false;
-                                                      // item["favbutton"] = false;
-                                                      Provider.of<CartData>(
+                                                      favbutton![index] = false;
+                                                      Provider.of<
+                                                                  CartData>(
                                                               context,
                                                               listen: false)
-                                                          .removeFromFav(item);
+                                                          .removeFromFav(Provider
+                                                                  .of<CartData>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                              .getFavItems()[index]);
                                                       showInSnackBar(
                                                           "${item["name"]} Removed from Favorites",
                                                           context);
-                                                      print(favbutton[index]);
-                                                    } else if (favbutton[
+                                                    } else if (favbutton![
                                                             index] ==
                                                         false) {
-                                                      favbutton[index] = true;
+                                                      favbutton![index] = true;
                                                       Provider.of<CartData>(
                                                               context,
                                                               listen: false)
@@ -478,9 +492,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                         //         listen: false)
                                                         //     .addToTotal(
                                                         //         item.price!);
-                                                        showInSnackBar(
-                                                            "${item["name"]} Added to Cart",
-                                                            context);
+                                                        // showInSnackBar(
+                                                        //     "${item["name"]} Added to Cart",
+                                                        //     context);
                                                       } else {
                                                         cartbutton = true;
                                                         // item.setQuantity(1);
@@ -496,9 +510,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                         //     .decreaseTotal(
                                                         //         clothes[index]
                                                         //             .price!);
-                                                        showInSnackBar(
-                                                            "${item["name"]} Removed from Cart",
-                                                            context);
+                                                        // showInSnackBar(
+                                                        //     "${item["name"]} Removed from Cart",
+                                                        //     context);
                                                       }
                                                     } else {
                                                       // showSizeSheet(
