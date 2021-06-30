@@ -8,15 +8,25 @@ class CartData extends ChangeNotifier {
 
   List<ClothesModel> _cart = [];
   List<QueryDocumentSnapshot<Object?>> _fav = [];
+  List<bool>? _favbutton = [];
+
+  void fillFavbutton() async {
+    var get = await FirebaseFirestore.instance.collection("all_products").get();
+
+    get.docs.forEach((element) {
+      _favbutton!.add(false);
+    });
+  }
+
+  List<bool>? getFavbutton() {
+    fillFavbutton();
+    return _favbutton;
+  }
 
   void addToCart(ClothesModel clothes) {
     _cart.add(clothes);
     notifyListeners();
   }
-  // void addToCartWithSize(ClothesModel clothes, String size) {
-  //   _cart.add(clothes);
-  //   notifyListeners();
-  // }
 
   void removeFromCart(ClothesModel clothes) {
     _cart.remove(clothes);

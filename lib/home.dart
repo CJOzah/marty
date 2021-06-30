@@ -43,7 +43,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool cartbutton = false;
-  List<bool>? favbutton;
+  List<bool>? favbutton = [false];
   int? prodLength = 0;
 
   var update = FirebaseFirestore.instance.collection("all_products");
@@ -56,8 +56,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   late Future<QuerySnapshot<Map<String, dynamic>>> products;
   List<ClothesModel> clothes = [];
-
-  void fillIcons() {}
 
   void shoesCat() {
     clothes.clear();
@@ -93,6 +91,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     allCat();
     products = getProducts();
+    favbutton = Provider.of<CartData>(context, listen: false).getFavbutton();
+    favbutton!.add(false);
+
     super.initState();
   }
 
@@ -335,23 +336,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   itemCount: snapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     final item = snapshot.data!.docs[index];
-                                    favbutton = List<bool>.filled(
-                                        snapshot.data!.docs.length, false,
-                                        growable: false);
 
                                     // these lines check to see if there's any item in the favorite or cart lists and toggle the icon respectively
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .getFavItems()
-                                        .forEach((element) {
-                                      print(element.get("id"));
-                                      if (element.get("id") == item["id"]) {
-                                        favbutton![index] = true;
-                                      } else if (element.get("id") !=
-                                          item["id"]) {
-                                        favbutton![index] = false;
-                                      }
-                                    });
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .getFavItems()
+                                    //     .forEach((element) {
+                                    //   print(element.get("id"));
+                                    //   if (element.get("id") == item["id"]) {
+                                    //     favbutton![index] = true;
+                                    //   } else if (element.get("id") !=
+                                    //       item["id"]) {
+                                    //     favbutton![index] = false;
+                                    //   }
+                                    // });
                                     if (Provider.of<CartData>(context,
                                             listen: false)
                                         .getFavItems()
