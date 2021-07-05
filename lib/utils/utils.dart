@@ -987,7 +987,7 @@ class SecondLayerState extends State<SecondLayer> {
         duration: Duration(milliseconds: 550),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.blueGrey.shade900.withOpacity(0.9)),
+            color: Colors.purple.shade900.withOpacity(0.9)),
         child: Column(
           children: [
             Row(

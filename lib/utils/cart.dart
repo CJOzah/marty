@@ -10,8 +10,19 @@ class CartData extends ChangeNotifier {
   List<QueryDocumentSnapshot<Object?>> _fav = [];
   List<bool>? _favbutton = [];
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getProducts() async {
+    var get = FirebaseFirestore.instance;
+
+    return await get.collection("all_products").get();
+  }
+
   void fillFavbutton() async {
-    var get = await FirebaseFirestore.instance.collection("all_products").get();
+    var get;
+    try {
+      get = await FirebaseFirestore.instance.collection("all_products").get();
+    } catch (e) {
+      print(e);
+    }
 
     get.docs.forEach((element) {
       _favbutton!.add(false);
@@ -20,6 +31,7 @@ class CartData extends ChangeNotifier {
 
   List<bool>? getFavbutton() {
     fillFavbutton();
+    print(_favbutton);
     return _favbutton;
   }
 
@@ -44,7 +56,9 @@ class CartData extends ChangeNotifier {
   }
 
   void removeFromFav(QueryDocumentSnapshot<Object?> clothes) {
-    _fav.remove(clothes);
+    _fav.forEach((element) {
+      if (element.id == clothes.id) _fav.remove(clothes);
+    });
     notifyListeners();
   }
 
