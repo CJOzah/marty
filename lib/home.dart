@@ -35,6 +35,176 @@ class _FancyDrawState extends State<FancyDraw> {
   }
 }
 
+const _shimmerGradient = LinearGradient(
+  colors: [
+    Color(0xFFEBEBF4),
+    Color(0xFFF4F4F4),
+    Color(0xFFEBEBF4),
+  ],
+  stops: [
+    0.1,
+    0.3,
+    0.4,
+  ],
+  begin: Alignment(-0.9, -0.5),
+  end: Alignment(0.9, 0.5),
+  tileMode: TileMode.clamp,
+);
+
+class ShimmerLoading extends StatefulWidget {
+  const ShimmerLoading({
+    Key? key,
+    required this.isLoading,
+    required this.child,
+  }) : super(key: key);
+
+  final bool isLoading;
+  final Widget child;
+
+  @override
+  _ShimmerLoadingState createState() => _ShimmerLoadingState();
+}
+
+class _ShimmerLoadingState extends State<ShimmerLoading> {
+  Listenable? _shimmerChanges;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_shimmerChanges != null) {
+      _shimmerChanges!.removeListener(_onShimmerChange);
+    }
+    _shimmerChanges = Shimmer.of(context)?.shimmerChanges;
+    if (_shimmerChanges != null) {
+      _shimmerChanges!.addListener(_onShimmerChange);
+    }
+  }
+
+  @override
+  void dispose() {
+    _shimmerChanges?.removeListener(_onShimmerChange);
+    super.dispose();
+  }
+
+  void _onShimmerChange() {
+    if (widget.isLoading) {
+      setState(() {
+        //update the shimmer painting.
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.isLoading) {
+      return widget.child;
+    }
+
+    final shimmer = Shimmer.of(context)!;
+    if (!shimmer.isSized) {
+      //The ancestor Shimmer widget isn't laid
+      //out yet. Return an empty box
+      return SizedBox();
+    }
+    final shimmerSize = shimmer.size;
+    final gradient = shimmer.gradient;
+    final OffsetWithinShimmer = shimmer.getDescendantOffset(
+      descendant: context.findRenderObject() as RenderBox,
+    );
+
+    return ShaderMask(
+      blendMode: BlendMode.srcATop,
+      shaderCallback: (bounds) {
+        return gradient.createShader(
+          Rect.fromLTWH(
+            -OffsetWithinShimmer.dx,
+            -OffsetWithinShimmer.dy,
+            shimmerSize.width,
+            shimmerSize.height,
+          ),
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
+class _SlidingGradientTransform extends GradientTransform {
+  const _SlidingGradientTransform({
+    required this.slidePercent,
+  });
+
+  final double slidePercent;
+
+  @override
+  Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {
+    return Matrix4.translationValues(bounds.width * slidePercent, 0.0, 0.0);
+  }
+}
+
+class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
+  late AnimationController _shimmerController;
+  Listenable get shimmerChanges => _shimmerController;
+
+  bool get isSized => (context.findRenderObject() as RenderBox).hasSize;
+
+  Size get size => (context.findRenderObject() as RenderBox).size;
+
+  LinearGradient get gradient => LinearGradient(
+        colors: widget.linearGradient.colors,
+        stops: widget.linearGradient.stops,
+        begin: widget.linearGradient.begin,
+        end: widget.linearGradient.end,
+        transform:
+            _SlidingGradientTransform(slidePercent: _shimmerController.value),
+      );
+
+  Offset getDescendantOffset({
+    required RenderBox descendant,
+    Offset offset = Offset.zero,
+  }) {
+    final shimmerBox = context.findRenderObject() as RenderBox;
+    return descendant.localToGlobal(offset, ancestor: shimmerBox);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _shimmerController = AnimationController.unbounded(vsync: this)
+      ..repeat(min: -0.5, max: 1.5, period: const Duration(milliseconds: 1000));
+  }
+
+  @override
+  void dispose() {
+    _shimmerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child ?? const SizedBox();
+  }
+}
+
+class Shimmer extends StatefulWidget {
+  static ShimmerState? of(BuildContext context) {
+    return context.findAncestorStateOfType<ShimmerState>();
+  }
+
+  const Shimmer({
+    Key? key,
+    required this.linearGradient,
+    this.child,
+  }) : super(key: key);
+
+  final LinearGradient linearGradient;
+  final Widget? child;
+
+  @override
+  ShimmerState createState() => ShimmerState();
+}
+
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
   @override
@@ -105,7 +275,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   List<int> quantity = List<int>.filled(5, 0, growable: true);
 
   AsyncSnapshot<QuerySnapshot>? product;
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -180,370 +350,630 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           });
                         }),
               ),
-              body: SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.all(
-                    SizeConfig.sW! * 3,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                            enableInfiniteScroll: false,
-                            viewportFraction: 1,
-                            height: SizeConfig.sH! * 25,
-                            autoPlay: true,
-                            pageSnapping: false,
-                            enlargeCenterPage: false,
-                            onPageChanged: (int? index, reason) {
-                              int? inDex;
-                              index = inDex;
-                            }),
-                        items: <Widget>[
-                          Container(
-                            height: SizeConfig.sH! * 20,
-                            width: width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage("images/carousel.jpg"),
-                                  fit: BoxFit.cover),
-                            ),
+              body: (isLoading)
+                  ? LoadingWidget(isLoading: isLoading)
+                  : Shimmer(
+                      linearGradient: _shimmerGradient,
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.all(
+                            SizeConfig.sW! * 3,
                           ),
-                          HomeCarousel(
-                            height: height,
-                            width: width,
-                            textColor: Colors.blue.shade900,
-                            imagePath: 'images/clothes2.jpg',
-                            backgroundColor: Colors.white,
-                            text1: "Mens Shirt\nHigh Quality",
-                            text2:
-                                "Check out the stylish men's shirt,\n100% natural material",
-                          ),
-                          HomeCarousel(
-                            height: height,
-                            width: width,
-                            text2Color: Colors.white,
-                            text3Color: Colors.white,
-                            textColor: Colors.white,
-                            imagePath: 'images/shoe1.jpg',
-                            backgroundColor: Color(0xFFCC041E),
-                            text1: "Shoes \nHigh Quality",
-                            text2:
-                                "Check out  stylish Shoes,\n100% natural material",
-                          ),
-                          Container(
-                            height: SizeConfig.sH! * 25,
-                            width: width,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage("images/carousel2.jpg"),
-                                  fit: BoxFit.fill),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          top: SizeConfig.sH! * 2,
-                          bottom: SizeConfig.sH! * 1.2,
-                        ),
-                        child: Text(
-                          "Choose Category",
-                          style: TextStyle(
-                            fontSize: SizeConfig.sW! * 6,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CatCard(
-                            onpressed: () {
-                              setState(() {
-                                cat = "Clothes";
-                                clothesCat();
-                              });
-                            },
-                            height: height,
-                            icon: FontAwesomeIcons.tshirt,
-                            text: "Clothes",
-                          ),
-                          CatCard(
-                            onpressed: () {
-                              setState(() {
-                                cat = "Shoes";
-                                shoesCat();
-                              });
-                            },
-                            height: height,
-                            icon: FontAwesomeIcons.shoePrints,
-                            text: "Shoes",
-                          ),
-                          CatCard(
-                            onpressed: () {
-                              setState(() {
-                                cat = "Watches";
-                                watchCat();
-                              });
-                            },
-                            height: height,
-                            icon: Icons.watch_outlined,
-                            text: "Accessories",
-                          ),
-                          CatCard(
-                            onpressed: () {
-                              setState(() {
-                                cat = "All Products";
-                                allCat();
-                              });
-                            },
-                            height: height,
-                            icon: Icons.all_inclusive_outlined,
-                            text: "All Products",
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: SizeConfig.sH! * 2),
-                        child: Text(
-                          "$cat",
-                          style: TextStyle(
-                            fontSize: SizeConfig.sW! * 6,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      FutureBuilder(
-                          future: products,
-                          builder:
-                              (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.done) {
-                              return GridView.builder(
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: size.aspectRatio / 2,
-                                    mainAxisExtent: SizeConfig.sH! * 42,
-                                    crossAxisSpacing: SizeConfig.sW! * 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ShimmerLoading(
+                                isLoading: isLoading,
+                                child: CarouselSlider(
+                                  options: CarouselOptions(
+                                      enableInfiniteScroll: false,
+                                      viewportFraction: 1,
+                                      height: SizeConfig.sH! * 25,
+                                      autoPlay: !isLoading,
+                                      pageSnapping: false,
+                                      enlargeCenterPage: false,
+                                      onPageChanged: (int? index, reason) {
+                                        int? inDex;
+                                        index = inDex;
+                                      }),
+                                  items: <Widget>[
+                                    Container(
+                                      height: SizeConfig.sH! * 20,
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                "images/carousel.jpg"),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    HomeCarousel(
+                                      height: height,
+                                      width: width,
+                                      textColor: Colors.blue.shade900,
+                                      imagePath: 'images/clothes2.jpg',
+                                      backgroundColor: Colors.white,
+                                      text1: "Mens Shirt\nHigh Quality",
+                                      text2:
+                                          "Check out the stylish men's shirt,\n100% natural material",
+                                    ),
+                                    HomeCarousel(
+                                      height: height,
+                                      width: width,
+                                      text2Color: Colors.white,
+                                      text3Color: Colors.white,
+                                      textColor: Colors.white,
+                                      imagePath: 'images/shoe1.jpg',
+                                      backgroundColor: Color(0xFFCC041E),
+                                      text1: "Shoes \nHigh Quality",
+                                      text2:
+                                          "Check out  stylish Shoes,\n100% natural material",
+                                    ),
+                                    Container(
+                                      height: SizeConfig.sH! * 25,
+                                      width: width,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                                "images/carousel2.jpg"),
+                                            fit: BoxFit.fill),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: SizeConfig.sH! * 2,
+                                  bottom: SizeConfig.sH! * 1.2,
+                                ),
+                                child: Text(
+                                  "Choose Category",
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.sW! * 6,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  scrollDirection: Axis.vertical,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  shrinkWrap: true,
-                                  itemCount: snapshot.data!.docs.length,
-                                  itemBuilder: (context, index) {
-                                    final item = snapshot.data!.docs[index];
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ShimmerLoading(
+                                    isLoading: isLoading,
+                                    child: CatCard(
+                                      onpressed: () {
+                                        setState(() {
+                                          cat = "Clothes";
+                                          clothesCat();
+                                        });
+                                      },
+                                      height: height,
+                                      icon: FontAwesomeIcons.tshirt,
+                                      text: "Clothes",
+                                    ),
+                                  ),
+                                  ShimmerLoading(
+                                    isLoading: isLoading,
+                                    child: CatCard(
+                                      onpressed: () {
+                                        setState(() {
+                                          cat = "Shoes";
+                                          shoesCat();
+                                        });
+                                      },
+                                      height: height,
+                                      icon: FontAwesomeIcons.shoePrints,
+                                      text: "Shoes",
+                                    ),
+                                  ),
+                                  ShimmerLoading(
+                                    isLoading: isLoading,
+                                    child: CatCard(
+                                      onpressed: () {
+                                        setState(() {
+                                          cat = "Watches";
+                                          watchCat();
+                                        });
+                                      },
+                                      height: height,
+                                      icon: Icons.watch_outlined,
+                                      text: "Accessories",
+                                    ),
+                                  ),
+                                  ShimmerLoading(
+                                    isLoading: isLoading,
+                                    child: CatCard(
+                                      onpressed: () {
+                                        setState(() {
+                                          cat = "All Products";
+                                          allCat();
+                                        });
+                                      },
+                                      height: height,
+                                      icon: Icons.all_inclusive_outlined,
+                                      text: "All Products",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding:
+                                    EdgeInsets.only(top: SizeConfig.sH! * 2),
+                                child: Text(
+                                  "$cat",
+                                  style: TextStyle(
+                                    fontSize: SizeConfig.sW! * 6,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              FutureBuilder(
+                                  future: products,
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      return GridView.builder(
+                                          gridDelegate:
+                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio:
+                                                size.aspectRatio / 2,
+                                            mainAxisExtent: SizeConfig.sH! * 42,
+                                            crossAxisSpacing:
+                                                SizeConfig.sW! * 2,
+                                          ),
+                                          scrollDirection: Axis.vertical,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: snapshot.data!.docs.length,
+                                          itemBuilder: (context, index) {
+                                            final item =
+                                                snapshot.data!.docs[index];
 
-                                    // these lines check to see if there's any item in the favorite or cart lists and toggle the icon respectively
-                                    // Provider.of<CartData>(context,
-                                    //         listen: false)
-                                    //     .getFavItems()
-                                    //     .forEach((element) {
-                                    //   print(element.get("id"));
-                                    //   if (element.get("id") == item["id"]) {
-                                    //     favbutton![index] = true;
-                                    //   } else if (element.get("id") !=
-                                    //       item["id"]) {
-                                    //     favbutton![index] = false;
-                                    //   }
-                                    // });
-                                    if (Provider.of<CartData>(context,
-                                            listen: false)
-                                        .getFavItems()
-                                        .isEmpty) favbutton![index] = false;
-                                    // favbutton![index] = true;
-                                    // } else
-                                    //   favbutton![index] = false;
-                                    // if (Provider.of<CartData>(context,
-                                    //             listen: false)
-                                    //         .getCartItems()
-                                    //         .contains(item) ==
-                                    //     false) {
-                                    //   cartbutton = true;
-                                    // } else
-                                    //   cartbutton = false;
-                                    return Container(
-                                      height: SizeConfig.sH! * 40,
-                                      width: double.infinity,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          InkWell(
-                                            // onTap: () => Navigator.push(
-                                            //   context,
-                                            //   MaterialPageRoute(
-                                            //       builder: (context) =>
-                                            //           ProductDescScreen(item)),
-                                            // ),
-                                            child: Container(
-                                              height: SizeConfig.sH! * 30,
+                                            // these lines check to see if there's any item in the favorite or cart lists and toggle the icon respectively
+                                            // Provider.of<CartData>(context,
+                                            //         listen: false)
+                                            //     .getFavItems()
+                                            //     .forEach((element) {
+                                            //   print(element.get("id"));
+                                            //   if (element.get("id") == item["id"]) {
+                                            //     favbutton![index] = true;
+                                            //   } else if (element.get("id") !=
+                                            //       item["id"]) {
+                                            //     favbutton![index] = false;
+                                            //   }
+                                            // });
+                                            if (Provider.of<CartData>(context,
+                                                    listen: false)
+                                                .getFavItems()
+                                                .isEmpty)
+                                              favbutton![index] = false;
+                                            // favbutton![index] = true;
+                                            // } else
+                                            //   favbutton![index] = false;
+                                            // if (Provider.of<CartData>(context,
+                                            //             listen: false)
+                                            //         .getCartItems()
+                                            //         .contains(item) ==
+                                            //     false) {
+                                            //   cartbutton = true;
+                                            // } else
+                                            //   cartbutton = false;
+                                            return Container(
+                                              height: SizeConfig.sH! * 40,
                                               width: double.infinity,
-                                              child: Image.network(item["url"],
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                          Text(
-                                            "${item["name"]}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: SizeConfig.sW! * 5,
-                                            ),
-                                            softWrap: true,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Column(
+                                              child: Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
                                                 children: [
-                                                  FittedBox(
-                                                    fit: BoxFit.scaleDown,
-                                                    child: Text(
-                                                      "₦${item["price"]}",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize:
-                                                            SizeConfig.sW! * 5,
-                                                      ),
+                                                  InkWell(
+                                                    // onTap: () => Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(
+                                                    //       builder: (context) =>
+                                                    //           ProductDescScreen(item)),
+                                                    // ),
+                                                    child: Container(
+                                                      height:
+                                                          SizeConfig.sH! * 30,
+                                                      width: double.infinity,
+                                                      child: Image.network(
+                                                          item["url"],
+                                                          fit: BoxFit.cover),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                              InkWell(
-                                                child: Icon(
-                                                  favbutton![index] == true
-                                                      ? FontAwesomeIcons
-                                                          .solidHeart
-                                                      : FontAwesomeIcons.heart,
-                                                  color:
-                                                      favbutton![index] == true
-                                                          ? Colors.red
-                                                          : Colors.black,
-                                                  size: SizeConfig.sW! * 6,
-                                                ),
-                                                onTap: () {
-                                                  setState(() {
-                                                    if (favbutton![index] ==
-                                                        true) {
-                                                      favbutton![index] = false;
-                                                      Provider.of<
-                                                                  CartData>(
-                                                              context,
-                                                              listen: false)
-                                                          .removeFromFav(Provider
-                                                                  .of<CartData>(
+                                                  Text(
+                                                    "${item["name"]}",
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          SizeConfig.sW! * 5,
+                                                    ),
+                                                    softWrap: true,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          FittedBox(
+                                                            fit: BoxFit
+                                                                .scaleDown,
+                                                            child: Text(
+                                                              "₦${item["price"]}",
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize:
+                                                                    SizeConfig
+                                                                            .sW! *
+                                                                        5,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      InkWell(
+                                                        child: Icon(
+                                                          favbutton![index] ==
+                                                                  true
+                                                              ? FontAwesomeIcons
+                                                                  .solidHeart
+                                                              : FontAwesomeIcons
+                                                                  .heart,
+                                                          color: favbutton![
+                                                                      index] ==
+                                                                  true
+                                                              ? Colors.red
+                                                              : Colors.black,
+                                                          size: SizeConfig.sW! *
+                                                              6,
+                                                        ),
+                                                        onTap: () {
+                                                          setState(() {
+                                                            if (favbutton![
+                                                                    index] ==
+                                                                true) {
+                                                              favbutton![
+                                                                      index] =
+                                                                  false;
+                                                              Provider.of<CartData>(
                                                                       context,
                                                                       listen:
                                                                           false)
-                                                              .getFavItems()[index]);
-                                                      showInSnackBar(
-                                                          "${item["name"]} Removed from Favorites",
-                                                          context);
-                                                    } else if (favbutton![
-                                                            index] ==
-                                                        false) {
-                                                      favbutton![index] = true;
-                                                      Provider.of<CartData>(
-                                                              context,
-                                                              listen: false)
-                                                          .addToFav(item);
-                                                      showInSnackBar(
-                                                          "${item["name"]} Added to Favorites",
-                                                          context);
-                                                    }
-                                                  });
-                                                },
-                                              ),
-                                              InkWell(
-                                                child: Icon(
-                                                  item["cartbutton"]!
-                                                      ? Icons
-                                                          .shopping_cart_outlined
-                                                      : FontAwesomeIcons.check,
-                                                  color: item["cartbutton"]!
-                                                      ? Colors.black
-                                                      : Colors.green,
-                                                ),
-                                                onTap: () {
-                                                  setState(() {
-                                                    if (item["size"]!.isEmpty) {
-                                                      if (cartbutton == true) {
-                                                        cartbutton = false;
-                                                        // item.quantity = 1;
-                                                        // Provider.of<CartData>(
-                                                        //         context,
-                                                        //         listen: false)
-                                                        //     .addToCart(
-                                                        //         clothes[index]);
-                                                        // Provider.of<CartData>(
-                                                        //         context,
-                                                        //         listen: false)
-                                                        //     .addToTotal(
-                                                        //         item.price!);
-                                                        // showInSnackBar(
-                                                        //     "${item["name"]} Added to Cart",
-                                                        //     context);
-                                                      } else {
-                                                        cartbutton = true;
-                                                        // item.setQuantity(1);
+                                                                  .removeFromFav(Provider.of<
+                                                                              CartData>(
+                                                                          context,
+                                                                          listen:
+                                                                              false)
+                                                                      .getFavItems()[index]);
+                                                              showInSnackBar(
+                                                                  "${item["name"]} Removed from Favorites",
+                                                                  context);
+                                                            } else if (favbutton![
+                                                                    index] ==
+                                                                false) {
+                                                              favbutton![
+                                                                  index] = true;
+                                                              Provider.of<CartData>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .addToFav(
+                                                                      item);
+                                                              showInSnackBar(
+                                                                  "${item["name"]} Added to Favorites",
+                                                                  context);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                                      InkWell(
+                                                        child: Icon(
+                                                          item["cartbutton"]!
+                                                              ? Icons
+                                                                  .shopping_cart_outlined
+                                                              : FontAwesomeIcons
+                                                                  .check,
+                                                          color: item[
+                                                                  "cartbutton"]!
+                                                              ? Colors.black
+                                                              : Colors.green,
+                                                        ),
+                                                        onTap: () {
+                                                          setState(() {
+                                                            if (item["size"]!
+                                                                .isEmpty) {
+                                                              if (cartbutton ==
+                                                                  true) {
+                                                                cartbutton =
+                                                                    false;
+                                                                // item.quantity = 1;
+                                                                // Provider.of<CartData>(
+                                                                //         context,
+                                                                //         listen: false)
+                                                                //     .addToCart(
+                                                                //         clothes[index]);
+                                                                // Provider.of<CartData>(
+                                                                //         context,
+                                                                //         listen: false)
+                                                                //     .addToTotal(
+                                                                //         item.price!);
+                                                                // showInSnackBar(
+                                                                //     "${item["name"]} Added to Cart",
+                                                                //     context);
+                                                              } else {
+                                                                cartbutton =
+                                                                    true;
+                                                                // item.setQuantity(1);
 
-                                                        // Provider.of<CartData>(
-                                                        //         context,
-                                                        //         listen: false)
-                                                        //     .removeFromCart(
-                                                        //         clothes[index]);
-                                                        // Provider.of<CartData>(
-                                                        //         context,
-                                                        //         listen: false)
-                                                        //     .decreaseTotal(
-                                                        //         clothes[index]
-                                                        //             .price!);
-                                                        // showInSnackBar(
-                                                        //     "${item["name"]} Removed from Cart",
-                                                        //     context);
-                                                      }
-                                                    } else {
-                                                      // showSizeSheet(
-                                                      //     context,
-                                                      //     item,
-                                                      //     setState,
-                                                      //     quantity);
-                                                    }
-                                                  });
-                                                },
+                                                                // Provider.of<CartData>(
+                                                                //         context,
+                                                                //         listen: false)
+                                                                //     .removeFromCart(
+                                                                //         clothes[index]);
+                                                                // Provider.of<CartData>(
+                                                                //         context,
+                                                                //         listen: false)
+                                                                //     .decreaseTotal(
+                                                                //         clothes[index]
+                                                                //             .price!);
+                                                                // showInSnackBar(
+                                                                //     "${item["name"]} Removed from Cart",
+                                                                //     context);
+                                                              }
+                                                            } else {
+                                                              // showSizeSheet(
+                                                              //     context,
+                                                              //     item,
+                                                              //     setState,
+                                                              //     quantity);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
-                                        ],
+                                            );
+                                          });
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.none) {
+                                      return Text("No data");
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        backgroundColor:
+                                            Colors.grey.withOpacity(0.5),
                                       ),
                                     );
-                                  });
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.none) {
-                              return Text("No data");
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.grey.withOpacity(0.5),
-                              ),
-                            );
-                          }),
-                    ],
+                                  }),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
+          )),
+    );
+  }
+}
+
+class LoadingWidget extends StatelessWidget {
+  final bool isLoading;
+  LoadingWidget({Key? key, required this.isLoading}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    final size = MediaQuery.of(context).size;
+    final height = size.height;
+    final width = size.width;
+    return Shimmer(
+      linearGradient: _shimmerGradient,
+      child: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(
+            SizeConfig.sW! * 3,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShimmerLoading(
+                isLoading: isLoading,
+                child: Container(
+                  height: SizeConfig.sH! * 23,
+                  color: Colors.black,
+                ),
+              ),
+              ShimmerLoading(
+                isLoading: isLoading,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.sH! * 1,
+                    bottom: SizeConfig.sH! * 1.2,
+                  ),
+                  child: Container(
+                    height: SizeConfig.sH! * 4,
+                    width: SizeConfig.sW! * 45,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius:
+                            BorderRadius.circular(SizeConfig.sH! * 2)),
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ShimmerLoading(
+                    isLoading: isLoading,
+                    child: CatCard(
+                      onpressed: () {},
+                      height: height,
+                      icon: FontAwesomeIcons.tshirt,
+                      text: "Clothes",
+                    ),
+                  ),
+                  ShimmerLoading(
+                    isLoading: isLoading,
+                    child: CatCard(
+                      onpressed: () {},
+                      height: height,
+                      icon: FontAwesomeIcons.shoePrints,
+                      text: "Shoes",
+                    ),
+                  ),
+                  ShimmerLoading(
+                    isLoading: isLoading,
+                    child: CatCard(
+                      onpressed: () {},
+                      height: height,
+                      icon: Icons.watch_outlined,
+                      text: "Accessories",
+                    ),
+                  ),
+                  ShimmerLoading(
+                    isLoading: isLoading,
+                    child: CatCard(
+                      height: height,
+                      icon: Icons.all_inclusive_outlined,
+                      text: "All Products",
+                      onpressed: () {},
+                    ),
+                  ),
+                ],
+              ),
+              ShimmerLoading(
+                isLoading: isLoading,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.sH! * 1,
+                    bottom: SizeConfig.sH! * 1.2,
+                  ),
+                  child: Container(
+                    height: SizeConfig.sH! * 4,
+                    width: SizeConfig.sW! * 30,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius:
+                            BorderRadius.circular(SizeConfig.sH! * 2)),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Grid(isLoading: isLoading),
+                  SizedBox(
+                    width: SizeConfig.sW! * 3,
+                  ),
+                  Grid(isLoading: isLoading),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class Grid extends StatelessWidget {
+  const Grid({
+    Key? key,
+    required this.isLoading,
+  }) : super(key: key);
+
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ShimmerLoading(
+            isLoading: isLoading,
+            child: Container(
+              height: SizeConfig.sH! * 30,
+              color: Colors.black,
             ),
-          )),
+          ),
+          ShimmerLoading(
+            isLoading: isLoading,
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: SizeConfig.sH! * 1,
+              ),
+              child: Container(
+                height: SizeConfig.sH! * 3.5,
+                width: SizeConfig.sW! * 30,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(SizeConfig.sH! * 2)),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ShimmerLoading(
+                isLoading: isLoading,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: SizeConfig.sH! * 1,
+                  ),
+                  child: Container(
+                    height: SizeConfig.sH! * 3.5,
+                    width: SizeConfig.sW! * 18,
+                    decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius:
+                            BorderRadius.circular(SizeConfig.sH! * 2)),
+                  ),
+                ),
+              ),
+              ShimmerLoading(
+                isLoading: isLoading,
+                child: InkWell(
+                  child: Icon(
+                    FontAwesomeIcons.solidHeart,
+                    color: Colors.black,
+                    size: SizeConfig.sW! * 6,
+                  ),
+                ),
+              ),
+              ShimmerLoading(
+                isLoading: isLoading,
+                child: InkWell(
+                  child: Icon(
+                    FontAwesomeIcons.check,
+                    color: Colors.green,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
