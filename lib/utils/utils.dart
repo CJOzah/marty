@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
@@ -639,8 +640,11 @@ class ProfileListTile extends StatelessWidget {
   }
 }
 
-Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
-    StateSetter setState, List<int> quantity) {
+Future<void> showSizeSheet(
+    BuildContext context,
+    QueryDocumentSnapshot<Object?>? widget,
+    StateSetter setState,
+    List<int> quantity) {
   if (Provider.of<CartData>(context, listen: false).getCartItems().isEmpty) {
     Provider.of<CartData>(context, listen: false).clearTotal();
     // quantity.clear();
@@ -704,10 +708,10 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                           height: SizeConfig.sH! * 2,
                         ),
                         ListView.builder(
-                            itemCount: widget!.size!.length,
+                            itemCount: widget!["size"].length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              final item = widget.size;
+                              final item = widget["size"];
                               final items = widget;
                               return Container(
                                 height: SizeConfig.sH! * 10,
@@ -725,7 +729,7 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                                         top: SizeConfig.sH! * 1,
                                         bottom: SizeConfig.sH! * 2),
                                     child: Text(
-                                      "₦ ${widget.price}",
+                                      "₦ ${widget["price"]}",
                                       style: TextStyle(
                                           fontSize: SizeConfig.sH! * 2.5,
                                           fontWeight: FontWeight.bold),
@@ -738,154 +742,119 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Container(
-                                            height: SizeConfig.sH! * 6,
-                                            width: SizeConfig.sH! * 6,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      SizeConfig.sH! * 1),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.bottomLeft,
-                                                end: Alignment.topRight,
-                                                colors: [
-                                                  primary,
-                                                  secondary,
-                                                ],
+                                        Expanded(
+                                          child: Container(
+                                              height: SizeConfig.sH! * 6,
+                                              width: SizeConfig.sH! * 6,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        SizeConfig.sH! * 1),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  end: Alignment.topRight,
+                                                  colors: [
+                                                    primary,
+                                                    secondary,
+                                                  ],
+                                                ),
+                                                color: primary,
                                               ),
-                                              color: primary,
-                                            ),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setModalState(() {
-                                                    if (quantity[index] > 0) {
-                                                      quantity[index]--;
-                                                      items.setQuantity(
-                                                          0 - quantity[index]);
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setModalState(() {
+                                                      if (quantity[index] > 0) {
+                                                        quantity[index]--;
+                                                        Provider.of<CartData>(
+                                                                context,
+                                                                listen: false)
+                                                            .removeFromCart(
+                                                                items);
+                                                        setModalState(() {
+                                                          showInSnackBar(
+                                                              "${items["name"]} Removed to Cart",
+                                                              context);
+                                                        });
+                                                        print(Provider.of<
+                                                                    CartData>(
+                                                                context,
+                                                                listen: false)
+                                                            .getCartItems()
+                                                            .length);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    FontAwesomeIcons.minus,
+                                                    color: Colors.white,
+                                                    size: SizeConfig.sH! * 3,
+                                                  ))),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: SizeConfig.sH! * 6,
+                                              width: SizeConfig.sH! * 6,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white),
+                                              child: Center(
+                                                child: Text(
+                                                  "${quantity[index]}",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        SizeConfig.sH! * 3,
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: SizeConfig.sH! * 6,
+                                              width: SizeConfig.sH! * 6,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        SizeConfig.sH! * 1),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  end: Alignment.topRight,
+                                                  colors: [
+                                                    primary,
+                                                    secondary,
+                                                  ],
+                                                ),
+                                                color: primary,
+                                              ),
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setModalState(() {
+                                                      quantity[index]++;
                                                       Provider.of<CartData>(
                                                               context,
                                                               listen: false)
-                                                          .removeFromCart(
-                                                              items);
-                                                      Provider.of<CartData>(
-                                                              context,
-                                                              listen: false)
-                                                          .decreaseTotal(
-                                                              items.price!);
-                                                      setModalState(() {
-                                                        showInSnackBar(
-                                                            "${items.name} Removed to Cart",
-                                                            context);
-                                                      });
+                                                          .addToCart(
+                                                              items,
+                                                              quantity[index]
+                                                                  .toInt(),
+                                                              items["size"]
+                                                                  [index]);
+                                                      showInSnackBar(
+                                                          "${items["name"]} Added to Cart",
+                                                          context);
                                                       print(
                                                           Provider.of<CartData>(
                                                                   context,
                                                                   listen: false)
                                                               .getCartItems()
                                                               .length);
-                                                      if (quantity[index] > 0)
-                                                        print(Provider.of<
-                                                                    CartData>(
-                                                                context,
-                                                                listen: false)
-                                                            .getCartItem(Provider.of<
-                                                                            CartData>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .getCartItems()
-                                                                    .length -
-                                                                1)
-                                                            .selectedSize);
-                                                    }
-                                                    print(quantity);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  FontAwesomeIcons.minus,
-                                                  color: Colors.white,
-                                                  size: SizeConfig.sH! * 3,
-                                                ))),
-                                        Container(
-                                            height: SizeConfig.sH! * 6,
-                                            width: SizeConfig.sH! * 6,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white),
-                                            child: Center(
-                                              child: Text(
-                                                "${quantity[index]}",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: SizeConfig.sH! * 3,
-                                                ),
-                                              ),
-                                            )),
-                                        Container(
-                                            height: SizeConfig.sH! * 6,
-                                            width: SizeConfig.sH! * 6,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      SizeConfig.sH! * 1),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.bottomLeft,
-                                                end: Alignment.topRight,
-                                                colors: [
-                                                  primary,
-                                                  secondary,
-                                                ],
-                                              ),
-                                              color: primary,
-                                            ),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setModalState(() {
-                                                    quantity[index]++;
-                                                    print(quantity);
-                                                    items.selectedSize =
-                                                        item[index];
-                                                    items.setSizeQuantity(
-                                                        quantity[index]);
-                                                    Provider.of<CartData>(
-                                                            context,
-                                                            listen: false)
-                                                        .addToCart(items);
-
-                                                    Provider.of<CartData>(
-                                                            context,
-                                                            listen: false)
-                                                        .addToTotal(
-                                                            items.price!);
-                                                    showInSnackBar(
-                                                        "${items.name} Added to Cart",
-                                                        context);
-                                                    if (quantity[index] > 0)
-                                                      print(Provider.of<
-                                                                  CartData>(
-                                                              context,
-                                                              listen: false)
-                                                          .getCartItem(Provider.of<
-                                                                          CartData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .getCartItems()
-                                                                  .length -
-                                                              1)
-                                                          .selectedSize);
-                                                    print(Provider.of<CartData>(
-                                                            context,
-                                                            listen: false)
-                                                        .getCartItems()
-                                                        .length);
-                                                    print(quantity);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  FontAwesomeIcons.plus,
-                                                  color: Colors.white,
-                                                  size: SizeConfig.sH! * 3,
-                                                ))),
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    FontAwesomeIcons.plus,
+                                                    color: Colors.white,
+                                                    size: SizeConfig.sH! * 3,
+                                                  ))),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -1027,21 +996,21 @@ class HomeCarousel extends StatelessWidget {
     return Container(
       color: backgroundColor,
       width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: SizeConfig.sH! * 3,
-                  left: SizeConfig.sW! * 3,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+      height: SizeConfig.sH!,
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: SizeConfig.sH! * 3,
+                left: SizeConfig.sW! * 3,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
                       text1,
                       style: TextStyle(
                         color: text2Color,
@@ -1049,7 +1018,10 @@ class HomeCarousel extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
                       padding: EdgeInsets.only(
                         top: SizeConfig.sH! * 2,
                         bottom: SizeConfig.sH! * 2,
@@ -1062,7 +1034,10 @@ class HomeCarousel extends StatelessWidget {
                         ),
                       ),
                     ),
-                    InkWell(
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: InkWell(
                       child: Text(
                         "Discover Collection ->",
                         style: TextStyle(
@@ -1071,19 +1046,21 @@ class HomeCarousel extends StatelessWidget {
                             color: textColor),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.only(left: SizeConfig.sH! * 1),
-                height: SizeConfig.sH! * 15,
-                width: SizeConfig.sW! * 35,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(imagePath!), fit: BoxFit.cover),
-                ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: SizeConfig.sH! * 1),
+              height: SizeConfig.sH! * 15,
+              width: SizeConfig.sW! * 30,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(imagePath!), fit: BoxFit.cover),
               ),
-            ],
+            ),
           ),
         ],
       ),

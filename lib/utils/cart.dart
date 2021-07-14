@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import 'clothes.dart';
+import 'package:shopplift/utils/clothes.dart';
 
 class CartData extends ChangeNotifier {
   int _total = 0;
@@ -35,13 +34,41 @@ class CartData extends ChangeNotifier {
     return _favbutton;
   }
 
-  void addToCart(ClothesModel clothes) {
-    _cart.add(clothes);
+  void addToCart(
+      QueryDocumentSnapshot<Object?> clothes, int quantity, String size) {
+    ClothesModel cart =
+        ClothesModel(cartDetails: clothes, quantity: quantity, size: size);
+    //increases the quantity of product if it's already in the cart
+    //otherwise add a new product to the cart
+    if (_cart.isNotEmpty) {
+      for (int i = 0; i < _cart.length; i++) {
+        // _cart.forEach((element) {
+        if (_cart[i].cartDetails!["id"] == clothes.id &&
+            _cart[i].size == size) {
+          _cart[i].quantity = _cart[i].quantity! + 1;
+          break;
+        } else if (_cart[i].cartDetails!["id"] == clothes.id &&
+            _cart[i].size != size) {
+          _cart.add(cart);
+          print(_cart[i].cartDetails!["name"]);
+          break;
+        }
+        // });
+      }
+    } else {
+      _cart.add(cart);
+      print(_cart.length);
+    }
     notifyListeners();
   }
 
-  void removeFromCart(ClothesModel clothes) {
-    _cart.remove(clothes);
+  void removeFromCart(QueryDocumentSnapshot<Object?> clothes) {
+    int? index;
+    _cart.forEach((element) {
+      if (element.cartDetails!["id"] == clothes.id)
+        index = _cart.indexOf(element);
+    });
+    _cart.removeAt(index!);
     notifyListeners();
   }
 
@@ -56,18 +83,16 @@ class CartData extends ChangeNotifier {
   }
 
   void removeFromFav(QueryDocumentSnapshot<Object?> clothes) {
+    int? index;
     _fav.forEach((element) {
-      if (element.id == clothes.id) _fav.remove(clothes);
+      if (element.id == clothes.id) index = _fav.indexOf(element);
     });
+    _fav.removeAt(index!);
     notifyListeners();
   }
 
   List<ClothesModel> getCartItems() {
     return _cart;
-  }
-
-  ClothesModel getCartItem(int index) {
-    return _cart[index];
   }
 
   List<QueryDocumentSnapshot<Object?>> getFavItems() {
@@ -81,18 +106,6 @@ class CartData extends ChangeNotifier {
   void clearTotal() {
     _total = 0;
     notifyListeners();
-  }
-
-  void increaseTotal(int tot) {
-    _total += tot;
-  }
-
-  void decreaseTotal(int tot) {
-    _total -= tot;
-  }
-
-  void removeFromTotal(int tot, int index) {
-    _total -= tot * _cart[index].quantity!;
   }
 
   int getTotal() {

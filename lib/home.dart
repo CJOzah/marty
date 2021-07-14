@@ -57,8 +57,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  bool cartbutton = false;
   List<bool>? favbutton = [];
+  List<bool>? cartbutton = [];
   int? prodLength = 0;
 
   var update = FirebaseFirestore.instance.collection("all_products");
@@ -67,28 +67,28 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late Future<QuerySnapshot<Map<String, dynamic>>> products;
   List<ClothesModel> clothes = [];
 
-  void shoesCat() {
-    clothes.clear();
-    clothes.addAll(shoes);
-  }
+  // void shoesCat() {
+  //   clothes.clear();
+  //   clothes.addAll(shoes);
+  // }
 
-  void watchCat() {
-    clothes.clear();
-    clothes.addAll(watches);
-  }
+  // void watchCat() {
+  //   clothes.clear();
+  //   clothes.addAll(watches);
+  // }
 
-  void allCat() {
-    clothes.clear();
-    clothes.addAll(shoes);
+  // void allCat() {
+  //   clothes.clear();
+  //   clothes.addAll(shoes);
 
-    clothes.addAll(watches);
-    clothes.addAll(cloth);
-  }
+  //   clothes.addAll(watches);
+  //   clothes.addAll(cloth);
+  // }
 
-  void clothesCat() {
-    clothes.clear();
-    clothes.addAll(cloth);
-  }
+  // void clothesCat() {
+  //   clothes.clear();
+  //   clothes.addAll(cloth);
+  // }
 
   String cat = "All Products";
   double xoffSet = 0;
@@ -99,12 +99,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    allCat();
+    // allCat();
     products = Provider.of<CartData>(context, listen: false).getProducts();
-    // Provider.of<CartData>(context, listen: false).fillFavbutton();
-    // print(Provider.of<CartData>(context, listen: false).getFavbutton());
-    // favbutton = Provider.of<CartData>(context, listen: false).getFavbutton();
-    // favbutton!.add(false);
 
     super.initState();
   }
@@ -206,12 +202,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
+                              //check if the list of favorite or cart button is null and fill them
                               if (favbutton!.isEmpty) {
                                 snapshot.data!.docs.forEach((element) {
                                   favbutton!.add(false);
                                 });
                               }
-                              // print(favbutton);
+                              if (cartbutton!.isEmpty) {
+                                snapshot.data!.docs.forEach((element) {
+                                  cartbutton!.add(false);
+                                });
+                              }
                               Future.delayed(Duration(milliseconds: 5000))
                                   .whenComplete(() {
                                 setState(() {
@@ -303,7 +304,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         onpressed: () {
                                           setState(() {
                                             cat = "Clothes";
-                                            clothesCat();
+                                            // clothesCat();
                                           });
                                         },
                                         height: height,
@@ -314,7 +315,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         onpressed: () {
                                           setState(() {
                                             cat = "Shoes";
-                                            shoesCat();
+                                            // shoesCat();
                                           });
                                         },
                                         height: height,
@@ -325,7 +326,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         onpressed: () {
                                           setState(() {
                                             cat = "Watches";
-                                            watchCat();
+                                            // watchCat();
                                           });
                                         },
                                         height: height,
@@ -336,7 +337,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         onpressed: () {
                                           setState(() {
                                             cat = "All Products";
-                                            allCat();
+                                            // allCat();
                                           });
                                         },
                                         height: height,
@@ -370,35 +371,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       itemCount: snapshot.data!.docs.length,
                                       itemBuilder: (context, index) {
                                         final item = snapshot.data!.docs[index];
-
-                                        // these lines check to see if there's any item in the favorite or cart lists and toggle the icon respectively
-                                        // Provider.of<CartData>(context,
-                                        //         listen: false)
-                                        //     .getFavItems()
-                                        //     .forEach((element) {
-                                        //   print(element.get("id"));
-                                        //   if (element.get("id") == item["id"]) {
-                                        //     favbutton![index] = true;
-                                        //   } else if (element.get("id") !=
-                                        //       item["id"]) {
-                                        //     favbutton![index] = false;
-                                        //   }
-                                        // });
+                                        //checks if there is any product in the favorites or cart
                                         if (Provider.of<CartData>(context,
                                                 listen: false)
                                             .getFavItems()
                                             .isEmpty) favbutton![index] = false;
-                                        // favbutton![index] = true;
-                                        // } else
-                                        //   favbutton![index] = false;
-                                        // if (Provider.of<CartData>(context,
-                                        //             listen: false)
-                                        //         .getCartItems()
-                                        //         .contains(item) ==
-                                        //     false) {
-                                        //   cartbutton = true;
-                                        // } else
-                                        //   cartbutton = false;
+                                        if (Provider.of<CartData>(context,
+                                                listen: false)
+                                            .getCartItems()
+                                            .isEmpty)
+                                          cartbutton![index] = false;
                                         return Container(
                                           height: SizeConfig.sH! * 40,
                                           width: double.infinity,
@@ -503,61 +485,56 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   ),
                                                   InkWell(
                                                     child: Icon(
-                                                      item["cartbutton"]!
-                                                          ? Icons
-                                                              .shopping_cart_outlined
-                                                          : FontAwesomeIcons
-                                                              .check,
-                                                      color: item["cartbutton"]!
-                                                          ? Colors.black
-                                                          : Colors.green,
+                                                      cartbutton![index]
+                                                          ? FontAwesomeIcons
+                                                              .check
+                                                          : Icons
+                                                              .shopping_cart_outlined,
+                                                      color: cartbutton![index]
+                                                          ? Colors.green
+                                                          : Colors.black,
                                                     ),
                                                     onTap: () {
                                                       setState(() {
                                                         if (item["size"]!
-                                                            .isEmpty) {
-                                                          if (cartbutton ==
+                                                                .hashCode ==
+                                                            0) {
+                                                          if (cartbutton![
+                                                                  index] ==
+                                                              false) {
+                                                            cartbutton![index] =
+                                                                true;
+                                                            Provider.of<CartData>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .addToCart(item,
+                                                                    1, "M");
+                                                            showInSnackBar(
+                                                                "${item["name"]} Added to Cart",
+                                                                context);
+                                                          } else if (cartbutton![
+                                                                  index] ==
                                                               true) {
-                                                            cartbutton = false;
-                                                            // item.quantity = 1;
-                                                            // Provider.of<CartData>(
-                                                            //         context,
-                                                            //         listen: false)
-                                                            //     .addToCart(
-                                                            //         clothes[index]);
-                                                            // Provider.of<CartData>(
-                                                            //         context,
-                                                            //         listen: false)
-                                                            //     .addToTotal(
-                                                            //         item.price!);
-                                                            // showInSnackBar(
-                                                            //     "${item["name"]} Added to Cart",
-                                                            //     context);
-                                                          } else {
-                                                            cartbutton = true;
-                                                            // item.setQuantity(1);
+                                                            cartbutton![index] =
+                                                                false;
+                                                            Provider.of<CartData>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .removeFromCart(
+                                                                    item);
 
-                                                            // Provider.of<CartData>(
-                                                            //         context,
-                                                            //         listen: false)
-                                                            //     .removeFromCart(
-                                                            //         clothes[index]);
-                                                            // Provider.of<CartData>(
-                                                            //         context,
-                                                            //         listen: false)
-                                                            //     .decreaseTotal(
-                                                            //         clothes[index]
-                                                            //             .price!);
-                                                            // showInSnackBar(
-                                                            //     "${item["name"]} Removed from Cart",
-                                                            //     context);
+                                                            showInSnackBar(
+                                                                "${item["name"]} Removed from Cart",
+                                                                context);
                                                           }
                                                         } else {
-                                                          // showSizeSheet(
-                                                          //     context,
-                                                          //     item,
-                                                          //     setState,
-                                                          //     quantity);
+                                                          showSizeSheet(
+                                                              context,
+                                                              item,
+                                                              setState,
+                                                              quantity);
                                                         }
                                                       });
                                                     },

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/screens/profile_screen/details_screen.dart';
@@ -8,9 +9,9 @@ import 'package:shopplift/utils/utils.dart';
 
 // ignore: must_be_immutable
 class ProductDescScreen extends StatefulWidget {
-  ClothesModel? item;
+  QueryDocumentSnapshot<Object?>? item;
 
-  ProductDescScreen(ClothesModel it) {
+  ProductDescScreen(QueryDocumentSnapshot<Object?> it) {
     item = it;
   }
   @override
@@ -38,7 +39,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
                   image: DecorationImage(
-                    image: AssetImage("${widget.item!.image}"),
+                    image: NetworkImage("${widget.item!["image"]}"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -75,7 +76,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${widget.item!.name}",
+                      "${widget.item!["name"]}",
                       style: TextStyle(
                         fontSize: SizeConfig.sH! * 4,
                       ),
@@ -86,47 +87,47 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                     Row(
                       children: [
                         Icon(
-                          ((widget.item!.ratings!) <= 2)
+                          ((widget.item!["ratings"]) <= 2)
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!.ratings!) <= 2)
+                          color: ((widget.item!["ratings"]) <= 2)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!.ratings!) <= 4
+                          (widget.item!["ratings"]) <= 4
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!.ratings!) <= 4)
+                          color: ((widget.item!["ratings"]) <= 4)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!.ratings!) <= 6
+                          (widget.item!["ratings"]) <= 6
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!.ratings!) <= 6)
+                          color: ((widget.item!["ratings"]) <= 6)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!.ratings!) <= 8
+                          (widget.item!["ratings"]) <= 8
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!.ratings!) <= 8)
+                          color: ((widget.item!["ratings"]) <= 8)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!.ratings!) <= 10
+                          (widget.item!["ratings"]) <= 10
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!.ratings!) <= 10)
+                          color: ((widget.item!["ratings"]) <= 10)
                               ? Colors.black
                               : Colors.yellow,
                         ),
@@ -134,7 +135,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           width: SizeConfig.sW! * 6,
                         ),
                         Text(
-                          "(${widget.item!.ratings} ratings)",
+                          "(${widget.item!["ratings"]} ratings)",
                           style: TextStyle(
                             fontSize: SizeConfig.sH! * 3,
                           ),
@@ -148,7 +149,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "₦${widget.item!.price}",
+                          "₦${widget.item!["price"]}",
                           style: TextStyle(
                             fontSize: SizeConfig.sH! * 4,
                             fontWeight: FontWeight.bold,
@@ -177,7 +178,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                       height: SizeConfig.sH! * 3,
                     ),
                     Text(
-                      "${widget.item!.description}",
+                      "${widget.item!["description"]}",
                       style: TextStyle(
                         fontSize: SizeConfig.sH! * 3,
                       ),
@@ -191,14 +192,14 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                       child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.item!.size!.length,
+                        itemCount: widget.item!["size"].length,
                         itemBuilder: (context, index) {
                           Color selectedColor = Colors.transparent;
                           final item = widget.item!;
                           return InkWell(
                             onTap: () {
                               setState(() {
-                                if (widget.item!.size!.isNotEmpty) {
+                                if (widget.item!["size"].isNotEmpty) {
                                   showSizeSheet(
                                       context, widget.item, setState, quantity);
                                 }
@@ -219,7 +220,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "${item.size![index]}",
+                                  "${item["size"][index]}",
                                   style: TextStyle(
                                     fontSize: SizeConfig.sH! * 3,
                                     fontWeight: FontWeight.bold,
@@ -248,20 +249,20 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                             .getCartItems()
                             .contains(widget.item!)) {
                           showInSnackBar(
-                              "${widget.item!.name} Already added to cart",
+                              "${widget.item!["name"]} Already added to cart",
                               context);
                         } else {
-                          if (widget.item!.quantity! > 0) {
-                            widget.item!.setQuantity(-1);
+                          if (widget.item!["quantity"] > 0) {
+                            // widget.item!.setQuantity(-1);
                           }
-                          widget.item!.setQuantity(1);
-                          Provider.of<CartData>(context, listen: false)
-                              .addToCart(widget.item!);
+                          // widget.item!.setQuantity(1);
+                          // Provider.of<CartData>(context, listen: false)
+                          //     .addToCart(widget.item!);
 
                           Provider.of<CartData>(context, listen: false)
-                              .addToTotal(widget.item!.price!);
+                              .addToTotal(widget.item!["price"]);
                           showInSnackBar(
-                              "${widget.item!.name} Added to cart", context);
+                              "${widget.item!["name"]} Added to cart", context);
                         }
                       });
                     }),

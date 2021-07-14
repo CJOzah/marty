@@ -192,7 +192,8 @@ class _CartScreenState extends State<CartScreen> {
                                       height: SizeConfig.sH! * 15,
                                       width: SizeConfig.sW! * 25,
                                       child: Image(
-                                        image: AssetImage("${item.image}"),
+                                        image: NetworkImage(
+                                            "${item.cartDetails!["url"]}"),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -203,7 +204,7 @@ class _CartScreenState extends State<CartScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "${item.name}",
+                                          "${item.cartDetails!["name"]}",
                                           style: TextStyle(
                                               fontSize: SizeConfig.sH! * 2.5,
                                               fontWeight: FontWeight.bold,
@@ -213,7 +214,7 @@ class _CartScreenState extends State<CartScreen> {
                                           height: SizeConfig.sH! * 1,
                                         ),
                                         Text(
-                                          "Size: ${item.selectedSize}",
+                                          "Size: ${item.size}",
                                           style: TextStyle(
                                               fontSize: SizeConfig.sW! * 3.5,
                                               fontWeight: FontWeight.bold,
@@ -229,7 +230,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                "₦${item.price}",
+                                                "₦${item.cartDetails!["price"]}",
                                                 style: TextStyle(
                                                     fontSize:
                                                         SizeConfig.sH! * 3,
@@ -274,20 +275,20 @@ class _CartScreenState extends State<CartScreen> {
                                                         setState(() {
                                                           if (item.quantity! >
                                                               1) {
-                                                            item.setQuantity(
-                                                                -1);
-                                                            Provider.of<CartData>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .decreaseTotal(
-                                                                    item.price!);
+                                                            // item.setQuantity(
+                                                            //     -1);
+                                                            // Provider.of<CartData>(
+                                                            //         context,
+                                                            //         listen:
+                                                            //             false)
+                                                            //     .decreaseTotal(
+                                                            //         item.price!);
                                                           }
                                                         });
                                                       },
                                                     ),
                                                     Text(
-                                                      "${item.getQuantity()}",
+                                                      "${item.quantity}",
                                                       style: TextStyle(
                                                           fontSize: w / 25,
                                                           fontWeight:
@@ -303,12 +304,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       ),
                                                       onTap: () {
                                                         setState(() {
-                                                          item.setQuantity(1);
-                                                          Provider.of<CartData>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .addToTotal(
-                                                                  item.price!);
+                                                          // item.setQuantity(1);
                                                         });
                                                       },
                                                     ),
