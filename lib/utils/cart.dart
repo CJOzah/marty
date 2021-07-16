@@ -38,22 +38,26 @@ class CartData extends ChangeNotifier {
       QueryDocumentSnapshot<Object?> clothes, int quantity, String size) {
     ClothesModel cart =
         ClothesModel(cartDetails: clothes, quantity: quantity, size: size);
+    bool add = false;
     //increases the quantity of product if it's already in the cart
     //otherwise add a new product to the cart
     if (_cart.isNotEmpty) {
       for (int i = 0; i < _cart.length; i++) {
-        // _cart.forEach((element) {
+        if (_cart[i].cartDetails!["id"] == clothes.id &&
+            _cart[i].size != size) {
+          add = true;
+          print(_cart[i].cartDetails!["name"]);
+        } else
+          add = false;
+
         if (_cart[i].cartDetails!["id"] == clothes.id &&
             _cart[i].size == size) {
           _cart[i].quantity = _cart[i].quantity! + 1;
           break;
-        } else if (_cart[i].cartDetails!["id"] == clothes.id &&
-            _cart[i].size != size) {
-          _cart.add(cart);
-          print(_cart[i].cartDetails!["name"]);
-          break;
         }
-        // });
+      }
+      if (add) {
+        _cart.add(cart);
       }
     } else {
       _cart.add(cart);

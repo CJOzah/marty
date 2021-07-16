@@ -644,11 +644,8 @@ Future<void> showSizeSheet(
     BuildContext context,
     QueryDocumentSnapshot<Object?>? widget,
     StateSetter setState,
-    List<int> quantity) {
-  if (Provider.of<CartData>(context, listen: false).getCartItems().isEmpty) {
-    Provider.of<CartData>(context, listen: false).clearTotal();
-    // quantity.clear();
-  }
+    List<int> quanty) {
+  List<int> quantity = List<int>.filled(5, 0, growable: true);
   return showModalBottomSheet<void>(
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
@@ -713,6 +710,17 @@ Future<void> showSizeSheet(
                             itemBuilder: (context, index) {
                               final item = widget["size"];
                               final items = widget;
+                              final cartItems =
+                                  Provider.of<CartData>(context, listen: false)
+                                      .getCartItems();
+                              for (int i = 0; i < cartItems.length; i++) {
+                                if (cartItems[i].cartDetails!["id"] ==
+                                        items["id"] &&
+                                    cartItems[i].quantity == items["size"]) {
+                                  quantity[index] = cartItems[i].quantity!;
+                                  print(quantity);
+                                }
+                              }
                               return Container(
                                 height: SizeConfig.sH! * 10,
                                 width: double.infinity,
