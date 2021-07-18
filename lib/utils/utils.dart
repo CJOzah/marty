@@ -713,12 +713,19 @@ Future<void> showSizeSheet(
                               final cartItems =
                                   Provider.of<CartData>(context, listen: false)
                                       .getCartItems();
+
+                              //checks the cart for products already in it and fill the sizes with it's
+                              //quantity already added
                               for (int i = 0; i < cartItems.length; i++) {
                                 if (cartItems[i].cartDetails!["id"] ==
-                                        items["id"] &&
-                                    cartItems[i].quantity == items["size"]) {
-                                  quantity[index] = cartItems[i].quantity!;
-                                  print(quantity);
+                                    items["id"]) {
+                                  int dex = 0;
+                                  item.forEach((element) {
+                                    if (cartItems[i].size != element) dex++;
+                                    if (cartItems[i].size == element) {
+                                      quantity[dex] = cartItems[i].quantity!;
+                                    }
+                                  });
                                 }
                               }
                               return Container(

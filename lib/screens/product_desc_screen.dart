@@ -259,8 +259,8 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           // Provider.of<CartData>(context, listen: false)
                           //     .addToCart(widget.item!);
 
-                          Provider.of<CartData>(context, listen: false)
-                              .addToTotal(widget.item!["price"]);
+                          // Provider.of<CartData>(context, listen: false)
+                          //     .addToTotal(widget.item!["price"]);
                           showInSnackBar(
                               "${widget.item!["name"]} Added to cart", context);
                         }

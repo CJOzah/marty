@@ -50,6 +50,12 @@ class CartData extends ChangeNotifier {
         } else
           add = false;
 
+        //add another product to the cart
+        if (_cart[i].cartDetails!["id"] != clothes.id) {
+          add = true;
+          print(_cart[i].cartDetails!["name"]);
+        }
+
         if (_cart[i].cartDetails!["id"] == clothes.id &&
             _cart[i].size == size) {
           _cart[i].quantity = _cart[i].quantity! + 1;
@@ -103,8 +109,14 @@ class CartData extends ChangeNotifier {
     return _fav;
   }
 
-  void addToTotal(int tot) {
-    _total += tot;
+  void calculateTotal() {
+    _total = 0;
+    _cart.forEach((element) {
+      String price = element.cartDetails!["price"];
+      print(element.quantity);
+      print(price);
+      _total += int.parse(price) * element.quantity!;
+    });
   }
 
   void clearTotal() {
@@ -113,6 +125,7 @@ class CartData extends ChangeNotifier {
   }
 
   int getTotal() {
+    calculateTotal();
     return _total;
   }
 }

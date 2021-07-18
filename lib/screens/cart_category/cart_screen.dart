@@ -191,9 +191,15 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                       height: SizeConfig.sH! * 15,
                                       width: SizeConfig.sW! * 25,
-                                      child: Image(
-                                        image: NetworkImage(
-                                            "${item.cartDetails!["url"]}"),
+                                      child: Image.network(
+                                        "${item.cartDetails!["url"]}",
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace? stackTrace) {
+                                          return Container(
+                                            color: Colors.grey,
+                                          );
+                                        },
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -275,15 +281,16 @@ class _CartScreenState extends State<CartScreen> {
                                                         setState(() {
                                                           if (item.quantity! >
                                                               1) {
-                                                            // item.setQuantity(
-                                                            //     -1);
-                                                            // Provider.of<CartData>(
-                                                            //         context,
-                                                            //         listen:
-                                                            //             false)
-                                                            //     .decreaseTotal(
-                                                            //         item.price!);
-                                                          }
+                                                            item.quantity =
+                                                                item.quantity! -
+                                                                    1;
+                                                          } else
+                                                            Provider.of<CartData>(
+                                                                    context,
+                                                                    listen:
+                                                                        false)
+                                                                .removeFromCart(
+                                                                    item.cartDetails!);
                                                         });
                                                       },
                                                     ),
@@ -304,7 +311,16 @@ class _CartScreenState extends State<CartScreen> {
                                                       ),
                                                       onTap: () {
                                                         setState(() {
-                                                          // item.setQuantity(1);
+                                                          int quant =
+                                                              item.quantity! +
+                                                                  1;
+                                                          Provider.of<CartData>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .addToCart(
+                                                                  item.cartDetails!,
+                                                                  quant.toInt(),
+                                                                  item.size!);
                                                         });
                                                       },
                                                     ),

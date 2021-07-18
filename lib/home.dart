@@ -371,7 +371,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                       itemCount: snapshot.data!.docs.length,
                                       itemBuilder: (context, index) {
                                         final item = snapshot.data!.docs[index];
-                                        //checks if there is any product in the favorites or cart
+                                        final items = Provider.of<CartData>(
+                                                context,
+                                                listen: false)
+                                            .getCartItems();
+                                        cartbutton![index] = false;
+                                        //checks if the favorites or cart are empty
                                         if (Provider.of<CartData>(context,
                                                 listen: false)
                                             .getFavItems()
@@ -381,6 +386,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             .getCartItems()
                                             .isEmpty)
                                           cartbutton![index] = false;
+
+                                        // checks if product is has already been added to cart
+                                        items.forEach((element) {
+                                          if (item["id"] ==
+                                              element.cartDetails!["id"]) {
+                                            cartbutton![index] = true;
+                                          }
+                                        });
                                         return Container(
                                           height: SizeConfig.sH! * 40,
                                           width: double.infinity,
@@ -401,8 +414,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                   height: SizeConfig.sH! * 30,
                                                   width: double.infinity,
                                                   child: Image.network(
-                                                      item["url"],
-                                                      fit: BoxFit.cover),
+                                                      item["url"], errorBuilder:
+                                                          (BuildContext context,
+                                                              Object exception,
+                                                              StackTrace?
+                                                                  stackTrace) {
+                                                    return Container(
+                                                      color: Colors.grey,
+                                                    );
+                                                  }, fit: BoxFit.cover),
                                                 ),
                                               ),
                                               Text(
