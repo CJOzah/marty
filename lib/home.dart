@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
+import 'package:shopplift/screens/product_desc_screen.dart';
 import 'package:shopplift/shimmer_loading_effect.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/size_config.dart';
@@ -404,12 +405,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               InkWell(
-                                                // onTap: () => Navigator.push(
-                                                //   context,
-                                                //   MaterialPageRoute(
-                                                //       builder: (context) =>
-                                                //           ProductDescScreen(item)),
-                                                // ),
+                                                onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProductDescScreen(
+                                                              item)),
+                                                ),
                                                 child: Container(
                                                   height: SizeConfig.sH! * 30,
                                                   width: double.infinity,

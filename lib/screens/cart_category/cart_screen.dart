@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/cart_category/checkout_screen.dart';
+import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
@@ -66,6 +67,8 @@ class _CartScreenState extends State<CartScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                padding: EdgeInsets.only(
+                    left: SizeConfig.sW! * 3, right: SizeConfig.sW! * 3),
                 height: SizeConfig.sH! * 86,
                 width: w,
                 decoration: BoxDecoration(
@@ -86,72 +89,58 @@ class _CartScreenState extends State<CartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: SizeConfig.sW! * 5,
+                      IconButton(
+                        icon: Icon(
+                          Icons.arrow_back_sharp,
+                          color: Colors.black,
+                          size: SizeConfig.sH! * 6,
                         ),
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.arrow_back_sharp,
-                            color: Colors.black,
-                            size: SizeConfig.sH! * 6,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: SizeConfig.sW! * 9,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Shopping",
-                                  style: TextStyle(
-                                    fontSize: SizeConfig.sH! * 5,
-                                    color: Colors.black,
-                                  ),
+                      SizedBox(
+                        height: SizeConfig.sH! * 2,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Shopping",
+                                style: TextStyle(
+                                  fontSize: SizeConfig.sH! * 5,
+                                  color: Colors.black,
                                 ),
-                                Text(
-                                  "Cart",
-                                  style: TextStyle(
-                                    fontSize: SizeConfig.sH! * 5,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: SizeConfig.sW! * 3,
                               ),
-                              child: IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.trash,
-                                    size: SizeConfig.sH! * 5,
-                                    color: Colors.black,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      Provider.of<CartData>(context,
-                                              listen: false)
-                                          .clearCart();
-                                      Provider.of<CartData>(context,
-                                              listen: false)
-                                          .clearTotal();
-                                    });
-                                  }),
-                            ),
-                          ],
-                        ),
+                              Text(
+                                "Cart",
+                                style: TextStyle(
+                                  fontSize: SizeConfig.sH! * 5,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                              icon: Icon(
+                                FontAwesomeIcons.trash,
+                                size: SizeConfig.sH! * 5,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  Provider.of<CartData>(context, listen: false)
+                                      .clearCart();
+                                  Provider.of<CartData>(context, listen: false)
+                                      .clearTotal();
+                                });
+                              }),
+                        ],
                       ),
                       Container(
                         margin: EdgeInsets.only(
@@ -185,175 +174,183 @@ class _CartScreenState extends State<CartScreen> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      margin: EdgeInsets.all(
-                                        SizeConfig.sH! * 2,
-                                      ),
-                                      height: SizeConfig.sH! * 15,
-                                      width: SizeConfig.sW! * 25,
-                                      child: Image.network(
-                                        "${item.cartDetails!["url"]}",
-                                        errorBuilder: (BuildContext context,
-                                            Object exception,
-                                            StackTrace? stackTrace) {
-                                          return Container(
-                                            color: Colors.grey,
-                                          );
-                                        },
-                                        fit: BoxFit.cover,
+                                    Expanded(
+                                      flex: 4,
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                          right: SizeConfig.sH! * 2,
+                                        ),
+                                        height: SizeConfig.sH! * 15,
+                                        width: SizeConfig.sW! * 25,
+                                        child: Image.network(
+                                          "${item.cartDetails!["url"]}",
+                                          errorBuilder: (BuildContext context,
+                                              Object exception,
+                                              StackTrace? stackTrace) {
+                                            return Container(
+                                              color: Colors.grey,
+                                            );
+                                          },
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${item.cartDetails!["name"]}",
-                                          style: TextStyle(
-                                              fontSize: SizeConfig.sH! * 2.5,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black),
-                                        ),
-                                        SizedBox(
-                                          height: SizeConfig.sH! * 1,
-                                        ),
-                                        Text(
-                                          "Size: ${item.size}",
-                                          style: TextStyle(
-                                              fontSize: SizeConfig.sW! * 3.5,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.grey),
-                                        ),
-                                        SizedBox(
-                                          height: SizeConfig.sH! * 1,
-                                        ),
-                                        Container(
-                                          width: SizeConfig.sW! * 60,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "₦${item.cartDetails!["price"]}",
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        SizeConfig.sH! * 3,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                              Container(
-                                                alignment: Alignment.center,
-                                                height: SizeConfig.sH! * 4,
-                                                width: SizeConfig.sW! * 22,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                    SizeConfig.sH! * 5,
-                                                  ),
-                                                  gradient: LinearGradient(
-                                                    begin: Alignment.bottomLeft,
-                                                    end: Alignment.topRight,
-                                                    colors: [
-                                                      primary,
-                                                      secondary
-                                                    ],
-                                                  ),
+                                    Expanded(
+                                      flex: 7,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "${item.cartDetails!["name"]}",
+                                            overflow: TextOverflow.clip,
+                                            style: TextStyle(
+                                                fontSize: SizeConfig.sH! * 3,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.black),
+                                          ),
+                                          SizedBox(
+                                            height: SizeConfig.sH! * 1,
+                                          ),
+                                          Text(
+                                            "Size: ${item.size}",
+                                            style: TextStyle(
+                                                fontSize: SizeConfig.sW! * 4,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.grey),
+                                          ),
+                                          SizedBox(
+                                            height: SizeConfig.sH! * 1,
+                                          ),
+                                          Container(
+                                            width: SizeConfig.sW! * 60,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "₦${item.cartDetails!["price"]}",
+                                                  style: TextStyle(
+                                                      fontSize:
+                                                          SizeConfig.sH! * 3,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.black),
                                                 ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    InkWell(
-                                                      child: Icon(
-                                                          FontAwesomeIcons
-                                                              .minus,
+                                                Container(
+                                                  alignment: Alignment.center,
+                                                  height: SizeConfig.sH! * 4,
+                                                  width: SizeConfig.sW! * 22,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                      SizeConfig.sH! * 5,
+                                                    ),
+                                                    gradient: LinearGradient(
+                                                      begin:
+                                                          Alignment.bottomLeft,
+                                                      end: Alignment.topRight,
+                                                      colors: [
+                                                        primary,
+                                                        secondary
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      InkWell(
+                                                        child: Icon(
+                                                            FontAwesomeIcons
+                                                                .minus,
+                                                            size:
+                                                                SizeConfig.sW! *
+                                                                    5.5,
+                                                            color: (item.quantity ==
+                                                                    1)
+                                                                ? Colors
+                                                                    .transparent
+                                                                : Colors.white),
+                                                        onTap: () {
+                                                          setState(() {
+                                                            if (item.quantity! >
+                                                                1) {
+                                                              item.quantity =
+                                                                  item.quantity! -
+                                                                      1;
+                                                            } else
+                                                              Provider.of<CartData>(
+                                                                      context,
+                                                                      listen:
+                                                                          false)
+                                                                  .removeFromCart(
+                                                                      item.cartDetails!);
+                                                          });
+                                                        },
+                                                      ),
+                                                      Text(
+                                                        "${item.quantity}",
+                                                        style: TextStyle(
+                                                            fontSize: w / 25,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      InkWell(
+                                                        child: Icon(
+                                                          FontAwesomeIcons.plus,
                                                           size: SizeConfig.sW! *
                                                               5.5,
-                                                          color: (item.quantity ==
-                                                                  1)
-                                                              ? Colors
-                                                                  .transparent
-                                                              : Colors.white),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          if (item.quantity! >
-                                                              1) {
-                                                            item.quantity =
-                                                                item.quantity! -
+                                                          color: Colors.white,
+                                                        ),
+                                                        onTap: () {
+                                                          setState(() {
+                                                            int quant =
+                                                                item.quantity! +
                                                                     1;
-                                                          } else
                                                             Provider.of<CartData>(
                                                                     context,
                                                                     listen:
                                                                         false)
-                                                                .removeFromCart(
-                                                                    item.cartDetails!);
-                                                        });
-                                                      },
-                                                    ),
-                                                    Text(
-                                                      "${item.quantity}",
-                                                      style: TextStyle(
-                                                          fontSize: w / 25,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: Colors.white),
-                                                    ),
-                                                    InkWell(
-                                                      child: Icon(
-                                                        FontAwesomeIcons.plus,
-                                                        size: SizeConfig.sW! *
-                                                            5.5,
-                                                        color: Colors.white,
+                                                                .addToCart(
+                                                                    item
+                                                                        .cartDetails!,
+                                                                    quant
+                                                                        .toInt(),
+                                                                    item.size!);
+                                                          });
+                                                        },
                                                       ),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          int quant =
-                                                              item.quantity! +
-                                                                  1;
-                                                          Provider.of<CartData>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .addToCart(
-                                                                  item.cartDetails!,
-                                                                  quant.toInt(),
-                                                                  item.size!);
-                                                        });
-                                                      },
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               );
                             }),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: SizeConfig.sW! * 10,
-                        ),
-                        child: Text(
-                          "${Provider.of<CartData>(context, listen: false).getCartItems().length} Items",
-                          style: TextStyle(
-                              fontSize: SizeConfig.sH! * 2.5,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.bold),
-                        ),
+                      Text(
+                        "${Provider.of<CartData>(context, listen: false).getCartItems().length} Items",
+                        style: TextStyle(
+                            fontSize: SizeConfig.sH! * 2.5,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          left: SizeConfig.sW! * 10,
                           bottom: SizeConfig.sH! * 4,
-                          right: SizeConfig.sW! * 6,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,14 +359,14 @@ class _CartScreenState extends State<CartScreen> {
                             Text(
                               "Total",
                               style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 2.5,
+                                  fontSize: SizeConfig.sH! * 3,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
                               style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 2.6,
+                                  fontSize: SizeConfig.sH! * 3,
                                   color: Colors.blue.shade900,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -428,12 +425,8 @@ class _CartScreenState extends State<CartScreen> {
                                                     MainAxisAlignment
                                                         .spaceEvenly,
                                                 children: [
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        bottom: SizeConfig.sH! *
-                                                            1.5,
-                                                        left: SizeConfig.sW! *
-                                                            18),
+                                                  Expanded(
+                                                    flex: 6,
                                                     child: Text(
                                                       "Order Summary",
                                                       style: TextStyle(
@@ -445,41 +438,44 @@ class _CartScreenState extends State<CartScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                  Container(
-                                                    margin: EdgeInsets.only(
-                                                      left: SizeConfig.sW! * 6,
-                                                    ),
-                                                    height: SizeConfig.sH! * 6,
-                                                    width: SizeConfig.sH! * 6,
-                                                    decoration: BoxDecoration(
-                                                      gradient: LinearGradient(
-                                                        begin: Alignment
-                                                            .bottomLeft,
-                                                        end: Alignment.topRight,
-                                                        colors: [
-                                                          primary,
-                                                          secondary,
-                                                        ],
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Container(
+                                                      height:
+                                                          SizeConfig.sH! * 6,
+                                                      width: SizeConfig.sH! * 6,
+                                                      decoration: BoxDecoration(
+                                                        gradient:
+                                                            LinearGradient(
+                                                          begin: Alignment
+                                                              .bottomLeft,
+                                                          end: Alignment
+                                                              .topRight,
+                                                          colors: [
+                                                            primary,
+                                                            secondary,
+                                                          ],
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                SizeConfig.sH! *
+                                                                    30),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              SizeConfig.sH! *
-                                                                  30),
-                                                    ),
-                                                    child: IconButton(
-                                                      icon: Icon(
-                                                        FontAwesomeIcons
-                                                            .arrowDown,
-                                                        size:
-                                                            SizeConfig.sW! * 5,
-                                                        color: Colors.white,
+                                                      child: IconButton(
+                                                        icon: Icon(
+                                                          FontAwesomeIcons
+                                                              .arrowDown,
+                                                          size: SizeConfig.sW! *
+                                                              5,
+                                                          color: Colors.white,
+                                                        ),
+                                                        onPressed: () {
+                                                          setState(() {
+                                                            Navigator.pop(
+                                                                context);
+                                                          });
+                                                        },
                                                       ),
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          Navigator.pop(
-                                                              context);
-                                                        });
-                                                      },
                                                     ),
                                                   ),
                                                 ],
@@ -593,8 +589,8 @@ class _CartScreenState extends State<CartScreen> {
                                                 ),
                                                 minWidth: SizeConfig.sW! * 50,
                                                 onPressed: () {
-                                                  Navigator.pushNamed(context,
-                                                      CheckOutScreen.id);
+                                                  Navigator.pushNamed(
+                                                      context, SignInScreen.id);
                                                 },
                                                 child: Text(
                                                   "Checkout",

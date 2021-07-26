@@ -39,7 +39,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
                   image: DecorationImage(
-                    image: NetworkImage("${widget.item!["image"]}"),
+                    image: NetworkImage("${widget.item!["url"]}"),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -69,8 +69,8 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                    left: SizeConfig.sW! * 4,
-                    right: SizeConfig.sW! * 4,
+                    left: SizeConfig.sW! * 5,
+                    right: SizeConfig.sW! * 5,
                     top: SizeConfig.sH! * 2),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,47 +87,47 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                     Row(
                       children: [
                         Icon(
-                          ((widget.item!["ratings"]) <= 2)
+                          (double.parse((widget.item!["ratings"])) <= 2)
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!["ratings"]) <= 2)
+                          color: (double.parse((widget.item!["ratings"])) <= 2)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!["ratings"]) <= 4
+                          double.parse((widget.item!["ratings"])) <= 4
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!["ratings"]) <= 4)
+                          color: (double.parse((widget.item!["ratings"])) <= 4)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!["ratings"]) <= 6
+                          double.parse((widget.item!["ratings"])) <= 6
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!["ratings"]) <= 6)
+                          color: (double.parse((widget.item!["ratings"])) <= 6)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!["ratings"]) <= 8
+                          double.parse((widget.item!["ratings"])) <= 8
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!["ratings"]) <= 8)
+                          color: (double.parse((widget.item!["ratings"])) <= 8)
                               ? Colors.black
                               : Colors.yellow,
                         ),
                         Icon(
-                          (widget.item!["ratings"]) <= 10
+                          double.parse((widget.item!["ratings"])) <= 10
                               ? Icons.star_outline_sharp
                               : Icons.star,
                           size: SizeConfig.sH! * 5,
-                          color: ((widget.item!["ratings"]) <= 10)
+                          color: (double.parse((widget.item!["ratings"])) <= 10)
                               ? Colors.black
                               : Colors.yellow,
                         ),
@@ -252,15 +252,9 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                               "${widget.item!["name"]} Already added to cart",
                               context);
                         } else {
-                          if (widget.item!["quantity"] > 0) {
-                            // widget.item!.setQuantity(-1);
-                          }
-                          // widget.item!.setQuantity(1);
-                          // Provider.of<CartData>(context, listen: false)
-                          //     .addToCart(widget.item!);
-
-                          // Provider.of<CartData>(context, listen: false)
-                          //     .addToTotal(widget.item!["price"]);
+                          Provider.of<CartData>(context, listen: false)
+                              .addToCart(
+                                  widget.item!, 1, widget.item!["size"][0]);
                           showInSnackBar(
                               "${widget.item!["name"]} Added to cart", context);
                         }
