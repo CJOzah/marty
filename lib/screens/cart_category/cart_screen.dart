@@ -1,3 +1,4 @@
+import 'package:firebase_auth/Firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -589,8 +590,22 @@ class _CartScreenState extends State<CartScreen> {
                                                 ),
                                                 minWidth: SizeConfig.sW! * 50,
                                                 onPressed: () {
-                                                  Navigator.pushNamed(
-                                                      context, SignInScreen.id);
+                                                  FirebaseAuth.instance
+                                                      .authStateChanges()
+                                                      .listen((User? user) {
+                                                    if (user == null) {
+                                                      print(
+                                                          "User not logged in");
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          SignInScreen.id);
+                                                    } else {
+                                                      print("User logged in");
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          CheckOutScreen.id);
+                                                    }
+                                                  });
                                                 },
                                                 child: Text(
                                                   "Checkout",
