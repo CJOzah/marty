@@ -9,6 +9,14 @@ class CartData extends ChangeNotifier {
   List<QueryDocumentSnapshot<Object?>> _fav = [];
   List<bool>? _favbutton = [];
 
+  // factory _cart.fromJson(Map<String, dynamic> json) {
+  //   return _cart(
+  //     name: json['name'],
+  //     singlePrice: json['singlePrice'],
+  //     quantity: json['quantity'],
+  //   );
+  // }
+
   Future<QuerySnapshot<Map<String, dynamic>>> getProducts() async {
     var get = FirebaseFirestore.instance;
 
@@ -50,7 +58,7 @@ class CartData extends ChangeNotifier {
         } else
           add = false;
 
-        //add another product to the cart
+        //add another product with a different id to the cart
         if (_cart[i].cartDetails!["id"] != clothes.id) {
           add = true;
           print(_cart[i].cartDetails!["name"]);

@@ -6,6 +6,12 @@ class ClothesModel {
   String? size;
 
   ClothesModel({required this.cartDetails, this.quantity, this.size});
+
+  dynamic toJson() => {
+        'name': cartDetails!.id,
+        'size': size,
+        'quantity': quantity,
+      };
 }
 // List<ClothesModel> cloth = [
 //   ClothesModel(

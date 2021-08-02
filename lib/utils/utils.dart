@@ -8,7 +8,6 @@ import 'package:shopplift/screens/fav_screen.dart';
 import 'package:shopplift/screens/profile_screen/details_screen.dart';
 import 'package:shopplift/screens/profile_screen/profile_screen.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
-import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 
 import '../home.dart';
@@ -484,7 +483,7 @@ class Bubbles extends StatelessWidget {
 
 class PlainTextField extends StatelessWidget {
   final String? text;
-  final Function? onchanged;
+  final Function(String)? onchanged;
   final bool? obscure;
   final TextInputType? keyboardType;
   final IconData? icon;
@@ -517,7 +516,7 @@ class PlainTextField extends StatelessWidget {
             prefixIcon:
                 Icon(icon, size: SizeConfig.sH! * 4, color: Colors.black),
           ),
-          onChanged: (value) {},
+          onChanged: onchanged,
         ),
       ],
     );

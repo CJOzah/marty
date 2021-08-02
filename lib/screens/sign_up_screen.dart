@@ -1,10 +1,13 @@
-import 'dart:core';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:shopplift/main.dart';
+import 'package:shopplift/screens/cart_category/checkout_screen.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
+import 'package:shopplift/utils/cart.dart';
+import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
 
@@ -19,8 +22,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String? email;
   String? password;
   bool? isLoading = false;
+  List<ClothesModel>? _cart = [];
+  UserCredential? user;
 
-  void signUp() async {
+  void signUp({Function(String)? callback}) async {
     FirebaseFirestore details = FirebaseFirestore.instance;
     try {
       UserCredential userCredential = await FirebaseAuth.instance
@@ -37,16 +42,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       print("User details Stored");
 
+      //saves cart to database
+      saveCart();
+      print("Cart items saved to db");
+
       showInSnackBar("Sign Up Successful", context);
-      Navigator.pushNamed(context, SignInScreen.id);
+      Navigator.popAndPushNamed(context, CheckOutScreen.id);
     } on FirebaseAuthException catch (e) {
       if (e.code == "weak-password") {
         print("The password provided is too weak.");
+        showInSnackBar("The password provided is too weak.", context);
+        callback!(e.code);
       } else if (e.code == "email-already-in-use") {
         print("The account already exists for that email.");
+        showInSnackBar("The account already exists for that email.", context);
+        callback!(e.code);
       }
     } catch (e) {
       print(e);
+      callback!(e.toString());
+    }
+  }
+
+  //this function saves the cart to the firebase after user has logged in
+  Future<void> saveCart() async {
+    _cart = Provider.of<CartData>(context, listen: false).getCartItems();
+
+    var save = FirebaseFirestore.instance;
+
+    var cartID = save.collection("cart").doc();
+
+    for (ClothesModel cartItem in _cart!) {
+      await FirebaseFirestore.instance
+          .collection('cart')
+          .doc("$cartID")
+          .set(cartItem.toJson());
     }
   }
 
@@ -60,9 +90,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: ModalProgressHUD(
         inAsyncCall: isLoading!,
         dismissible: true,
-        progressIndicator: CircularProgressIndicator(
-          color: primary,
-        ),
+        color: primary,
+        progressIndicator: CircularProgressIndicator(),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Container(
@@ -108,8 +137,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onchanged: (value) {
                           setState(() {
                             name = value;
-                            print(name);
                           });
+                          print(name);
                         },
                         keyboardType: TextInputType.emailAddress,
                         text: "Your Name",
@@ -123,8 +152,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onchanged: (value) {
                           setState(() {
                             email = value;
-                            print(email);
                           });
+                          print(email);
                         },
                         keyboardType: TextInputType.text,
                         text: "Your E-mail",
@@ -138,7 +167,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onchanged: (value) {
                           setState(() {
                             password = value;
-                            print(password);
                           });
                         },
                         keyboardType: TextInputType.text,
@@ -192,7 +220,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () {
                             setState(() {
                               isLoading = true;
-                              signUp();
+                              signUp(callback: (String text) {
+                                if (text.isNotEmpty)
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                              });
                             });
                           },
                           child: Center(
