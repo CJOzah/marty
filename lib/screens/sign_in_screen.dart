@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:provider/provider.dart';
 import 'package:shopplift/home.dart';
 import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/sign_up_screen.dart';
+import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
@@ -19,49 +21,31 @@ class _SignInScreenState extends State<SignInScreen> {
   bool? isLoading = false;
   String? email;
   String? password;
-  List<ClothesModel>? _cart = [];
   UserCredential? user;
 
   //fuction that sign the user in if the user is logged out
-  void signIn({Function(String)? callback}) async {
+  void signIn({Function(String?)? callback}) async {
     try {
       user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email!, password: password!);
       print("user Logged in");
 
-      // showInSnackBar("Sign Ip Successful", context);
+      showInSnackBar("Sign In Successful", context);
 
       //saves cart to database
-      saveCart();
+      saveCart(context);
       print("Cart items saved to db");
-
-      // Navigator.popAndPushNamed(context, FancyDraw.id);
+      callback!("logged in");
     } on FirebaseAuthException catch (e) {
       if (e.code.isNotEmpty) {
         print(e.code);
-        // showInSnackBar("${e.code}", context);
+        showInSnackBar("${e.code}", context);
         callback!(e.code);
       }
     } catch (e) {
       print(e);
-      // showInSnackBar("${e.toString()}", context);
+      showInSnackBar("${e.toString()}", context);
       callback!(e.toString());
-    }
-  }
-
-  //this function saves the cart to the firebase after user has logged in
-  Future<void> saveCart() async {
-    // _cart = Provider.of<CartData>(context, listen: false).getCartItems();
-
-    var save = FirebaseFirestore.instance;
-
-    var cartID = save.collection("cart").doc();
-
-    for (ClothesModel cartItem in _cart!) {
-      await FirebaseFirestore.instance
-          .collection('cart')
-          .doc("$cartID")
-          .set(cartItem.toJson());
     }
   }
 
@@ -175,17 +159,22 @@ class _SignInScreenState extends State<SignInScreen> {
                                 .authStateChanges()
                                 .listen((User? user) {
                               if (user == null) {
-                                signIn(callback: (String text) {
-                                  if (text.isNotEmpty)
-                                    setState(() {
-                                      isLoading = false;
-                                    });
+                                setState(() {
+                                  isLoading = true;
                                 });
-                              } else {
+                                signIn(callback: (String? text) {
+                                  if (text == "logged in") {
+                                    Navigator.pushNamedAndRemoveUntil(context,
+                                        FancyDraw.id, (route) => false);
+                                  }
+                                });
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              } else if (user.uid.isNotEmpty) {
                                 print("User logged in");
                                 showInSnackBar(
                                     "User Already Logged in", context);
-                                Navigator.pushNamed(context, FancyDraw.id);
                               }
                             });
                           },

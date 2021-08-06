@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
 import 'package:shopplift/screens/fav_screen.dart';
@@ -13,6 +15,7 @@ import 'package:shopplift/utils/size_config.dart';
 import '../home.dart';
 import '../main.dart';
 import 'cart.dart';
+import 'clothes.dart';
 
 class HorizontalLine extends StatelessWidget {
   final double? width;
@@ -570,19 +573,19 @@ class MenuListTile extends StatelessWidget {
   final IconData? leading;
   final String? title;
   final IconData? trailing;
-  final String ontap;
+  final Function()? onPressed;
   const MenuListTile({
     Key? key,
     this.leading,
     this.title,
     this.trailing,
-    required this.ontap,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, ontap),
+      onTap: onPressed!,
       leading: Icon(
         leading,
         color: Colors.white,
@@ -650,7 +653,6 @@ Future<void> showSizeSheet(
     isScrollControlled: true,
     context: context,
     builder: (BuildContext context) {
-      print(quantity);
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
         return Wrap(
@@ -1104,77 +1106,134 @@ class ThirdLayer extends StatefulWidget {
 }
 
 class _ThirdLayerState extends State<ThirdLayer> {
+  final auth = FirebaseAuth.instance;
+  bool? isloggedIn = false;
+  bool? isLoading = false;
+
   @override
   Widget build(BuildContext context) {
+    auth.authStateChanges().listen((User? user) {
+      if (user == null) {
+        setState(() {
+          isloggedIn = false;
+        });
+      } else {
+        setState(() {
+          isloggedIn = true;
+        });
+      }
+    });
     SizeConfig().init(context);
-    return SafeArea(
-      child: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/BubbleDesign.png"),
-            fit: BoxFit.cover,
+    return ModalProgressHUD(
+      inAsyncCall: isLoading!,
+      progressIndicator: CircularProgressIndicator(
+        backgroundColor: primary,
+      ),
+      child: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/BubbleDesign.png"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    left: SizeConfig.sW! * 4, top: SizeConfig.sH! * 15),
-                child: Text(
-                  "Marty",
-                  style: TextStyle(
-                    fontSize: SizeConfig.sH! * 4,
-                    color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.sW! * 4, top: SizeConfig.sH! * 15),
+                  child: Text(
+                    "Marty",
+                    style: TextStyle(
+                      fontSize: SizeConfig.sH! * 4,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    MenuListTile(
-                      leading: Icons.home_outlined,
-                      title: "Home",
-                      ontap: FancyDraw.id,
-                    ),
-                    MenuListTile(
-                      leading: Icons.shopping_cart_outlined,
-                      title: "Cart",
-                      ontap: CartScreen.id,
-                    ),
-                    MenuListTile(
-                      leading: Icons.person_outline,
-                      title: "Profile",
-                      ontap: ProfileScreen.id,
-                    ),
-                    MenuListTile(
-                      leading: FontAwesomeIcons.heartbeat,
-                      title: "Wishlist",
-                      ontap: FavScreen.id,
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MenuListTile(
+                        leading: Icons.home_outlined,
+                        title: "Home",
+                        onPressed: () =>
+                            Navigator.pushNamed(context, FancyDraw.id),
+                      ),
+                      MenuListTile(
+                        leading: Icons.shopping_cart_outlined,
+                        title: "Cart",
+                        onPressed: () =>
+                            Navigator.pushNamed(context, CartScreen.id),
+                      ),
+                      MenuListTile(
+                        leading: Icons.person_outline,
+                        title: "Profile",
+                        onPressed: () =>
+                            Navigator.pushNamed(context, ProfileScreen.id),
+                      ),
+                      MenuListTile(
+                        leading: FontAwesomeIcons.heartbeat,
+                        title: "Wishlist",
+                        onPressed: () =>
+                            Navigator.pushNamed(context, FavScreen.id),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: SizeConfig.sH! * 25),
-                child: MenuListTile(
-                  leading: Icons.logout,
-                  title: "Log In",
-                  ontap: SignInScreen.id,
+                Padding(
+                  padding: EdgeInsets.only(top: SizeConfig.sH! * 25),
+                  child: MenuListTile(
+                    leading: Icons.logout,
+                    title: (isloggedIn! == true) ? "Log Out" : "Log In",
+                    onPressed: () async {
+                      if (isloggedIn! == true) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await auth.signOut();
+                        showInSnackBar("Log Out Successful", context);
+                        setState(() {
+                          isLoading = false;
+                        });
+                        // Navigator.popAndPushNamed(context, FancyDraw.id);
+                      } else {
+                        Navigator.pushNamed(context, SignInScreen.id);
+                      }
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+//this function saves the cart to the firebase after user has logged in
+Future<void> saveCart(BuildContext context) async {
+  List<ClothesModel> _cart = [];
+
+  _cart = Provider.of<CartData>(context, listen: false).getCartItems();
+
+  var save = FirebaseFirestore.instance;
+
+  var cartID = save.collection("cart").doc();
+
+  for (ClothesModel cartItem in _cart) {
+    await FirebaseFirestore.instance
+        .collection('cart')
+        .doc("$cartID")
+        .set(cartItem.toJson());
   }
 }

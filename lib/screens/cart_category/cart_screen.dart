@@ -1,13 +1,14 @@
-import 'package:firebase_auth/Firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/main.dart';
-import 'package:shopplift/screens/cart_category/checkout_screen.dart';
-import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
+
+import '../sign_in_screen.dart';
+import 'checkout_screen.dart';
 
 class CartScreen extends StatefulWidget {
   static String id = 'CartScreen';
@@ -600,6 +601,10 @@ class _CartScreenState extends State<CartScreen> {
                                                           context,
                                                           SignInScreen.id);
                                                     } else {
+                                                      //saves cart to database
+                                                      saveCart(context);
+                                                      print(
+                                                          "Cart items saved to db");
                                                       print("User logged in");
                                                       Navigator.pushNamed(
                                                           context,
