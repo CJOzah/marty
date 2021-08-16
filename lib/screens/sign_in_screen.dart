@@ -32,8 +32,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
       showInSnackBar("Sign In Successful", context);
 
-      //saves cart to database
-      saveCart(context);
       print("Cart items saved to db");
       callback!("logged in");
     } on FirebaseAuthException catch (e) {

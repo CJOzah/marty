@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shopplift/utils/clothes.dart';
 
 class CartData extends ChangeNotifier {
   int _total = 0;
+  Map<String, dynamic>? item;
 
   List<ClothesModel> _cart = [];
   List<QueryDocumentSnapshot<Object?>> _fav = [];
@@ -42,8 +44,8 @@ class CartData extends ChangeNotifier {
     return _favbutton;
   }
 
-  void addToCart(
-      QueryDocumentSnapshot<Object?> clothes, int quantity, String size) {
+  Future<void> addToCart(
+      QueryDocumentSnapshot<Object?> clothes, int quantity, String size) async {
     ClothesModel cart =
         ClothesModel(cartDetails: clothes, quantity: quantity, size: size);
     bool add = false;
@@ -54,6 +56,7 @@ class CartData extends ChangeNotifier {
         if (_cart[i].cartDetails!["id"] == clothes.id &&
             _cart[i].size != size) {
           add = true;
+
           print(_cart[i].cartDetails!["name"]);
         } else
           add = false;
@@ -67,15 +70,91 @@ class CartData extends ChangeNotifier {
         if (_cart[i].cartDetails!["id"] == clothes.id &&
             _cart[i].size == size) {
           _cart[i].quantity = _cart[i].quantity! + 1;
+          FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+            if (user == null) {
+              // print("User not logged in");
+            } else {
+              // print("User logged in");
+
+              item = _cart[i].toJson();
+              var id = FirebaseFirestore.instance
+                  .collection('cart')
+                  .doc("cartItems")
+                  .collection("${user.uid}")
+                  .doc()
+                  .id;
+
+              await FirebaseFirestore.instance
+                  .collection('cart')
+                  .doc("cartItems")
+                  .collection("${user.uid}")
+                  .doc("$id")
+                  .set({
+                "itemId": id,
+                "details": item!,
+              });
+              print("added to db");
+            }
+          });
           break;
         }
       }
+
       if (add) {
+        FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+          if (user == null) {
+            // print("User not logged in");
+          } else {
+            // print("User logged in");
+            item = cart.toJson();
+            var id = FirebaseFirestore.instance
+                .collection('cart')
+                .doc("cartItems")
+                .collection("${user.uid}")
+                .doc()
+                .id;
+
+            await FirebaseFirestore.instance
+                .collection('cart')
+                .doc("cartItems")
+                .collection("${user.uid}")
+                .doc("$id")
+                .set({
+              "itemId": id,
+              "details": item!,
+            });
+          }
+        });
+
         _cart.add(cart);
       }
     } else {
+      FirebaseAuth.instance.authStateChanges().listen((User? user) async {
+        if (user == null) {
+          // print("User not logged in");
+        } else {
+          // print("User logged in");
+          item = cart.toJson();
+          var id = FirebaseFirestore.instance
+              .collection('cart')
+              .doc("cartItems")
+              .collection("${user.uid}")
+              .doc()
+              .id;
+
+          await FirebaseFirestore.instance
+              .collection('cart')
+              .doc("cartItems")
+              .collection("${user.uid}")
+              .doc("$id")
+              .set({
+            "itemId": id,
+            "details": item!,
+          });
+        }
+      });
+
       _cart.add(cart);
-      print(_cart.length);
     }
     notifyListeners();
   }
@@ -137,3 +216,20 @@ class CartData extends ChangeNotifier {
     return _total;
   }
 }
+
+// //this function saves the cart to the firebase after user has logged in
+// Future<void> saveCart(BuildContext context) async {
+//   List<ClothesModel> _cart = [];
+
+//   _cart = Provider.of<CartData>(context, listen: false).getCartItems();
+
+//   var save = FirebaseFirestore.instance;
+
+//   var cartID = save.collection("cart").doc();
+
+//     await FirebaseFirestore.instance
+//         .collection('cart')
+//         .doc("$cartID")
+//         .set(cartItem.toJson());
+  
+// }

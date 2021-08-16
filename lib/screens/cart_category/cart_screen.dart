@@ -601,10 +601,6 @@ class _CartScreenState extends State<CartScreen> {
                                                           context,
                                                           SignInScreen.id);
                                                     } else {
-                                                      //saves cart to database
-                                                      saveCart(context);
-                                                      print(
-                                                          "Cart items saved to db");
                                                       print("User logged in");
                                                       Navigator.pushNamed(
                                                           context,

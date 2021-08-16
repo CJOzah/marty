@@ -1219,21 +1219,3 @@ class _ThirdLayerState extends State<ThirdLayer> {
     );
   }
 }
-
-//this function saves the cart to the firebase after user has logged in
-Future<void> saveCart(BuildContext context) async {
-  List<ClothesModel> _cart = [];
-
-  _cart = Provider.of<CartData>(context, listen: false).getCartItems();
-
-  var save = FirebaseFirestore.instance;
-
-  var cartID = save.collection("cart").doc();
-
-  for (ClothesModel cartItem in _cart) {
-    await FirebaseFirestore.instance
-        .collection('cart')
-        .doc("$cartID")
-        .set(cartItem.toJson());
-  }
-}
