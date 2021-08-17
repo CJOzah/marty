@@ -72,25 +72,31 @@ class CartData extends ChangeNotifier {
           _cart[i].quantity = _cart[i].quantity! + 1;
           FirebaseAuth.instance.authStateChanges().listen((User? user) async {
             if (user == null) {
-              // print("User not logged in");
+              print("User not logged in");
             } else {
-              // print("User logged in");
+              print("User logged in");
 
               item = _cart[i].toJson();
-              var id = FirebaseFirestore.instance
+              QuerySnapshot query = await FirebaseFirestore.instance
                   .collection('cart')
                   .doc("cartItems")
                   .collection("${user.uid}")
-                  .doc()
-                  .id;
+                  .where("name", isEqualTo: clothes.id)
+                  .where("size", isEqualTo: size)
+                  .get();
+
+              print("gotten product from db");
+              print(query.docs);
+              QueryDocumentSnapshot doc = query.docs[0];
+              DocumentReference docRef = doc.reference;
 
               await FirebaseFirestore.instance
                   .collection('cart')
                   .doc("cartItems")
                   .collection("${user.uid}")
-                  .doc("$id")
+                  .doc("${docRef.id}")
                   .set({
-                "itemId": id,
+                "itemId": docRef.id,
                 "details": item!,
               });
               print("added to db");
@@ -103,9 +109,9 @@ class CartData extends ChangeNotifier {
       if (add) {
         FirebaseAuth.instance.authStateChanges().listen((User? user) async {
           if (user == null) {
-            // print("User not logged in");
+            print("User not logged in");
           } else {
-            // print("User logged in");
+            print("User logged in");
             item = cart.toJson();
             var id = FirebaseFirestore.instance
                 .collection('cart')
@@ -123,6 +129,7 @@ class CartData extends ChangeNotifier {
               "itemId": id,
               "details": item!,
             });
+            print("added to db");
           }
         });
 
@@ -131,9 +138,9 @@ class CartData extends ChangeNotifier {
     } else {
       FirebaseAuth.instance.authStateChanges().listen((User? user) async {
         if (user == null) {
-          // print("User not logged in");
+          print("User not logged in");
         } else {
-          // print("User logged in");
+          print("User logged in");
           item = cart.toJson();
           var id = FirebaseFirestore.instance
               .collection('cart')
@@ -151,6 +158,7 @@ class CartData extends ChangeNotifier {
             "itemId": id,
             "details": item!,
           });
+          print("added to db");
         }
       });
 
@@ -231,5 +239,5 @@ class CartData extends ChangeNotifier {
 //         .collection('cart')
 //         .doc("$cartID")
 //         .set(cartItem.toJson());
-  
+
 // }
