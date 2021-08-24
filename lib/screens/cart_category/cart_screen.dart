@@ -291,7 +291,8 @@ class _CartScreenState extends State<CartScreen> {
                                                                       listen:
                                                                           false)
                                                                   .removeFromCart(
-                                                                      item.cartDetails!);
+                                                                      item.cartDetails!,
+                                                                      item.size!);
                                                           });
                                                         },
                                                       ),

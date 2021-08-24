@@ -569,7 +569,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                                                       listen:
                                                                           false)
                                                                   .removeFromCart(
-                                                                      item);
+                                                                      item,
+                                                                      item["size"]
+                                                                          [
+                                                                          index]);
 
                                                               showInSnackBar(
                                                                   "${item["name"]} Removed from Cart",

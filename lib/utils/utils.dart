@@ -785,7 +785,9 @@ Future<void> showSizeSheet(
                                                                 context,
                                                                 listen: false)
                                                             .removeFromCart(
-                                                                items);
+                                                                items,
+                                                                items["size"]
+                                                                    [index]);
                                                         setModalState(() {
                                                           showInSnackBar(
                                                               "${items["name"]} Removed to Cart",
