@@ -41,6 +41,8 @@ dependencies:
   firebase_storage: ^8.1.1
   modal_progress_hud_nsn: ^0.1.0-nullsafety-1
   firebase_auth: ^3.0.1
+  connectivity: ^3.0.6
+  shimmer: ^2.0.0
   
 
 dev_dependencies:

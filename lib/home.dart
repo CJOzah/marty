@@ -1,12 +1,16 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
+import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/product_desc_screen.dart';
-import 'package:shopplift/shimmer_loading_effect.dart';
+import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/utils/cart.dart';
+import 'package:shopplift/utils/connection_status_singleton.dart';
+import 'package:shopplift/utils/shimmer_custom_widget.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
 import 'utils/clothes.dart';
@@ -65,7 +69,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   var update = FirebaseFirestore.instance.collection("all_products");
   //gets all the products stored in the firebase
 
-  late Future<QuerySnapshot<Map<String, dynamic>>> products;
+  Future<QuerySnapshot<Map<String, dynamic>>>? products;
   List<ClothesModel> clothes = [];
 
   // void shoesCat() {
@@ -95,8 +99,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   double xoffSet = 0;
   double yoffSet = 0;
   double angle = 0;
-
   bool isOpen = false;
+
+  bool? _hasNetworkConnection;
+  bool? _fallbackViewOn;
+
+  void updateConnectivity(dynamic hasConnection) {
+    if (!_hasNetworkConnection!) {
+      if (!_fallbackViewOn!) {
+        navigatorKey.currentState!.pushNamed(SignInScreen.id);
+        setState(() {
+          _fallbackViewOn = true;
+          _hasNetworkConnection = hasConnection;
+        });
+      }
+    } else {
+      if (_fallbackViewOn!) {
+        navigatorKey.currentState!.pop(context);
+        setState(() {
+          _fallbackViewOn = false;
+          _hasNetworkConnection = hasConnection;
+        });
+      }
+    }
+  }
+
+  Future<void> _pullRefresh(isloading) async {
+    return isloading;
+  }
 
   @override
   void initState() {
@@ -104,6 +134,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     products = Provider.of<CartData>(context, listen: false).getProducts();
 
     super.initState();
+    _hasNetworkConnection = false;
+    _fallbackViewOn = false;
+
+    ConnectionStatusSingleton connectionStatus =
+        ConnectionStatusSingleton.getInstance();
+    connectionStatus.connectionChange.listen(updateConnectivity);
   }
 
   @override
@@ -189,423 +225,496 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           });
                         }),
               ),
-              body: RefreshIndicator(
-                onRefresh: () {
-                  LoadingWidget(isLoading: isLoading);
-                  return _pullRefresh(isLoading);
-                },
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.only(
-                      left: SizeConfig.sW! * 3,
-                      right: SizeConfig.sW! * 3,
-                    ),
-                    child: Column(
-                      children: [
-                        FutureBuilder(
-                            future: products,
-                            builder: (context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                //check if the list of favorite or cart button is null and fill them
-                                if (favbutton!.isEmpty) {
-                                  snapshot.data!.docs.forEach((element) {
-                                    favbutton!.add(false);
-                                  });
-                                }
-                                if (cartbutton!.isEmpty) {
-                                  snapshot.data!.docs.forEach((element) {
-                                    cartbutton!.add(false);
-                                  });
-                                }
-                                Future.delayed(Duration(milliseconds: 5000))
-                                    .whenComplete(() {
-                                  setState(() {
-                                    isLoading = false;
-                                  });
-                                });
-                              }
-                              if (isLoading == false) {
-                                return Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CarouselSlider(
-                                      options: CarouselOptions(
-                                          enableInfiniteScroll: false,
-                                          viewportFraction: 1,
-                                          height: SizeConfig.sH! * 25,
-                                          autoPlay: !isLoading,
-                                          pageSnapping: false,
-                                          enlargeCenterPage: false,
-                                          onPageChanged: (int? index, reason) {
-                                            int? inDex;
-                                            index = inDex;
-                                          }),
-                                      items: <Widget>[
-                                        Container(
-                                          height: SizeConfig.sH! * 20,
-                                          width: width,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    "images/carousel.jpg"),
-                                                fit: BoxFit.cover),
-                                          ),
-                                        ),
-                                        HomeCarousel(
-                                          height: height,
-                                          width: width,
-                                          textColor: Colors.blue.shade900,
-                                          imagePath: 'images/clothes2.jpg',
-                                          backgroundColor: Colors.white,
-                                          text1: "Mens Shirt\nHigh Quality",
-                                          text2:
-                                              "Check out the stylish men's shirt,\n100% natural material",
-                                        ),
-                                        HomeCarousel(
-                                          height: height,
-                                          width: width,
-                                          text2Color: Colors.white,
-                                          text3Color: Colors.white,
-                                          textColor: Colors.white,
-                                          imagePath: 'images/shoe1.jpg',
-                                          backgroundColor: Color(0xFFCC041E),
-                                          text1: "Shoes \nHigh Quality",
-                                          text2:
-                                              "Check out  stylish Shoes,\n100% natural material",
-                                        ),
-                                        Container(
-                                          height: SizeConfig.sH! * 25,
-                                          width: width,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    "images/carousel2.jpg"),
-                                                fit: BoxFit.fill),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: SizeConfig.sH! * 2,
-                                        bottom: SizeConfig.sH! * 1.2,
-                                      ),
-                                      child: Text(
-                                        "Choose Category",
-                                        style: TextStyle(
-                                          fontSize: SizeConfig.sW! * 6,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        CatCard(
-                                          onpressed: () {
-                                            setState(() {
-                                              cat = "Clothes";
-                                              // clothesCat();
-                                            });
-                                          },
-                                          height: height,
-                                          icon: FontAwesomeIcons.tshirt,
-                                          text: "Clothes",
-                                        ),
-                                        CatCard(
-                                          onpressed: () {
-                                            setState(() {
-                                              cat = "Shoes";
-                                              // shoesCat();
-                                            });
-                                          },
-                                          height: height,
-                                          icon: FontAwesomeIcons.shoePrints,
-                                          text: "Shoes",
-                                        ),
-                                        CatCard(
-                                          onpressed: () {
-                                            setState(() {
-                                              cat = "Watches";
-                                              // watchCat();
-                                            });
-                                          },
-                                          height: height,
-                                          icon: Icons.watch_outlined,
-                                          text: "Accessories",
-                                        ),
-                                        CatCard(
-                                          onpressed: () {
-                                            setState(() {
-                                              cat = "All Products";
-                                              // allCat();
-                                            });
-                                          },
-                                          height: height,
-                                          icon: Icons.all_inclusive_outlined,
-                                          text: "All Products",
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                          top: SizeConfig.sH! * 2),
-                                      child: Text(
-                                        "$cat",
-                                        style: TextStyle(
-                                          fontSize: SizeConfig.sW! * 6,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    GridView.builder(
-                                        gridDelegate:
-                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          childAspectRatio:
-                                              size.aspectRatio / 2,
-                                          mainAxisExtent: SizeConfig.sH! * 42,
-                                          crossAxisSpacing: SizeConfig.sW! * 2,
-                                        ),
-                                        scrollDirection: Axis.vertical,
-                                        physics: NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: snapshot.data!.docs.length,
-                                        itemBuilder: (context, index) {
-                                          final item =
-                                              snapshot.data!.docs[index];
-                                          final items = Provider.of<CartData>(
-                                                  context,
-                                                  listen: false)
-                                              .getCartItems();
-                                          cartbutton![index] = false;
-                                          //checks if the favorites or cart are empty
-                                          if (Provider.of<CartData>(context,
-                                                  listen: false)
-                                              .getFavItems()
-                                              .isEmpty)
-                                            favbutton![index] = false;
-                                          if (Provider.of<CartData>(context,
-                                                  listen: false)
-                                              .getCartItems()
-                                              .isEmpty)
-                                            cartbutton![index] = false;
-
-                                          // checks if product is has already been added to cart
-                                          items.forEach((element) {
-                                            if (item["id"] ==
-                                                element.cartDetails!["id"]) {
-                                              cartbutton![index] = true;
-                                            }
+              body: StreamBuilder(
+                stream: Connectivity().onConnectivityChanged,
+                builder: (BuildContext context,
+                    AsyncSnapshot<ConnectivityResult> snapshot) {
+                  // snapshot = Connectivity().onConnectivityChanged;
+                  if (!snapshot.hasData)
+                    return Center(child: Text("No Internet Connection!"));
+                  var result = snapshot.data;
+                  switch (result) {
+                    case ConnectivityResult.none:
+                      print("no network");
+                      return Center(child: Text("No Internet Connection!"));
+                    case ConnectivityResult.mobile:
+                    case ConnectivityResult.wifi:
+                      return RefreshIndicator(
+                        onRefresh: () {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          Future.delayed(Duration(milliseconds: 5000))
+                              .whenComplete(() {
+                            products =
+                                Provider.of<CartData>(context, listen: false)
+                                    .getProducts();
+                            setState(() {
+                              isLoading = false;
+                            });
+                          });
+                          return _pullRefresh(isLoading);
+                        },
+                        child: SingleChildScrollView(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                              left: SizeConfig.sW! * 3,
+                              right: SizeConfig.sW! * 3,
+                            ),
+                            child: Column(
+                              children: [
+                                FutureBuilder(
+                                    future: products!,
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot>?
+                                            snapshot) {
+                                      if (snapshot!.connectionState ==
+                                          ConnectionState.done) {
+                                        //check if the list of favorite or cart button is null and fill them
+                                        if (favbutton!.isEmpty) {
+                                          snapshot.data!.docs
+                                              .forEach((element) {
+                                            favbutton!.add(false);
                                           });
-                                          return Container(
-                                            height: SizeConfig.sH! * 40,
-                                            width: double.infinity,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () => Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            ProductDescScreen(
-                                                                item)),
-                                                  ),
-                                                  child: Container(
-                                                    height: SizeConfig.sH! * 30,
-                                                    width: double.infinity,
-                                                    child: Image.network(
-                                                        item["url"],
-                                                        errorBuilder:
-                                                            (BuildContext
-                                                                    context,
-                                                                Object
-                                                                    exception,
-                                                                StackTrace?
-                                                                    stackTrace) {
-                                                      return Container(
-                                                        color: Colors.grey,
-                                                      );
-                                                    }, fit: BoxFit.cover),
+                                        }
+                                        if (cartbutton!.isEmpty) {
+                                          snapshot.data!.docs
+                                              .forEach((element) {
+                                            cartbutton!.add(false);
+                                          });
+                                        }
+                                        Future.delayed(
+                                                Duration(milliseconds: 5000))
+                                            .whenComplete(() {
+                                          setState(() {
+                                            isLoading = false;
+                                          });
+                                        });
+                                      }
+                                      if (isLoading == false) {
+                                        return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            CarouselSlider(
+                                              options: CarouselOptions(
+                                                  enableInfiniteScroll: false,
+                                                  viewportFraction: 1,
+                                                  height: SizeConfig.sH! * 25,
+                                                  autoPlay: !isLoading,
+                                                  pageSnapping: false,
+                                                  enlargeCenterPage: false,
+                                                  onPageChanged:
+                                                      (int? index, reason) {
+                                                    int? inDex;
+                                                    index = inDex;
+                                                  }),
+                                              items: <Widget>[
+                                                Container(
+                                                  height: SizeConfig.sH! * 20,
+                                                  width: width,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                            "images/carousel.jpg"),
+                                                        fit: BoxFit.cover),
                                                   ),
                                                 ),
-                                                Text(
-                                                  "${item["name"]}",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontSize:
-                                                        SizeConfig.sW! * 5,
-                                                  ),
-                                                  softWrap: true,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                HomeCarousel(
+                                                  height: height,
+                                                  width: width,
+                                                  textColor:
+                                                      Colors.blue.shade900,
+                                                  imagePath:
+                                                      'images/clothes2.jpg',
+                                                  backgroundColor: Colors.white,
+                                                  text1:
+                                                      "Mens Shirt\nHigh Quality",
+                                                  text2:
+                                                      "Check out the stylish men's shirt,\n100% natural material",
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        FittedBox(
-                                                          fit: BoxFit.scaleDown,
-                                                          child: Text(
-                                                            "₦${item["price"]}",
-                                                            style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize:
-                                                                  SizeConfig
-                                                                          .sW! *
-                                                                      5,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    InkWell(
-                                                      child: Icon(
-                                                        favbutton![index] ==
-                                                                true
-                                                            ? FontAwesomeIcons
-                                                                .solidHeart
-                                                            : FontAwesomeIcons
-                                                                .heart,
-                                                        color:
-                                                            favbutton![index] ==
-                                                                    true
-                                                                ? Colors.red
-                                                                : Colors.black,
-                                                        size:
-                                                            SizeConfig.sW! * 6,
-                                                      ),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          if (favbutton![
-                                                                  index] ==
-                                                              true) {
-                                                            favbutton![index] =
-                                                                false;
-                                                            Provider.of<CartData>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .removeFromFav(
-                                                                    item);
-                                                            showInSnackBar(
-                                                                "${item["name"]} Removed from Favorites",
-                                                                context);
-                                                          } else if (favbutton![
-                                                                  index] ==
-                                                              false) {
-                                                            favbutton![index] =
-                                                                true;
-                                                            Provider.of<CartData>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .addToFav(item);
-                                                            showInSnackBar(
-                                                                "${item["name"]} Added to Favorites",
-                                                                context);
-                                                          }
-                                                        });
-                                                      },
-                                                    ),
-                                                    InkWell(
-                                                      child: Icon(
-                                                        cartbutton![index]
-                                                            ? FontAwesomeIcons
-                                                                .check
-                                                            : Icons
-                                                                .shopping_cart_outlined,
-                                                        color:
-                                                            cartbutton![index]
-                                                                ? Colors.green
-                                                                : Colors.black,
-                                                      ),
-                                                      onTap: () {
-                                                        setState(() {
-                                                          if (item["size"]!
-                                                                  .hashCode ==
-                                                              0) {
-                                                            if (cartbutton![
-                                                                    index] ==
-                                                                false) {
-                                                              cartbutton![
-                                                                  index] = true;
-                                                              Provider.of<CartData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .addToCart(
-                                                                      item,
-                                                                      1,
-                                                                      "M");
-                                                              showInSnackBar(
-                                                                  "${item["name"]} Added to Cart",
-                                                                  context);
-                                                            } else if (cartbutton![
-                                                                    index] ==
-                                                                true) {
-                                                              cartbutton![
-                                                                      index] =
-                                                                  false;
-                                                              Provider.of<CartData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .removeFromCart(
-                                                                      item,
-                                                                      item["size"]
-                                                                          [
-                                                                          index]);
-
-                                                              showInSnackBar(
-                                                                  "${item["name"]} Removed from Cart",
-                                                                  context);
-                                                            }
-                                                          } else {
-                                                            showSizeSheet(
-                                                                context,
-                                                                item,
-                                                                setState,
-                                                                quantity);
-                                                          }
-                                                        });
-                                                      },
-                                                    ),
-                                                  ],
+                                                HomeCarousel(
+                                                  height: height,
+                                                  width: width,
+                                                  text2Color: Colors.white,
+                                                  text3Color: Colors.white,
+                                                  textColor: Colors.white,
+                                                  imagePath: 'images/shoe1.jpg',
+                                                  backgroundColor:
+                                                      Color(0xFFCC041E),
+                                                  text1: "Shoes \nHigh Quality",
+                                                  text2:
+                                                      "Check out  stylish Shoes,\n100% natural material",
+                                                ),
+                                                Container(
+                                                  height: SizeConfig.sH! * 25,
+                                                  width: width,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                            "images/carousel2.jpg"),
+                                                        fit: BoxFit.fill),
+                                                  ),
                                                 ),
                                               ],
                                             ),
-                                          );
-                                        }),
-                                  ],
-                                );
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.none) {
-                                return Text("No data");
-                              }
-                              return LoadingWidget(isLoading: isLoading);
-                            }),
-                      ],
-                    ),
-                  ),
-                ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                top: SizeConfig.sH! * 2,
+                                                bottom: SizeConfig.sH! * 1.2,
+                                              ),
+                                              child: Text(
+                                                "Choose Category",
+                                                style: TextStyle(
+                                                  fontSize: SizeConfig.sW! * 6,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                CatCard(
+                                                  onpressed: () {
+                                                    setState(() {
+                                                      cat = "Clothes";
+                                                      // clothesCat();
+                                                    });
+                                                  },
+                                                  height: height,
+                                                  icon: FontAwesomeIcons.tshirt,
+                                                  text: "Clothes",
+                                                ),
+                                                CatCard(
+                                                  onpressed: () {
+                                                    setState(() {
+                                                      cat = "Shoes";
+                                                      // shoesCat();
+                                                    });
+                                                  },
+                                                  height: height,
+                                                  icon: FontAwesomeIcons
+                                                      .shoePrints,
+                                                  text: "Shoes",
+                                                ),
+                                                CatCard(
+                                                  onpressed: () {
+                                                    setState(() {
+                                                      cat = "Watches";
+                                                      // watchCat();
+                                                    });
+                                                  },
+                                                  height: height,
+                                                  icon: Icons.watch_outlined,
+                                                  text: "Accessories",
+                                                ),
+                                                CatCard(
+                                                  onpressed: () {
+                                                    setState(() {
+                                                      cat = "All Products";
+                                                      // allCat();
+                                                    });
+                                                  },
+                                                  height: height,
+                                                  icon: Icons
+                                                      .all_inclusive_outlined,
+                                                  text: "All Products",
+                                                ),
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: SizeConfig.sH! * 2),
+                                              child: Text(
+                                                "$cat",
+                                                style: TextStyle(
+                                                  fontSize: SizeConfig.sW! * 6,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            GridView.builder(
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                  childAspectRatio:
+                                                      size.aspectRatio / 2,
+                                                  mainAxisExtent:
+                                                      SizeConfig.sH! * 42,
+                                                  crossAxisSpacing:
+                                                      SizeConfig.sW! * 2,
+                                                ),
+                                                scrollDirection: Axis.vertical,
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount:
+                                                    snapshot.data!.docs.length,
+                                                itemBuilder: (context, index) {
+                                                  final item = snapshot
+                                                      .data!.docs[index];
+                                                  final items =
+                                                      Provider.of<CartData>(
+                                                              context,
+                                                              listen: false)
+                                                          .getCartItems();
+                                                  cartbutton![index] = false;
+                                                  //checks if the favorites or cart are empty
+                                                  if (Provider.of<CartData>(
+                                                          context,
+                                                          listen: false)
+                                                      .getFavItems()
+                                                      .isEmpty)
+                                                    favbutton![index] = false;
+                                                  if (Provider.of<CartData>(
+                                                          context,
+                                                          listen: false)
+                                                      .getCartItems()
+                                                      .isEmpty)
+                                                    cartbutton![index] = false;
+
+                                                  // checks if product is has already been added to cart
+                                                  items.forEach((element) {
+                                                    if (item["id"] ==
+                                                        element.cartDetails![
+                                                            "id"]) {
+                                                      cartbutton![index] = true;
+                                                    }
+                                                  });
+                                                  return Container(
+                                                    height: SizeConfig.sH! * 40,
+                                                    width: double.infinity,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () =>
+                                                              Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    ProductDescScreen(
+                                                                        item)),
+                                                          ),
+                                                          child: Container(
+                                                            height:
+                                                                SizeConfig.sH! *
+                                                                    30,
+                                                            width:
+                                                                double.infinity,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                                    boxShadow: [
+                                                                  shadows()
+                                                                ]),
+                                                            child: Image.network(
+                                                                item["url"],
+                                                                errorBuilder: (BuildContext
+                                                                        context,
+                                                                    Object
+                                                                        exception,
+                                                                    StackTrace?
+                                                                        stackTrace) {
+                                                              return Container(
+                                                                color:
+                                                                    Colors.grey,
+                                                              );
+                                                            },
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          "${item["name"]}",
+                                                          textAlign:
+                                                              TextAlign.start,
+                                                          style: TextStyle(
+                                                            fontSize:
+                                                                SizeConfig.sW! *
+                                                                    5,
+                                                          ),
+                                                          softWrap: true,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                FittedBox(
+                                                                  fit: BoxFit
+                                                                      .scaleDown,
+                                                                  child: Text(
+                                                                    "₦${item["price"]}",
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          SizeConfig.sW! *
+                                                                              5,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            InkWell(
+                                                              child: Icon(
+                                                                favbutton![index] ==
+                                                                        true
+                                                                    ? FontAwesomeIcons
+                                                                        .solidHeart
+                                                                    : FontAwesomeIcons
+                                                                        .heart,
+                                                                color: favbutton![
+                                                                            index] ==
+                                                                        true
+                                                                    ? Colors.red
+                                                                    : Colors
+                                                                        .black,
+                                                                size: SizeConfig
+                                                                        .sW! *
+                                                                    6,
+                                                              ),
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  if (favbutton![
+                                                                          index] ==
+                                                                      true) {
+                                                                    favbutton![
+                                                                            index] =
+                                                                        false;
+                                                                    Provider.of<CartData>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .removeFromFav(
+                                                                            item);
+                                                                    showInSnackBar(
+                                                                        "${item["name"]} Removed from Favorites",
+                                                                        context);
+                                                                  } else if (favbutton![
+                                                                          index] ==
+                                                                      false) {
+                                                                    favbutton![
+                                                                            index] =
+                                                                        true;
+                                                                    Provider.of<CartData>(
+                                                                            context,
+                                                                            listen:
+                                                                                false)
+                                                                        .addToFav(
+                                                                            item);
+                                                                    showInSnackBar(
+                                                                        "${item["name"]} Added to Favorites",
+                                                                        context);
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                            InkWell(
+                                                              child: Icon(
+                                                                cartbutton![
+                                                                        index]
+                                                                    ? FontAwesomeIcons
+                                                                        .check
+                                                                    : Icons
+                                                                        .shopping_cart_outlined,
+                                                                color: cartbutton![
+                                                                        index]
+                                                                    ? Colors
+                                                                        .green
+                                                                    : Colors
+                                                                        .black,
+                                                              ),
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  if (item["size"]!
+                                                                          .hashCode ==
+                                                                      0) {
+                                                                    if (cartbutton![
+                                                                            index] ==
+                                                                        false) {
+                                                                      cartbutton![
+                                                                              index] =
+                                                                          true;
+                                                                      Provider.of<CartData>(
+                                                                              context,
+                                                                              listen:
+                                                                                  false)
+                                                                          .addToCart(
+                                                                              item,
+                                                                              1,
+                                                                              "M");
+                                                                      showInSnackBar(
+                                                                          "${item["name"]} Added to Cart",
+                                                                          context);
+                                                                    } else if (cartbutton![
+                                                                            index] ==
+                                                                        true) {
+                                                                      cartbutton![
+                                                                              index] =
+                                                                          false;
+                                                                      Provider.of<CartData>(context, listen: false).removeFromCart(
+                                                                          item,
+                                                                          item["size"]
+                                                                              [
+                                                                              index]);
+
+                                                                      showInSnackBar(
+                                                                          "${item["name"]} Removed from Cart",
+                                                                          context);
+                                                                    }
+                                                                  } else {
+                                                                    showSizeSheet(
+                                                                        context,
+                                                                        item,
+                                                                        setState,
+                                                                        quantity);
+                                                                  }
+                                                                });
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }),
+                                          ],
+                                        );
+                                      } else if (snapshot.connectionState ==
+                                          ConnectionState.none) {
+                                        return Text("No data");
+                                      }
+                                      return LoadingWidget();
+                                    }),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    default:
+                      return Center(
+                        child: Text("No Internet Connection!"),
+                      );
+                  }
+                },
               ),
             ),
           )),
@@ -614,137 +723,92 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 }
 
 class LoadingWidget extends StatelessWidget {
-  final bool isLoading;
-  LoadingWidget({Key? key, required this.isLoading}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final size = MediaQuery.of(context).size;
     final height = size.height;
-    return Shimmer(
-      linearGradient: _shimmerGradient,
-      child: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(
-            SizeConfig.sW! * 3,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ShimmerLoading(
-                isLoading: isLoading,
-                child: Container(
-                  height: SizeConfig.sH! * 23,
-                  color: Colors.white,
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.all(
+          SizeConfig.sW! * 3,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomWidget.rectangular(
+              height: SizeConfig.sH! * 23,
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                  top: SizeConfig.sH! * 1,
+                  bottom: SizeConfig.sH! * 1.2,
                 ),
-              ),
-              ShimmerLoading(
-                isLoading: isLoading,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: SizeConfig.sH! * 1,
-                    bottom: SizeConfig.sH! * 1.2,
-                  ),
-                  child: Container(
-                    height: SizeConfig.sH! * 4,
-                    width: SizeConfig.sW! * 45,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius:
-                            BorderRadius.circular(SizeConfig.sH! * 2)),
+                child: CustomWidget.rectangular(
+                  height: SizeConfig.sH! * 4,
+                  width: SizeConfig.sW! * 45,
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: CustomWidget.rectangular(
+                    height: SizeConfig.sH! * 11,
                   ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  ShimmerLoading(
-                    isLoading: isLoading,
-                    child: CatCard(
-                      onpressed: () {},
-                      height: height,
-                      icon: FontAwesomeIcons.tshirt,
-                      text: "Clothes",
-                    ),
-                  ),
-                  ShimmerLoading(
-                    isLoading: isLoading,
-                    child: CatCard(
-                      onpressed: () {},
-                      height: height,
-                      icon: FontAwesomeIcons.shoePrints,
-                      text: "Shoes",
-                    ),
-                  ),
-                  ShimmerLoading(
-                    isLoading: isLoading,
-                    child: CatCard(
-                      onpressed: () {},
-                      height: height,
-                      icon: Icons.watch_outlined,
-                      text: "Accessories",
-                    ),
-                  ),
-                  ShimmerLoading(
-                    isLoading: isLoading,
-                    child: CatCard(
-                      height: height,
-                      icon: Icons.all_inclusive_outlined,
-                      text: "All Products",
-                      onpressed: () {},
-                    ),
-                  ),
-                ],
-              ),
-              ShimmerLoading(
-                isLoading: isLoading,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: SizeConfig.sH! * 1,
-                    bottom: SizeConfig.sH! * 1.2,
-                  ),
-                  child: Container(
-                    height: SizeConfig.sH! * 4,
-                    width: SizeConfig.sW! * 30,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius:
-                            BorderRadius.circular(SizeConfig.sH! * 2)),
+                SizedBox(
+                  width: SizeConfig.sW! * 1.3,
+                ),
+                Expanded(
+                  child: CustomWidget.rectangular(
+                    height: SizeConfig.sH! * 11,
                   ),
                 ),
-              ),
-              Row(
-                children: [
-                  Grid(isLoading: isLoading),
-                  SizedBox(
-                    width: SizeConfig.sW! * 3,
+                SizedBox(
+                  width: SizeConfig.sW! * 1.3,
+                ),
+                Expanded(
+                  child: CustomWidget.rectangular(
+                    height: SizeConfig.sH! * 11,
                   ),
-                  Grid(isLoading: isLoading),
-                ],
-              ),
-            ],
-          ),
+                ),
+                SizedBox(
+                  width: SizeConfig.sW! * 1.3,
+                ),
+                Expanded(
+                  child: CustomWidget.rectangular(
+                    height: SizeConfig.sH! * 11,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+                padding: EdgeInsets.only(
+                  top: SizeConfig.sH! * 1,
+                  bottom: SizeConfig.sH! * 1.2,
+                ),
+                child: CustomWidget.rectangular(
+                  height: SizeConfig.sH! * 4,
+                  width: SizeConfig.sW! * 30,
+                )),
+            Row(
+              children: [
+                Grid(),
+                SizedBox(
+                  width: SizeConfig.sW! * 3,
+                ),
+                Grid(),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-Future<void> _pullRefresh(isloading) async {
-  isloading = true;
-  return isloading;
-}
-
 class Grid extends StatelessWidget {
-  const Grid({
-    Key? key,
-    required this.isLoading,
-  }) : super(key: key);
-
-  final bool isLoading;
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -752,65 +816,35 @@ class Grid extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ShimmerLoading(
-            isLoading: isLoading,
-            child: Container(
-              height: SizeConfig.sH! * 30,
-              color: Colors.white,
-            ),
+          CustomWidget.rectangular(
+            height: SizeConfig.sH! * 30,
           ),
-          ShimmerLoading(
-            isLoading: isLoading,
-            child: Padding(
+          Padding(
               padding: EdgeInsets.only(
                 top: SizeConfig.sH! * 1,
               ),
-              child: Container(
+              child: CustomWidget.rectangular(
                 height: SizeConfig.sH! * 3.5,
                 width: SizeConfig.sW! * 30,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(SizeConfig.sH! * 2)),
-              ),
-            ),
-          ),
+              )),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ShimmerLoading(
-                isLoading: isLoading,
-                child: Padding(
+              Padding(
                   padding: EdgeInsets.only(
                     top: SizeConfig.sH! * 1,
                   ),
-                  child: Container(
+                  child: CustomWidget.rectangular(
                     height: SizeConfig.sH! * 3.5,
                     width: SizeConfig.sW! * 18,
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius:
-                            BorderRadius.circular(SizeConfig.sH! * 2)),
-                  ),
-                ),
+                  )),
+              CustomWidget.circular(
+                width: SizeConfig.sW! * 6,
+                height: SizeConfig.sW! * 6,
               ),
-              ShimmerLoading(
-                isLoading: isLoading,
-                child: InkWell(
-                  child: Icon(
-                    FontAwesomeIcons.solidHeart,
-                    color: Colors.black,
-                    size: SizeConfig.sW! * 6,
-                  ),
-                ),
-              ),
-              ShimmerLoading(
-                isLoading: isLoading,
-                child: InkWell(
-                  child: Icon(
-                    FontAwesomeIcons.check,
-                    color: Colors.green,
-                  ),
-                ),
+              CustomWidget.circular(
+                width: SizeConfig.sW! * 6,
+                height: SizeConfig.sW! * 6,
               ),
             ],
           ),

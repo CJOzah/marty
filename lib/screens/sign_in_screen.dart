@@ -7,7 +7,6 @@ import 'package:shopplift/home.dart';
 import 'package:shopplift/main.dart';
 import 'package:shopplift/screens/sign_up_screen.dart';
 import 'package:shopplift/utils/cart.dart';
-import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
 
@@ -22,6 +21,7 @@ class _SignInScreenState extends State<SignInScreen> {
   String? email;
   String? password;
   UserCredential? user;
+  Stream<DocumentSnapshot<Map<String, dynamic>>>? cart;
 
   //fuction that sign the user in if the user is logged out
   void signIn({Function(String?)? callback}) async {
@@ -29,6 +29,13 @@ class _SignInScreenState extends State<SignInScreen> {
       user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email!, password: password!);
       print("user Logged in");
+
+      cart = FirebaseFirestore.instance
+          .collection("cart")
+          .doc(user!.user!.uid)
+          .snapshots();
+
+      Provider.of<CartData>(context, listen: false).setCart(cart!);
 
       showInSnackBar("Sign In Successful", context);
 
@@ -171,8 +178,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 });
                               } else if (user.uid.isNotEmpty) {
                                 print("User logged in");
-                                showInSnackBar(
-                                    "User Already Logged in", context);
+                                showInSnackBar("User Logged in", context);
                               }
                             });
                           },

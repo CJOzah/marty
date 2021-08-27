@@ -926,6 +926,9 @@ class CatCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(
             SizeConfig.sH! * 1.5,
           ),
+          boxShadow: [
+            shadows(),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1220,4 +1223,9 @@ class _ThirdLayerState extends State<ThirdLayer> {
       ),
     );
   }
+}
+
+BoxShadow shadows() {
+  return BoxShadow(
+      color: primary.withOpacity(0.2), offset: Offset.fromDirection(20.0, 4.0));
 }

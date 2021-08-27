@@ -184,6 +184,8 @@ class _CartScreenState extends State<CartScreen> {
                                         ),
                                         height: SizeConfig.sH! * 15,
                                         width: SizeConfig.sW! * 25,
+                                        decoration: BoxDecoration(
+                                            boxShadow: [shadows()]),
                                         child: Image.network(
                                           "${item.cartDetails!["url"]}",
                                           errorBuilder: (BuildContext context,
@@ -251,6 +253,7 @@ class _CartScreenState extends State<CartScreen> {
                                                         BorderRadius.circular(
                                                       SizeConfig.sH! * 5,
                                                     ),
+                                                    boxShadow: [shadows()],
                                                     gradient: LinearGradient(
                                                       begin:
                                                           Alignment.bottomLeft,

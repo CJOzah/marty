@@ -29,6 +29,8 @@ const accentColor = Color(0xFF2B18A3);
 const dividerColor = Color(0xFFE9D8E1);
 const secondary = Color(0xFFF353D5);
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 ThemeData _appTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (BuildContext context) => CartData(),
       child: MaterialApp(
+          navigatorKey: navigatorKey,
           initialRoute: FancyDraw.id,
           debugShowCheckedModeBanner: false,
           theme: _appTheme(),

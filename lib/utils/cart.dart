@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -161,18 +163,45 @@ class CartData extends ChangeNotifier {
     return _total;
   }
 
-  //creates a document in the database and stores the cart items inside
   void addCartToDb(List<Map<String, dynamic>> ct) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) async {
       if (user == null) {
         print("User not logged in");
       } else {
         print("User logged in");
-        await FirebaseFirestore.instance
-            .collection('cart')
-            .doc("${user.uid}")
-            .set({"cartItems": json.encode(ct)});
-        print("added to db");
+
+        try {
+          await FirebaseFirestore.instance
+              .collection('cart')
+              .doc("${user.uid}")
+              .set({"cartItems": json.encode(ct)});
+          print("added to db");
+        } catch (e, stackTrace) {
+          if (e is SocketException) {
+            print("No Internet Connection");
+            // onConnectionLost();
+          }
+        }
+      }
+    });
+  }
+
+  //this method gets the cart from the database
+  void setCart(Stream<DocumentSnapshot<Map<String, dynamic>>> cart) {
+    Map<String, dynamic>? ct;
+    cart.forEach((element) {
+      if (element.exists) {
+        print("cart found");
+
+        ct = element.data();
+        print(jsonDecode(ct.toString()));
+        // _cart.clear();
+        // _cart.add(ClothesModel(
+        //     cartDetails: ct!["name"],
+        //     quantity: ct!["quantity"],
+        //     size: ct!["size"]));
+      } else {
+        return;
       }
     });
   }
