@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,22 +40,6 @@ class _FancyDrawState extends State<FancyDraw> {
     );
   }
 }
-
-const _shimmerGradient = LinearGradient(
-  colors: [
-    Color(0xFFEBEBF4),
-    Color(0xFFF4F4F4),
-    Color(0xFFEBEBF4),
-  ],
-  stops: [
-    0.1,
-    0.3,
-    0.4,
-  ],
-  begin: Alignment(-0.9, -0.5),
-  end: Alignment(0.9, 0.5),
-  tileMode: TileMode.clamp,
-);
 
 class HomePage extends StatefulWidget {
   static String id = 'HomePage';
@@ -270,6 +256,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                             snapshot) {
                                       if (snapshot!.connectionState ==
                                           ConnectionState.done) {
+                                        //passes the QueryDocument Snapshot to be saved globally
+                                        Provider.of<CartData>(context,
+                                                listen: false)
+                                            .setSnapshot(snapshot);
                                         //check if the list of favorite or cart button is null and fill them
                                         if (favbutton!.isEmpty) {
                                           snapshot.data!.docs
@@ -726,8 +716,6 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final size = MediaQuery.of(context).size;
-    final height = size.height;
     return SingleChildScrollView(
       child: Container(
         margin: EdgeInsets.all(

@@ -15,7 +15,6 @@ import 'package:shopplift/utils/size_config.dart';
 import '../home.dart';
 import '../main.dart';
 import 'cart.dart';
-import 'clothes.dart';
 
 class HorizontalLine extends StatelessWidget {
   final double? width;
@@ -1106,6 +1105,7 @@ class _FirstLayerState extends State<FirstLayer> {
 }
 
 class ThirdLayer extends StatefulWidget {
+  static String id = 'ThirdLayer';
   @override
   _ThirdLayerState createState() => _ThirdLayerState();
 }
@@ -1114,6 +1114,11 @@ class _ThirdLayerState extends State<ThirdLayer> {
   final auth = FirebaseAuth.instance;
   bool? isloggedIn = false;
   bool? isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1229,3 +1234,19 @@ BoxShadow shadows() {
   return BoxShadow(
       color: primary.withOpacity(0.2), offset: Offset.fromDirection(20.0, 4.0));
 }
+
+const _shimmerGradient = LinearGradient(
+  colors: [
+    Color(0xFFEBEBF4),
+    Color(0xFFF4F4F4),
+    Color(0xFFEBEBF4),
+  ],
+  stops: [
+    0.1,
+    0.3,
+    0.4,
+  ],
+  begin: Alignment(-0.9, -0.5),
+  end: Alignment(0.9, 0.5),
+  tileMode: TileMode.clamp,
+);

@@ -13,6 +13,7 @@ class CartData extends ChangeNotifier {
   List<Map<String, dynamic>> ct = [];
   List<QueryDocumentSnapshot<Object?>> _fav = [];
   List<bool>? _favbutton = [];
+  AsyncSnapshot<QuerySnapshot<Object?>>? snapshot;
 
   Future<QuerySnapshot<Map<String, dynamic>>> getProducts() async {
     var get = FirebaseFirestore.instance;
@@ -176,7 +177,7 @@ class CartData extends ChangeNotifier {
               .doc("${user.uid}")
               .set({"cartItems": json.encode(ct)});
           print("added to db");
-        } catch (e, stackTrace) {
+        } catch (e) {
           if (e is SocketException) {
             print("No Internet Connection");
             // onConnectionLost();
@@ -186,21 +187,44 @@ class CartData extends ChangeNotifier {
     });
   }
 
+  void setSnapshot(AsyncSnapshot<QuerySnapshot<Object?>>? snap) {
+    snapshot = snap;
+  }
+
   //this method gets the cart from the database
   void setCart(Stream<DocumentSnapshot<Map<String, dynamic>>> cart) {
     Map<String, dynamic>? ct;
-    cart.forEach((element) {
-      if (element.exists) {
+    String? id;
+    cart.forEach((element) async {
+      if (element.exists && snapshot != null) {
         print("cart found");
 
         ct = element.data();
-        print(jsonDecode(ct.toString()));
-        // _cart.clear();
-        // _cart.add(ClothesModel(
-        //     cartDetails: ct!["name"],
-        //     quantity: ct!["quantity"],
-        //     size: ct!["size"]));
+
+        //decodes the data stored in the database to a list
+        List<dynamic> ctDb = jsonDecode(ct!["cartItems"]);
+
+        print("Cart Cleared: ${ctDb.length}");
+        _cart.clear();
+        //loops throught the all the objects stored in the database and add them to the cart
+        for (int i = 0; i < ctDb.length; i++) {
+          id = ctDb[i]["name"];
+          //loops through all the product in collected from the database
+          snapshot!.data!.docs.forEach((element) {
+            print("Started");
+            print(element);
+            if (element["id"] == id) {
+              print("Added ooooooooo");
+              _cart.add(ClothesModel(
+                  cartDetails: element,
+                  quantity: ctDb[i]["quantity"],
+                  size: ctDb[i]["size"]));
+              // return;
+            }
+          });
+        }
       } else {
+        print("User does not have any cart in the database");
         return;
       }
     });
