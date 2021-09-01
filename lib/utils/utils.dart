@@ -976,7 +976,7 @@ class SecondLayerState extends State<SecondLayer> {
         duration: Duration(milliseconds: 550),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: Colors.purple.shade900.withOpacity(0.9)),
+            color: secondary.withOpacity(0.9)),
         child: Column(
           children: [
             Row(
@@ -1099,7 +1099,7 @@ class _FirstLayerState extends State<FirstLayer> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(color: Colors.blue.shade900),
+      decoration: BoxDecoration(color: primary),
     );
   }
 }
