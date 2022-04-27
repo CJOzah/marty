@@ -9,7 +9,6 @@ import 'package:shopplift/screens/profile_screen/details_screen.dart';
 import 'package:shopplift/screens/profile_screen/orders_screen.dart';
 import 'package:shopplift/screens/profile_screen/profile_screen.dart';
 import 'package:shopplift/screens/sign_up_screen.dart';
-import 'package:shopplift/screens/cart_category/transfer_success_dialogue.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/screens/welcome_screen.dart';
 import 'package:shopplift/utils/cart.dart';
@@ -61,7 +60,7 @@ class MyApp extends StatelessWidget {
       create: (BuildContext context) => CartData(),
       child: MaterialApp(
           navigatorKey: navigatorKey,
-          initialRoute: FancyDraw.id,
+          initialRoute: WelcomeScreen.id,
           debugShowCheckedModeBanner: false,
           theme: _appTheme(),
           routes: {
@@ -69,7 +68,6 @@ class MyApp extends StatelessWidget {
             FavScreen.id: (context) => FavScreen(),
             CheckOutScreen.id: (context) => CheckOutScreen(),
             CartScreen.id: (context) => CartScreen(),
-            TransferSuccessDialogue.id: (context) => TransferSuccessDialogue(),
             SignInScreen.id: (context) => SignInScreen(),
             SignUpScreen.id: (context) => SignUpScreen(),
             WelcomeScreen.id: (context) => WelcomeScreen(),

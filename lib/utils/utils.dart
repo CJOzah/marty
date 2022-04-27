@@ -59,14 +59,14 @@ class HeadlineText extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
         left: SizeConfig.sH!,
-        top: SizeConfig.sH! * 2.2,
+        top: 10,
         bottom: SizeConfig.sH! * 0.2,
       ),
       child: Text(
         text,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: SizeConfig.sH! * 2.8,
+          fontSize: 16,
         ),
       ),
     );
@@ -112,7 +112,7 @@ class RoundedRectTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(SizeConfig.sH! * 4),
       ),
       child: Container(
-        height: SizeConfig.sH! * 6,
+        height: 40,
         width: width,
         decoration: BoxDecoration(
           border: Border.all(
@@ -128,17 +128,16 @@ class RoundedRectTextField extends StatelessWidget {
           decoration: InputDecoration(
               hintStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: SizeConfig.sH! * 3.6,
+                fontSize: 16,
               ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(
-                  left: SizeConfig.sW! * 3, bottom: SizeConfig.sH! * 2.5)),
+              contentPadding: EdgeInsets.only(left: 10, bottom: 5)),
           keyboardType: textInputType,
           cursorColor: Colors.black,
           textAlign: (withHint == true) ? TextAlign.start : TextAlign.center,
           style: TextStyle(
             color: Colors.black,
-            fontSize: SizeConfig.sH! * 4,
+            fontSize: 18,
           ),
           validator: validator as String? Function(String?)?,
           onChanged: onchanged as void Function(String)?,
@@ -507,7 +506,7 @@ class PlainTextField extends StatelessWidget {
         TextFormField(
           style: TextStyle(
             color: Colors.black,
-            fontSize: SizeConfig.sH! * 2.7,
+            fontSize: SizeConfig.sW! * 5,
           ),
           cursorHeight: SizeConfig.sH! * 3,
           cursorColor: primary,
@@ -516,7 +515,7 @@ class PlainTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: text!,
             prefixIcon:
-                Icon(icon, size: SizeConfig.sH! * 4, color: Colors.black),
+                Icon(icon, size: SizeConfig.sW! * 8, color: Colors.black),
           ),
           onChanged: onchanged,
         ),
@@ -550,7 +549,7 @@ class PlainTextFieldWithoutIcon extends StatelessWidget {
           child: TextField(
             style: TextStyle(
               color: Colors.black,
-              fontSize: SizeConfig.sH! * 2.7,
+              fontSize: SizeConfig.sW! * 5,
             ),
             cursorHeight: SizeConfig.sH! * 3,
             cursorColor: primary,
@@ -588,13 +587,13 @@ class MenuListTile extends StatelessWidget {
       leading: Icon(
         leading,
         color: Colors.white,
-        size: SizeConfig.sH! * 5,
+        size: SizeConfig.sW! * 8,
       ),
       title: Text(
         title!,
         style: TextStyle(
           color: Colors.white,
-          fontSize: SizeConfig.sH! * 4,
+          fontSize: SizeConfig.sW! * 6,
         ),
       ),
       trailing: Icon(trailing, color: primaryDark),
@@ -619,23 +618,23 @@ class ProfileListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: SizeConfig.sH! * 3,
+        top: 8,
       ),
       child: ListTile(
         onTap: () => Navigator.pushNamed(context, ontap!),
         leading: Icon(
           leading,
           color: primaryDark,
-          size: SizeConfig.sH! * 5,
+          size: 24,
         ),
         title: Text(
           title!,
           style: TextStyle(
             color: Colors.black,
-            fontSize: SizeConfig.sH! * 3,
+            fontSize: 18,
           ),
         ),
-        trailing: Icon(trailing, color: primaryDark),
+        trailing: Icon(trailing, size: 24, color: primaryDark),
       ),
     );
   }
@@ -684,7 +683,7 @@ Future<void> showSizeSheet(
                               child: Text(
                                 "Select Options",
                                 style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3,
+                                  fontSize: SizeConfig.sW! * 6,
                                 ),
                               ),
                             ),
@@ -696,13 +695,10 @@ Future<void> showSizeSheet(
                               },
                               icon: Icon(
                                 FontAwesomeIcons.times,
-                                size: SizeConfig.sH! * 4,
+                                size: SizeConfig.sW! * 8,
                               ),
                             )
                           ],
-                        ),
-                        SizedBox(
-                          height: SizeConfig.sH! * 2,
                         ),
                         ListView.builder(
                             itemCount: widget!["size"].length,
@@ -729,13 +725,13 @@ Future<void> showSizeSheet(
                                 }
                               }
                               return Container(
-                                height: SizeConfig.sH! * 10,
+                                height: SizeConfig.sW! * 19,
                                 width: double.infinity,
                                 child: ListTile(
                                   title: Text(
                                     "${item![index]}",
                                     style: TextStyle(
-                                        fontSize: SizeConfig.sH! * 3,
+                                        fontSize: SizeConfig.sW! * 5,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
@@ -746,7 +742,7 @@ Future<void> showSizeSheet(
                                     child: Text(
                                       "₦ ${widget["price"]}",
                                       style: TextStyle(
-                                          fontSize: SizeConfig.sH! * 2.5,
+                                          fontSize: SizeConfig.sW! * 5,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -759,8 +755,8 @@ Future<void> showSizeSheet(
                                       children: [
                                         Expanded(
                                           child: Container(
-                                              height: SizeConfig.sH! * 6,
-                                              width: SizeConfig.sH! * 6,
+                                              height: SizeConfig.sW! * 10,
+                                              width: SizeConfig.sW! * 6,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(
@@ -804,12 +800,12 @@ Future<void> showSizeSheet(
                                                   icon: Icon(
                                                     FontAwesomeIcons.minus,
                                                     color: Colors.white,
-                                                    size: SizeConfig.sH! * 3,
+                                                    size: SizeConfig.sW! * 6,
                                                   ))),
                                         ),
                                         Expanded(
                                           child: Container(
-                                              height: SizeConfig.sH! * 6,
+                                              height: SizeConfig.sH! * 10,
                                               width: SizeConfig.sH! * 6,
                                               decoration: BoxDecoration(
                                                   color: Colors.white),
@@ -819,15 +815,15 @@ Future<void> showSizeSheet(
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize:
-                                                        SizeConfig.sH! * 3,
+                                                        SizeConfig.sW! * 5,
                                                   ),
                                                 ),
                                               )),
                                         ),
                                         Expanded(
                                           child: Container(
-                                              height: SizeConfig.sH! * 6,
-                                              width: SizeConfig.sH! * 6,
+                                              height: SizeConfig.sW! * 10,
+                                              width: SizeConfig.sW! * 6,
                                               decoration: BoxDecoration(
                                                 borderRadius:
                                                     BorderRadius.circular(
@@ -869,7 +865,7 @@ Future<void> showSizeSheet(
                                                   icon: Icon(
                                                     FontAwesomeIcons.plus,
                                                     color: Colors.white,
-                                                    size: SizeConfig.sH! * 3,
+                                                    size: SizeConfig.sW! * 6,
                                                   ))),
                                         ),
                                       ],
@@ -918,8 +914,9 @@ class CatCard extends StatelessWidget {
     return InkWell(
       onTap: onpressed as void Function()?,
       child: Container(
-        height: SizeConfig.sH! * 11,
-        width: SizeConfig.sW! * 21.8,
+        padding: EdgeInsets.all(10),
+        height: SizeConfig.sW! * 18,
+        width: SizeConfig.sW! * 21,
         decoration: BoxDecoration(
           color: Colors.grey.shade300,
           borderRadius: BorderRadius.circular(
@@ -931,18 +928,28 @@ class CatCard extends StatelessWidget {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              size: SizeConfig.sH! * 5.5,
-              color: Colors.black,
-            ),
-            Text(
-              text,
-              style: TextStyle(
+            Flexible(
+              child: Icon(
+                icon,
+                size: SizeConfig.sW! * 5.5,
                 color: Colors.black,
-                fontSize: SizeConfig.sH! * 2,
-                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Flexible(
+              child: Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: SizeConfig.sH! * 2,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
               ),
             ),
           ],
@@ -1140,88 +1147,89 @@ class _ThirdLayerState extends State<ThirdLayer> {
         backgroundColor: primary,
       ),
       child: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/BubbleDesign.png"),
-              fit: BoxFit.cover,
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/BubbleDesign.png"),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: SizeConfig.sW! * 4, top: SizeConfig.sH! * 15),
-                  child: Text(
-                    "Marty",
-                    style: TextStyle(
-                      fontSize: SizeConfig.sH! * 4,
-                      color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.sH! * 8, right: SizeConfig.sW! * 55),
+                    child: Image.asset("images/WHITE.png"),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MenuListTile(
+                          leading: Icons.home_outlined,
+                          title: "Home",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, FancyDraw.id),
+                        ),
+                        MenuListTile(
+                          leading: Icons.shopping_cart_outlined,
+                          title: "Cart",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, CartScreen.id),
+                        ),
+                        MenuListTile(
+                          leading: Icons.person_outline,
+                          title: "Profile",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, ProfileScreen.id),
+                        ),
+                        MenuListTile(
+                          leading: FontAwesomeIcons.heartbeat,
+                          title: "Wishlist",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, FavScreen.id),
+                        ),
+                        MenuListTile(
+                          leading: FontAwesomeIcons.question,
+                          title: "Help",
+                          onPressed: () {},
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MenuListTile(
-                        leading: Icons.home_outlined,
-                        title: "Home",
-                        onPressed: () =>
-                            Navigator.pushNamed(context, FancyDraw.id),
-                      ),
-                      MenuListTile(
-                        leading: Icons.shopping_cart_outlined,
-                        title: "Cart",
-                        onPressed: () =>
-                            Navigator.pushNamed(context, CartScreen.id),
-                      ),
-                      MenuListTile(
-                        leading: Icons.person_outline,
-                        title: "Profile",
-                        onPressed: () =>
-                            Navigator.pushNamed(context, ProfileScreen.id),
-                      ),
-                      MenuListTile(
-                        leading: FontAwesomeIcons.heartbeat,
-                        title: "Wishlist",
-                        onPressed: () =>
-                            Navigator.pushNamed(context, FavScreen.id),
-                      ),
-                    ],
+                  Padding(
+                    padding: EdgeInsets.only(top: SizeConfig.sH! * 20),
+                    child: MenuListTile(
+                      leading: Icons.logout,
+                      title: (isloggedIn! == true) ? "Log Out" : "Log In",
+                      onPressed: () async {
+                        if (isloggedIn! == true) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await auth.signOut();
+                          showInSnackBar("Log Out Successful", context);
+                          setState(() {
+                            isLoading = false;
+                          });
+                          // Navigator.popAndPushNamed(context, FancyDraw.id);
+                        } else {
+                          Navigator.pushNamed(context, SignInScreen.id);
+                        }
+                      },
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: SizeConfig.sH! * 25),
-                  child: MenuListTile(
-                    leading: Icons.logout,
-                    title: (isloggedIn! == true) ? "Log Out" : "Log In",
-                    onPressed: () async {
-                      if (isloggedIn! == true) {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        await auth.signOut();
-                        showInSnackBar("Log Out Successful", context);
-                        setState(() {
-                          isLoading = false;
-                        });
-                        // Navigator.popAndPushNamed(context, FancyDraw.id);
-                      } else {
-                        Navigator.pushNamed(context, SignInScreen.id);
-                      }
-                    },
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

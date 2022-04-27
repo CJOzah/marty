@@ -54,7 +54,7 @@ class _CartScreenState extends State<CartScreen> {
           : SizedBox(),
       body: SafeArea(
         child: Container(
-          height: SizeConfig.sH! * 120,
+          height: SizeConfig.sH! * 130,
           decoration: BoxDecoration(
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
@@ -71,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
               Container(
                 padding: EdgeInsets.only(
                     left: SizeConfig.sW! * 3, right: SizeConfig.sW! * 3),
-                height: SizeConfig.sH! * 86,
+                height: SizeConfig.sH! * 90,
                 width: w,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -95,14 +95,11 @@ class _CartScreenState extends State<CartScreen> {
                         icon: Icon(
                           Icons.arrow_back_sharp,
                           color: Colors.black,
-                          size: SizeConfig.sH! * 6,
+                          size: SizeConfig.sW! * 8,
                         ),
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                      ),
-                      SizedBox(
-                        height: SizeConfig.sH! * 2,
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,14 +111,14 @@ class _CartScreenState extends State<CartScreen> {
                               Text(
                                 "Shopping",
                                 style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 5,
+                                  fontSize: SizeConfig.sW! * 8,
                                   color: Colors.black,
                                 ),
                               ),
                               Text(
                                 "Cart",
                                 style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 5,
+                                  fontSize: SizeConfig.sW! * 6,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
@@ -131,7 +128,7 @@ class _CartScreenState extends State<CartScreen> {
                           IconButton(
                               icon: Icon(
                                 FontAwesomeIcons.trash,
-                                size: SizeConfig.sH! * 5,
+                                size: SizeConfig.sW! * 8,
                                 color: Colors.black,
                               ),
                               onPressed: () {
@@ -171,7 +168,7 @@ class _CartScreenState extends State<CartScreen> {
                                 margin: EdgeInsets.only(
                                   bottom: SizeConfig.sH! * 1,
                                 ),
-                                height: SizeConfig.sH! * 18,
+                                height: SizeConfig.sW! * 22,
                                 width: double.infinity,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -182,7 +179,7 @@ class _CartScreenState extends State<CartScreen> {
                                         margin: EdgeInsets.only(
                                           right: SizeConfig.sH! * 2,
                                         ),
-                                        height: SizeConfig.sH! * 15,
+                                        height: SizeConfig.sW! * 25,
                                         width: SizeConfig.sW! * 25,
                                         decoration: BoxDecoration(
                                             boxShadow: [shadows()]),
@@ -211,12 +208,9 @@ class _CartScreenState extends State<CartScreen> {
                                             "${item.cartDetails!["name"]}",
                                             overflow: TextOverflow.clip,
                                             style: TextStyle(
-                                                fontSize: SizeConfig.sH! * 3,
+                                                fontSize: SizeConfig.sW! * 4.5,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black),
-                                          ),
-                                          SizedBox(
-                                            height: SizeConfig.sH! * 1,
                                           ),
                                           Text(
                                             "Size: ${item.size}",
@@ -224,9 +218,6 @@ class _CartScreenState extends State<CartScreen> {
                                                 fontSize: SizeConfig.sW! * 4,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.grey),
-                                          ),
-                                          SizedBox(
-                                            height: SizeConfig.sH! * 1,
                                           ),
                                           Container(
                                             width: SizeConfig.sW! * 60,
@@ -239,14 +230,14 @@ class _CartScreenState extends State<CartScreen> {
                                                   "₦${item.cartDetails!["price"]}",
                                                   style: TextStyle(
                                                       fontSize:
-                                                          SizeConfig.sH! * 3,
+                                                          SizeConfig.sW! * 4.5,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.black),
                                                 ),
                                                 Container(
                                                   alignment: Alignment.center,
-                                                  height: SizeConfig.sH! * 4,
+                                                  height: SizeConfig.sW! * 6,
                                                   width: SizeConfig.sW! * 22,
                                                   decoration: BoxDecoration(
                                                     borderRadius:
@@ -356,7 +347,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                          bottom: SizeConfig.sH! * 4,
+                          bottom: SizeConfig.sW! * 4,
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,14 +356,14 @@ class _CartScreenState extends State<CartScreen> {
                             Text(
                               "Total",
                               style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3,
+                                  fontSize: SizeConfig.sW! * 5,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
                               "₦${Provider.of<CartData>(context, listen: false).getTotal()}",
                               style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3,
+                                  fontSize: SizeConfig.sW! * 5,
                                   color: Colors.blue.shade900,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -385,10 +376,10 @@ class _CartScreenState extends State<CartScreen> {
               ),
               MaterialButton(
                 padding: EdgeInsets.only(
-                  bottom: SizeConfig.sH! * 5,
+                  bottom: SizeConfig.sH! * 3,
                 ),
                 elevation: 0,
-                height: SizeConfig.sH! * 6,
+                height: SizeConfig.sW! * 8,
                 minWidth: w,
                 onPressed: () {
                   setState(() {
@@ -437,8 +428,7 @@ class _CartScreenState extends State<CartScreen> {
                                                       "Order Summary",
                                                       style: TextStyle(
                                                         fontSize:
-                                                            SizeConfig.sH! *
-                                                                3.5,
+                                                            SizeConfig.sW! * 6,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
@@ -448,8 +438,9 @@ class _CartScreenState extends State<CartScreen> {
                                                     flex: 1,
                                                     child: Container(
                                                       height:
-                                                          SizeConfig.sH! * 6,
-                                                      width: SizeConfig.sH! * 6,
+                                                          SizeConfig.sW! * 10,
+                                                      width:
+                                                          SizeConfig.sW! * 10,
                                                       decoration: BoxDecoration(
                                                         gradient:
                                                             LinearGradient(
@@ -464,8 +455,8 @@ class _CartScreenState extends State<CartScreen> {
                                                         ),
                                                         borderRadius:
                                                             BorderRadius.circular(
-                                                                SizeConfig.sH! *
-                                                                    30),
+                                                                SizeConfig.sW! *
+                                                                    50),
                                                       ),
                                                       child: IconButton(
                                                         icon: Icon(
@@ -550,7 +541,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     "Total",
                                                     style: TextStyle(
                                                       fontSize:
-                                                          SizeConfig.sH! * 3,
+                                                          SizeConfig.sW! * 5,
                                                       color: Colors.black,
                                                     ),
                                                   ),
@@ -561,7 +552,7 @@ class _CartScreenState extends State<CartScreen> {
                                                     "₦$total",
                                                     style: TextStyle(
                                                         fontSize:
-                                                            SizeConfig.sH! * 4,
+                                                            SizeConfig.sW! * 5,
                                                         color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.bold),
@@ -586,7 +577,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 ),
                                               ),
                                               child: MaterialButton(
-                                                height: SizeConfig.sH! * 7,
+                                                height: SizeConfig.sW! * 8,
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -615,8 +606,7 @@ class _CartScreenState extends State<CartScreen> {
                                                 child: Text(
                                                   "Checkout",
                                                   style: TextStyle(
-                                                      fontSize:
-                                                          SizeConfig.sH! * 3.5,
+                                                      fontSize: 18,
                                                       color: Colors.white),
                                                 ),
                                               ),
@@ -636,7 +626,7 @@ class _CartScreenState extends State<CartScreen> {
                 child: Text(
                   "Proceed to Summary",
                   style: TextStyle(
-                      fontSize: SizeConfig.sH! * 3.5, color: Colors.white),
+                      fontSize: SizeConfig.sW! * 6, color: Colors.white),
                 ),
               ),
             ],

@@ -102,21 +102,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fit: BoxFit.cover),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   margin: EdgeInsets.only(
-                      top: SizeConfig.sH! * 36,
-                      left: SizeConfig.sW! * 5,
-                      right: SizeConfig.sW! * 5),
+                    left: SizeConfig.sW! * 2,
+                    top: SizeConfig.sW! * 13,
+                    bottom: SizeConfig.sW! * 48,
+                  ),
+                  height: SizeConfig.sW! * 14,
+                  width: SizeConfig.sW! * 14,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.5),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(SizeConfig.sH! * 5))),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      size: SizeConfig.sW! * 8,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                      left: SizeConfig.sW! * 5, right: SizeConfig.sW! * 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Sign Up",
                         style: TextStyle(
-                          fontSize: SizeConfig.sH! * 5,
+                          fontSize: SizeConfig.sW! * 8,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -126,12 +145,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(
                         "Good to see you again!",
                         style: TextStyle(
-                          fontSize: SizeConfig.sH! * 2.5,
+                          fontSize: SizeConfig.sW! * 5,
                           color: Colors.grey,
                         ),
                       ),
                       SizedBox(
-                        height: SizeConfig.sH! * 2,
+                        height: SizeConfig.sW! * 2,
                       ),
                       PlainTextField(
                         onchanged: (value) {
@@ -184,17 +203,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Text(
                             "Already have an account?",
                             style: TextStyle(
-                              fontSize: SizeConfig.sH! * 3,
+                              fontSize: SizeConfig.sW! * 5.5,
                               color: Colors.black,
                             ),
                           ),
                           InkWell(
-                            onTap: () =>
-                                Navigator.pushNamed(context, SignInScreen.id),
+                            onTap: () => Navigator.popAndPushNamed(
+                                context, SignInScreen.id),
                             child: Text(
                               "Sign In",
                               style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3.5,
+                                  fontSize: SizeConfig.sW! * 5.5,
                                   color: Color(0xffB541C6)),
                             ),
                           ),
@@ -202,8 +221,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       Container(
                         margin: EdgeInsets.only(
-                            top: SizeConfig.sH! * 5,
-                            bottom: SizeConfig.sH! * 5),
+                          top: SizeConfig.sH! * 5,
+                        ),
                         height: SizeConfig.sH! * 7,
                         width: SizeConfig.sW! * 100,
                         decoration: BoxDecoration(

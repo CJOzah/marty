@@ -16,14 +16,14 @@ class AddressBookScreen extends StatelessWidget {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back_outlined,
-              size: SizeConfig.sH! * 5,
+              size: SizeConfig.sW! * 8,
               color: Colors.white,
             ),
             onPressed: () => Navigator.pop(context)),
         title: Text(
           "My Addresses",
           style: TextStyle(
-            fontSize: SizeConfig.sH! * 3.5,
+            fontSize: SizeConfig.sW! * 5.5,
           ),
         ),
         centerTitle: true,
@@ -39,14 +39,14 @@ class AddressBookScreen extends StatelessWidget {
             Column(
               children: [
                 Container(
-                  height: SizeConfig.sH! * 8,
+                  height: SizeConfig.sW! * 14,
                   width: double.infinity,
                   color: Colors.grey.shade300,
                   padding: EdgeInsets.all(SizeConfig.sH! * 2),
                   child: Text(
                     "Your Addresses",
                     style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3,
+                        fontSize: SizeConfig.sW! * 5.5,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -79,7 +79,7 @@ class AddressBookScreen extends StatelessWidget {
                   child: Text(
                     "Add New Address",
                     style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3,
+                        fontSize: SizeConfig.sW! * 5.5,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
@@ -102,14 +102,14 @@ class AddAddress extends StatelessWidget {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back_outlined,
-              size: SizeConfig.sH! * 5,
+              size: SizeConfig.sW! * 8,
               color: Colors.white,
             ),
             onPressed: () => Navigator.pop(context)),
         title: Text(
           "Edit Address",
           style: TextStyle(
-            fontSize: SizeConfig.sH! * 3.5,
+            fontSize: SizeConfig.sW! * 5.5,
           ),
         ),
         centerTitle: true,
@@ -126,19 +126,19 @@ class AddAddress extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                    height: SizeConfig.sH! * 8,
+                    height: SizeConfig.sW! * 14,
                     width: double.infinity,
                     color: Colors.grey.shade300,
                     padding: EdgeInsets.all(SizeConfig.sH! * 2),
                     child: Text(
                       "Edit Address",
                       style: TextStyle(
-                          fontSize: SizeConfig.sH! * 3,
+                          fontSize: SizeConfig.sW! * 5.5,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "First Name",
@@ -146,7 +146,7 @@ class AddAddress extends StatelessWidget {
                     obscure: false,
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "Last Name",
@@ -154,7 +154,7 @@ class AddAddress extends StatelessWidget {
                     obscure: false,
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "Address",
@@ -162,7 +162,7 @@ class AddAddress extends StatelessWidget {
                     obscure: false,
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "Additional info ",
@@ -170,7 +170,7 @@ class AddAddress extends StatelessWidget {
                     obscure: false,
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "State",
@@ -178,7 +178,7 @@ class AddAddress extends StatelessWidget {
                     obscure: false,
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "City",
@@ -186,7 +186,7 @@ class AddAddress extends StatelessWidget {
                     obscure: false,
                   ),
                   SizedBox(
-                    height: SizeConfig.sH! * 4,
+                    height: SizeConfig.sW! * 4,
                   ),
                   PlainTextFieldWithoutIcon(
                     text: "Mobile Number",

@@ -24,6 +24,13 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Product Description",
+          style: TextStyle(fontSize: SizeConfig.sW! * 5.5),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Container(
           child: Column(
@@ -33,7 +40,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                 padding: EdgeInsets.only(
                   right: SizeConfig.sW! * 82,
                 ),
-                height: SizeConfig.sH! * 50,
+                height: SizeConfig.sW! * 100,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
@@ -41,29 +48,6 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                     image: NetworkImage("${widget.item!["url"]}"),
                     fit: BoxFit.cover,
                   ),
-                ),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: SizeConfig.sH! * 5, left: SizeConfig.sW! * 4),
-                      child: Container(
-                        height: SizeConfig.sH! * 8,
-                        width: SizeConfig.sH! * 8,
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.7),
-                            borderRadius:
-                                BorderRadius.circular(SizeConfig.sH! * 15)),
-                        child: IconButton(
-                            icon: Icon(
-                              Icons.arrow_back_outlined,
-                              size: SizeConfig.sH! * 4,
-                              color: Colors.white,
-                            ),
-                            onPressed: () => Navigator.pop(context)),
-                      ),
-                    ),
-                  ],
                 ),
               ),
               Container(
@@ -76,8 +60,9 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                   children: [
                     Text(
                       "${widget.item!["name"]}",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: SizeConfig.sH! * 4,
+                        fontSize: SizeConfig.sW! * 7,
                       ),
                     ),
                     SizedBox(
@@ -89,7 +74,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           (double.parse((widget.item!["ratings"])) <= 2)
                               ? Icons.star_outline_sharp
                               : Icons.star,
-                          size: SizeConfig.sH! * 5,
+                          size: SizeConfig.sW! * 8,
                           color: (double.parse((widget.item!["ratings"])) <= 2)
                               ? Colors.black
                               : Colors.yellow,
@@ -98,7 +83,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           double.parse((widget.item!["ratings"])) <= 4
                               ? Icons.star_outline_sharp
                               : Icons.star,
-                          size: SizeConfig.sH! * 5,
+                          size: SizeConfig.sW! * 8,
                           color: (double.parse((widget.item!["ratings"])) <= 4)
                               ? Colors.black
                               : Colors.yellow,
@@ -107,7 +92,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           double.parse((widget.item!["ratings"])) <= 6
                               ? Icons.star_outline_sharp
                               : Icons.star,
-                          size: SizeConfig.sH! * 5,
+                          size: SizeConfig.sW! * 8,
                           color: (double.parse((widget.item!["ratings"])) <= 6)
                               ? Colors.black
                               : Colors.yellow,
@@ -116,7 +101,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           double.parse((widget.item!["ratings"])) <= 8
                               ? Icons.star_outline_sharp
                               : Icons.star,
-                          size: SizeConfig.sH! * 5,
+                          size: SizeConfig.sW! * 8,
                           color: (double.parse((widget.item!["ratings"])) <= 8)
                               ? Colors.black
                               : Colors.yellow,
@@ -125,7 +110,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                           double.parse((widget.item!["ratings"])) <= 10
                               ? Icons.star_outline_sharp
                               : Icons.star,
-                          size: SizeConfig.sH! * 5,
+                          size: SizeConfig.sW! * 8,
                           color: (double.parse((widget.item!["ratings"])) <= 10)
                               ? Colors.black
                               : Colors.yellow,
@@ -136,7 +121,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                         Text(
                           "(${widget.item!["ratings"]} ratings)",
                           style: TextStyle(
-                            fontSize: SizeConfig.sH! * 3,
+                            fontSize: SizeConfig.sW! * 5,
                           ),
                         ),
                       ],
@@ -150,43 +135,43 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                         Text(
                           "₦${widget.item!["price"]}",
                           style: TextStyle(
-                            fontSize: SizeConfig.sH! * 4,
+                            fontSize: SizeConfig.sW! * 6,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           "Available in stock",
                           style: TextStyle(
-                            fontSize: SizeConfig.sH! * 2.8,
+                            fontSize: SizeConfig.sW! * 6,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
                     SizedBox(
-                      height: SizeConfig.sH! * 5,
+                      height: SizeConfig.sW! * 5,
                     ),
                     Text(
                       "About",
                       style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3.5,
+                        fontSize: SizeConfig.sW! * 7,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
-                      height: SizeConfig.sH! * 3,
+                      height: SizeConfig.sW! * 3,
                     ),
                     Text(
                       "${widget.item!["description"]}",
                       style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3,
+                        fontSize: SizeConfig.sW! * 4.5,
                       ),
                     ),
                     SizedBox(
-                      height: SizeConfig.sH! * 3,
+                      height: SizeConfig.sW! * 2,
                     ),
                     Container(
-                      height: SizeConfig.sH! * 12,
+                      height: SizeConfig.sW! * 20,
                       width: double.infinity,
                       child: ListView.builder(
                         shrinkWrap: true,
@@ -205,9 +190,9 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                               });
                             },
                             child: Container(
-                              margin: EdgeInsets.all(SizeConfig.sH! * 2),
-                              height: SizeConfig.sH! * 3,
-                              width: SizeConfig.sW! * 16,
+                              margin: EdgeInsets.all(SizeConfig.sW! * 3),
+                              height: SizeConfig.sW! * 12,
+                              width: SizeConfig.sW! * 12,
                               decoration: BoxDecoration(
                                 color: selectedColor,
                                 borderRadius:
@@ -221,7 +206,7 @@ class _ProductDescScreenState extends State<ProductDescScreen> {
                                 child: Text(
                                   "${item["size"][index]}",
                                   style: TextStyle(
-                                    fontSize: SizeConfig.sH! * 3,
+                                    fontSize: SizeConfig.sW! * 5,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:75752782069:android:83fe2ef49d86a19737adbc",
+        "mobilesdk_app_id": "1:75752782069:android:ed9fe39e12b8114037adbc",
         "android_client_info": {
-          "package_name": "com.example.marty_admin"
+          "package_name": "com.example.martyadmin"
         }
       },
       "oauth_client": [

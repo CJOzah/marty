@@ -320,14 +320,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 position: _imageOffsetAnimation!,
                 child: FadeTransition(
                   opacity: _image!,
-                  child: Image(
-                    fit: BoxFit.cover,
-                    image: AssetImage("images/LOGO.png"),
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: SizeConfig.sW! * 30),
+                    child: Image(
+                      fit: BoxFit.cover,
+                      image: AssetImage("images/LOGO.png"),
+                    ),
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: SizeConfig.sH! * 20),
+                padding: EdgeInsets.only(top: SizeConfig.sW! * 20),
                 child: Center(
                   child: SizedBox(
                     width: SizeConfig.sW! * 80,

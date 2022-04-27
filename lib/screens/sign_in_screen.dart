@@ -45,12 +45,12 @@ class _SignInScreenState extends State<SignInScreen> {
       if (e.code.isNotEmpty) {
         print(e.code);
         showInSnackBar("${e.code}", context);
-        callback!(e.code);
+        callback!("failed");
       }
     } catch (e) {
       print(e);
       showInSnackBar("${e.toString()}", context);
-      callback!(e.toString());
+      callback!("failed");
     }
   }
 
@@ -81,31 +81,45 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 Container(
                   margin: EdgeInsets.only(
-                      top: SizeConfig.sH! * 35,
+                    top: SizeConfig.sH! * 3,
+                    left: SizeConfig.sW! * 2,
+                  ),
+                  height: SizeConfig.sW! * 12,
+                  width: SizeConfig.sW! * 12,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.withOpacity(0.5),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(SizeConfig.sH! * 5))),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      size: SizeConfig.sW! * 8,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                      top: SizeConfig.sH! * 18,
                       left: SizeConfig.sW! * 5,
                       right: SizeConfig.sW! * 5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Hello!",
-                        style: TextStyle(
-                          fontSize: SizeConfig.sH! * 5,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       SizedBox(
-                        height: SizeConfig.sH! * 2,
-                      ),
+                          height: SizeConfig.sH! * 20,
+                          width: SizeConfig.sH! * 20,
+                          child: Image.asset("images/MAIN GRADIENT.png")),
                       Text(
                         "Good to see you again!",
                         style: TextStyle(
-                          fontSize: SizeConfig.sH! * 2.5,
+                          fontSize: SizeConfig.sW! * 5,
                           color: Colors.grey,
                         ),
                       ),
                       SizedBox(
-                        height: SizeConfig.sH! * 2,
+                        height: SizeConfig.sW! * 2,
                       ),
                       PlainTextField(
                         keyboardType: TextInputType.emailAddress,
@@ -119,7 +133,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         },
                       ),
                       SizedBox(
-                        height: SizeConfig.sH! * 3,
+                        height: SizeConfig.sW! * 5,
                       ),
                       PlainTextField(
                         keyboardType: TextInputType.text,
@@ -140,7 +154,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               onTap: () {},
                               child: Text(
                                 "Forgot Password?",
-                                style: TextStyle(fontSize: SizeConfig.sH! * 3),
+                                style: TextStyle(fontSize: SizeConfig.sW! * 5),
                               ))),
                       Container(
                         margin: EdgeInsets.only(
@@ -171,13 +185,17 @@ class _SignInScreenState extends State<SignInScreen> {
                                   if (text == "logged in") {
                                     Navigator.pushNamedAndRemoveUntil(context,
                                         FancyDraw.id, (route) => false);
+                                  } else if (text == "failed") {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
                                   }
-                                });
-                                setState(() {
-                                  isLoading = false;
                                 });
                               } else if (user.uid.isNotEmpty) {
                                 print("User logged in");
+                                setState(() {
+                                  isLoading = false;
+                                });
                                 showInSnackBar("User Logged in", context);
                               }
                             });
@@ -198,7 +216,7 @@ class _SignInScreenState extends State<SignInScreen> {
                           Text(
                             "Terms & Privacy Policy",
                             style: TextStyle(
-                              fontSize: SizeConfig.sH! * 2.5,
+                              fontSize: SizeConfig.sW! * 5,
                               color: Colors.black,
                             ),
                           ),
@@ -208,7 +226,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             child: Text(
                               "Sign Up",
                               style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3,
+                                  fontSize: SizeConfig.sW! * 5.5,
                                   color: Color(0xffB541C6)),
                             ),
                           ),

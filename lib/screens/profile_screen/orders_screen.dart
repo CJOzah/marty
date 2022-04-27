@@ -23,7 +23,7 @@ class OrderScreen extends StatelessWidget {
               child: IconButton(
                   icon: Icon(
                     Icons.arrow_back_outlined,
-                    size: SizeConfig.sH! * 5,
+                    size: SizeConfig.sW! * 8,
                     color: Colors.white,
                   ),
                   onPressed: () => Navigator.pop(context)),
@@ -35,7 +35,7 @@ class OrderScreen extends StatelessWidget {
                   child: Text(
                     "No Orders yet",
                     style: TextStyle(
-                      fontSize: SizeConfig.sH! * 5,
+                      fontSize: SizeConfig.sW! * 10,
                       color: Colors.white,
                     ),
                   ),

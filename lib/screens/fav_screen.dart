@@ -64,7 +64,7 @@ class _FavScreenState extends State<FavScreen> {
                               0)
                           ? Colors.white
                           : Colors.black,
-                      size: SizeConfig.sH! * 5,
+                      size: SizeConfig.sW! * 8,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -75,7 +75,7 @@ class _FavScreenState extends State<FavScreen> {
                     child: Text(
                       "WISHLIST",
                       style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3.5,
+                        fontSize: SizeConfig.sW! * 5.5,
                         color: (Provider.of<CartData>(context)
                                     .getFavItems()
                                     .length ==
@@ -96,12 +96,13 @@ class _FavScreenState extends State<FavScreen> {
                     (Provider.of<CartData>(context).getFavItems().length == 0)
                         ? Colors.white
                         : Colors.black,
-                fontSize: SizeConfig.sH! * 3,
+                fontSize: SizeConfig.sW! * 5,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Expanded(
               child: Container(
+                margin: EdgeInsets.only(bottom: SizeConfig.sW! * 20),
                 width: double.infinity,
                 child: (Provider.of<CartData>(context).getFavItems().length ==
                         0)
@@ -111,7 +112,7 @@ class _FavScreenState extends State<FavScreen> {
                         children: [
                           Icon(
                             FontAwesomeIcons.heart,
-                            size: SizeConfig.sH! * 15,
+                            size: SizeConfig.sW! * 40,
                             color: Colors.white,
                           ),
                           SizedBox(
@@ -121,7 +122,7 @@ class _FavScreenState extends State<FavScreen> {
                             "NO ITEMS IN YOUR WISHLIST",
                             overflow: TextOverflow.clip,
                             style: TextStyle(
-                              fontSize: SizeConfig.sH! * 3,
+                              fontSize: SizeConfig.sW! * 6,
                               color: Colors.white,
                             ),
                           ),
@@ -210,8 +211,8 @@ class _FavScreenState extends State<FavScreen> {
                                                         icon: Icon(
                                                           FontAwesomeIcons
                                                               .times,
-                                                          size: SizeConfig.sH! *
-                                                              2.5,
+                                                          size: SizeConfig.sW! *
+                                                              6,
                                                           color: Colors.white,
                                                         ),
                                                         onPressed: () {
@@ -256,7 +257,8 @@ class _FavScreenState extends State<FavScreen> {
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize:
-                                                            SizeConfig.sH! * 3,
+                                                            SizeConfig.sW! *
+                                                                5.5,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
@@ -269,8 +271,8 @@ class _FavScreenState extends State<FavScreen> {
                                                         style: TextStyle(
                                                           color: Colors.grey,
                                                           fontSize:
-                                                              SizeConfig.sH! *
-                                                                  2.5,
+                                                              SizeConfig.sW! *
+                                                                  5,
                                                         ),
                                                       ),
                                                     ),
@@ -288,8 +290,8 @@ class _FavScreenState extends State<FavScreen> {
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize:
-                                                              SizeConfig.sH! *
-                                                                  3,
+                                                              SizeConfig.sW! *
+                                                                  5.5,
                                                         ),
                                                       ),
                                                     ),
@@ -308,7 +310,7 @@ class _FavScreenState extends State<FavScreen> {
                             options: CarouselOptions(
                                 enableInfiniteScroll: false,
                                 viewportFraction: 0.8,
-                                height: SizeConfig.sH! * 80,
+                                height: SizeConfig.sW! * 180,
                                 autoPlay: true,
                                 pageSnapping: false,
                                 enlargeCenterPage: true,
@@ -333,7 +335,7 @@ class _FavScreenState extends State<FavScreen> {
                               ),
                             ),
                             child: MaterialButton(
-                              height: SizeConfig.sH! * 6.5,
+                              height: SizeConfig.sW! * 4.5,
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(SizeConfig.sH! * 2),
