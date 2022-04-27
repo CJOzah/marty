@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
@@ -8,13 +9,14 @@ import 'package:shopplift/screens/profile_screen/details_screen.dart';
 import 'package:shopplift/screens/profile_screen/orders_screen.dart';
 import 'package:shopplift/screens/profile_screen/profile_screen.dart';
 import 'package:shopplift/screens/sign_up_screen.dart';
-import 'package:shopplift/screens/cart_category/transfer_success_dialogue.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
 import 'package:shopplift/screens/welcome_screen.dart';
 import 'package:shopplift/utils/cart.dart';
 import 'home.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -25,6 +27,8 @@ Color primaryDark = Color(0xFF2B18A3);
 const accentColor = Color(0xFF2B18A3);
 const dividerColor = Color(0xFFE9D8E1);
 const secondary = Color(0xFFF353D5);
+
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
 ThemeData _appTheme() {
   final ThemeData base = ThemeData.light();
@@ -55,7 +59,8 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (BuildContext context) => CartData(),
       child: MaterialApp(
-          initialRoute: FancyDraw.id,
+          navigatorKey: navigatorKey,
+          initialRoute: WelcomeScreen.id,
           debugShowCheckedModeBanner: false,
           theme: _appTheme(),
           routes: {
@@ -63,7 +68,6 @@ class MyApp extends StatelessWidget {
             FavScreen.id: (context) => FavScreen(),
             CheckOutScreen.id: (context) => CheckOutScreen(),
             CartScreen.id: (context) => CartScreen(),
-            TransferSuccessDialogue.id: (context) => TransferSuccessDialogue(),
             SignInScreen.id: (context) => SignInScreen(),
             SignUpScreen.id: (context) => SignUpScreen(),
             WelcomeScreen.id: (context) => WelcomeScreen(),

@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/main.dart';
 import 'package:shopplift/utils/cart.dart';
-import 'package:shopplift/utils/clothes.dart';
 import 'package:shopplift/utils/size_config.dart';
 import 'package:shopplift/utils/utils.dart';
 
@@ -18,7 +18,7 @@ class FavScreen extends StatefulWidget {
 class _FavScreenState extends State<FavScreen> {
   bool butColor = true;
   int inDex = 0;
-  ClothesModel? items;
+  late QueryDocumentSnapshot<Object?> items;
 
   int addtoIndex = 1;
   Color text = Colors.black;
@@ -64,7 +64,7 @@ class _FavScreenState extends State<FavScreen> {
                               0)
                           ? Colors.white
                           : Colors.black,
-                      size: SizeConfig.sH! * 5,
+                      size: SizeConfig.sW! * 8,
                     ),
                     onPressed: () {
                       Navigator.pop(context);
@@ -75,7 +75,7 @@ class _FavScreenState extends State<FavScreen> {
                     child: Text(
                       "WISHLIST",
                       style: TextStyle(
-                        fontSize: SizeConfig.sH! * 3.5,
+                        fontSize: SizeConfig.sW! * 5.5,
                         color: (Provider.of<CartData>(context)
                                     .getFavItems()
                                     .length ==
@@ -96,12 +96,13 @@ class _FavScreenState extends State<FavScreen> {
                     (Provider.of<CartData>(context).getFavItems().length == 0)
                         ? Colors.white
                         : Colors.black,
-                fontSize: SizeConfig.sH! * 3,
+                fontSize: SizeConfig.sW! * 5,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Expanded(
               child: Container(
+                margin: EdgeInsets.only(bottom: SizeConfig.sW! * 20),
                 width: double.infinity,
                 child: (Provider.of<CartData>(context).getFavItems().length ==
                         0)
@@ -111,7 +112,7 @@ class _FavScreenState extends State<FavScreen> {
                         children: [
                           Icon(
                             FontAwesomeIcons.heart,
-                            size: SizeConfig.sH! * 15,
+                            size: SizeConfig.sW! * 40,
                             color: Colors.white,
                           ),
                           SizedBox(
@@ -121,7 +122,7 @@ class _FavScreenState extends State<FavScreen> {
                             "NO ITEMS IN YOUR WISHLIST",
                             overflow: TextOverflow.clip,
                             style: TextStyle(
-                              fontSize: SizeConfig.sH! * 3,
+                              fontSize: SizeConfig.sW! * 6,
                               color: Colors.white,
                             ),
                           ),
@@ -183,8 +184,8 @@ class _FavScreenState extends State<FavScreen> {
                                                                           .sH! *
                                                                       2)),
                                                   image: DecorationImage(
-                                                    image: AssetImage(
-                                                        '${item.image}'),
+                                                    image: NetworkImage(
+                                                        item["url"]),
                                                     fit: BoxFit.fill,
                                                   ),
                                                 ),
@@ -210,8 +211,8 @@ class _FavScreenState extends State<FavScreen> {
                                                         icon: Icon(
                                                           FontAwesomeIcons
                                                               .times,
-                                                          size: SizeConfig.sH! *
-                                                              2.5,
+                                                          size: SizeConfig.sW! *
+                                                              6,
                                                           color: Colors.white,
                                                         ),
                                                         onPressed: () {
@@ -231,7 +232,7 @@ class _FavScreenState extends State<FavScreen> {
                                                                             false)
                                                                     .getFavItems()[inDex]);
                                                             showInSnackBar(
-                                                                "${item.name} Removed from Cart",
+                                                                "${item["name"]} Removed from Cart",
                                                                 context);
                                                           });
                                                         },
@@ -252,11 +253,12 @@ class _FavScreenState extends State<FavScreen> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      "${item.name}",
+                                                      "${item["name"]}",
                                                       style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize:
-                                                            SizeConfig.sH! * 3,
+                                                            SizeConfig.sW! *
+                                                                5.5,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       ),
@@ -265,12 +267,12 @@ class _FavScreenState extends State<FavScreen> {
                                                       padding:
                                                           EdgeInsets.only(),
                                                       child: Text(
-                                                        "${item.color}",
+                                                        "${item["color"]}",
                                                         style: TextStyle(
                                                           color: Colors.grey,
                                                           fontSize:
-                                                              SizeConfig.sH! *
-                                                                  2.5,
+                                                              SizeConfig.sW! *
+                                                                  5,
                                                         ),
                                                       ),
                                                     ),
@@ -282,14 +284,14 @@ class _FavScreenState extends State<FavScreen> {
                                                               SizeConfig.sH! *
                                                                   2),
                                                       child: Text(
-                                                        "₦${item.price}",
+                                                        "₦${item["price"]}",
                                                         style: TextStyle(
                                                           color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize:
-                                                              SizeConfig.sH! *
-                                                                  3,
+                                                              SizeConfig.sW! *
+                                                                  5.5,
                                                         ),
                                                       ),
                                                     ),
@@ -308,7 +310,7 @@ class _FavScreenState extends State<FavScreen> {
                             options: CarouselOptions(
                                 enableInfiniteScroll: false,
                                 viewportFraction: 0.8,
-                                height: SizeConfig.sH! * 80,
+                                height: SizeConfig.sW! * 180,
                                 autoPlay: true,
                                 pageSnapping: false,
                                 enlargeCenterPage: true,
@@ -318,7 +320,6 @@ class _FavScreenState extends State<FavScreen> {
                                     items = Provider.of<CartData>(context,
                                             listen: false)
                                         .getFavItems()[index];
-                                    ;
                                   });
                                 }),
                           ),
@@ -334,7 +335,7 @@ class _FavScreenState extends State<FavScreen> {
                               ),
                             ),
                             child: MaterialButton(
-                              height: SizeConfig.sH! * 6.5,
+                              height: SizeConfig.sW! * 4.5,
                               shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(SizeConfig.sH! * 2),
@@ -348,25 +349,25 @@ class _FavScreenState extends State<FavScreen> {
                                       .isEmpty) {
                                   } else {
                                     if (inDex >= 1) inDex--;
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .addToCart(Provider.of<CartData>(
-                                                context,
-                                                listen: false)
-                                            .getFavItems()[inDex]);
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .addToCart(Provider.of<CartData>(
+                                    //             context,
+                                    //             listen: false)
+                                    //         .getFavItems()[inDex]);
 
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .addToTotal(Provider.of<CartData>(
-                                                context,
-                                                listen: false)
-                                            .getFavItems()[inDex]
-                                            .price!);
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .addToTotal(Provider.of<CartData>(
+                                    //             context,
+                                    //             listen: false)
+                                    //         .getFavItems()[inDex]
+                                    //         .price!);
 
-                                    Provider.of<CartData>(context,
-                                            listen: false)
-                                        .getFavItems()[inDex]
-                                        .setQuantity(1);
+                                    // Provider.of<CartData>(context,
+                                    //         listen: false)
+                                    //     .getFavItems()[inDex]
+                                    //     .setQuantity(1);
 
                                     showInSnackBar("Added to Cart", context);
                                     Provider.of<CartData>(context,

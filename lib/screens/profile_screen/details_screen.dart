@@ -25,14 +25,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back_outlined,
-              size: SizeConfig.sH! * 5,
+              size: SizeConfig.sW! * 8,
               color: Colors.white,
             ),
             onPressed: () => Navigator.pop(context)),
         title: Text(
           "My Profile",
           style: TextStyle(
-            fontSize: SizeConfig.sH! * 3.5,
+            fontSize: SizeConfig.sW! * 5.5,
           ),
         ),
         centerTitle: true,
@@ -45,14 +45,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
         child: Column(
           children: [
             Container(
-              height: SizeConfig.sH! * 8,
+              height: SizeConfig.sW! * 14,
               width: double.infinity,
               color: Colors.grey.shade300,
               padding: EdgeInsets.all(SizeConfig.sH! * 2),
               child: Text(
                 "Your Personal Data",
                 style: TextStyle(
-                    fontSize: SizeConfig.sH! * 3, fontWeight: FontWeight.bold),
+                    fontSize: SizeConfig.sW! * 5.5,
+                    fontWeight: FontWeight.bold),
               ),
             ),
             Padding(
@@ -116,13 +117,14 @@ class GradientButton extends StatelessWidget {
       onTap: ontap,
       child: Container(
         margin: EdgeInsets.only(
-            top: SizeConfig.sH! * 2,
+            top: SizeConfig.sW! * 1,
             left: SizeConfig.sW! * 3,
             right: SizeConfig.sW! * 3),
-        height: SizeConfig.sH! * 8.5,
+        height: SizeConfig.sW! * 12.5,
         width: double.infinity,
-        padding: EdgeInsets.all(SizeConfig.sH! * 2),
+        padding: EdgeInsets.all(SizeConfig.sW! * 2),
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(SizeConfig.sH! * 2),
           gradient: LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
@@ -136,7 +138,7 @@ class GradientButton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-                fontSize: SizeConfig.sH! * 3,
+                fontSize: SizeConfig.sW! * 6,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
           ),

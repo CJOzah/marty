@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
                     top: SizeConfig.sH! * 2,
                     left: SizeConfig.sW! * 2,
                     right: SizeConfig.sW! * 2),
-                height: SizeConfig.sH! * 27,
+                height: SizeConfig.sW! * 53,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.bottomLeft,
@@ -51,7 +51,7 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           IconButton(
                             icon: Icon(Icons.arrow_back,
-                                size: SizeConfig.sH! * 5, color: Colors.white),
+                                size: SizeConfig.sW! * 8, color: Colors.white),
                             onPressed: () {
                               Navigator.pop(context);
                             },
@@ -59,7 +59,7 @@ class ProfileScreen extends StatelessWidget {
                           Text(
                             "Profile",
                             style: TextStyle(
-                              fontSize: SizeConfig.sH! * 4,
+                              fontSize: SizeConfig.sW! * 7,
                               color: Colors.white,
                             ),
                           ),
@@ -79,14 +79,14 @@ class ProfileScreen extends StatelessWidget {
                                 Text(
                                   "Welcome!",
                                   style: TextStyle(
-                                    fontSize: SizeConfig.sH! * 3.5,
+                                    fontSize: SizeConfig.sW! * 6.5,
                                     color: Colors.white,
                                   ),
                                 ),
                                 Text(
                                   "Login to see your details",
                                   style: TextStyle(
-                                    fontSize: SizeConfig.sH! * 2.5,
+                                    fontSize: SizeConfig.sW! * 4.5,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -99,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
                                 margin: EdgeInsets.only(
                                     top: SizeConfig.sH! * 4,
                                     bottom: SizeConfig.sH! * 2),
-                                height: SizeConfig.sH! * 6,
+                                height: SizeConfig.sW! * 12,
                                 width: SizeConfig.sW! * 30,
                                 decoration: BoxDecoration(
                                   borderRadius:
@@ -117,7 +117,7 @@ class ProfileScreen extends StatelessWidget {
                                     child: Text(
                                   "LOGIN",
                                   style: TextStyle(
-                                    fontSize: SizeConfig.sH! * 3,
+                                    fontSize: SizeConfig.sW! * 5,
                                     color: Colors.white,
                                   ),
                                 )),
@@ -193,13 +193,13 @@ class CartIcon extends StatelessWidget {
       children: [
         IconButton(
           icon: Icon(Icons.shopping_cart_outlined,
-              size: SizeConfig.sH! * 5, color: Colors.white),
+              size: SizeConfig.sW! * 8, color: Colors.white),
           onPressed: () => Navigator.pushNamed(context, CartScreen.id),
         ),
         Container(
           margin: EdgeInsets.only(left: SizeConfig.sH! * 4),
-          height: SizeConfig.sH! * 3,
-          width: SizeConfig.sH! * 3,
+          height: SizeConfig.sW! * 6,
+          width: SizeConfig.sW! * 6,
           decoration: BoxDecoration(
             color: primary,
             borderRadius: BorderRadius.circular(SizeConfig.sH! * 2),

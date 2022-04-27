@@ -1,12 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:matrix4_transform/matrix4_transform.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 import 'package:shopplift/screens/cart_category/cart_screen.dart';
+import 'package:shopplift/screens/fav_screen.dart';
 import 'package:shopplift/screens/profile_screen/details_screen.dart';
-import 'package:shopplift/utils/clothes.dart';
-import 'package:shopplift/utils/size_config.dart';
+import 'package:shopplift/screens/profile_screen/profile_screen.dart';
 import 'package:shopplift/screens/sign_in_screen.dart';
+import 'package:shopplift/utils/size_config.dart';
 
+import '../home.dart';
 import '../main.dart';
 import 'cart.dart';
 
@@ -50,18 +56,17 @@ class HeadlineText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final s = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.only(
         left: SizeConfig.sH!,
-        top: SizeConfig.sH! * 2.2,
+        top: 10,
         bottom: SizeConfig.sH! * 0.2,
       ),
       child: Text(
         text,
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: SizeConfig.sH! * 2.8,
+          fontSize: 16,
         ),
       ),
     );
@@ -100,9 +105,6 @@ class RoundedRectTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = MediaQuery.of(context).size;
-    final h = s.height;
-    final w = s.width;
     SizeConfig().init(context);
     return Card(
       elevation: 2.0,
@@ -110,7 +112,7 @@ class RoundedRectTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(SizeConfig.sH! * 4),
       ),
       child: Container(
-        height: SizeConfig.sH! * 6,
+        height: 40,
         width: width,
         decoration: BoxDecoration(
           border: Border.all(
@@ -126,17 +128,16 @@ class RoundedRectTextField extends StatelessWidget {
           decoration: InputDecoration(
               hintStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: SizeConfig.sH! * 3.6,
+                fontSize: 16,
               ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.only(
-                  left: SizeConfig.sW! * 3, bottom: SizeConfig.sH! * 2.5)),
+              contentPadding: EdgeInsets.only(left: 10, bottom: 5)),
           keyboardType: textInputType,
           cursorColor: Colors.black,
           textAlign: (withHint == true) ? TextAlign.start : TextAlign.center,
           style: TextStyle(
             color: Colors.black,
-            fontSize: SizeConfig.sH! * 4,
+            fontSize: 18,
           ),
           validator: validator as String? Function(String?)?,
           onChanged: onchanged as void Function(String)?,
@@ -483,7 +484,7 @@ class Bubbles extends StatelessWidget {
 
 class PlainTextField extends StatelessWidget {
   final String? text;
-  final Function? onchanged;
+  final Function(String)? onchanged;
   final bool? obscure;
   final TextInputType? keyboardType;
   final IconData? icon;
@@ -505,7 +506,7 @@ class PlainTextField extends StatelessWidget {
         TextFormField(
           style: TextStyle(
             color: Colors.black,
-            fontSize: SizeConfig.sH! * 2.7,
+            fontSize: SizeConfig.sW! * 5,
           ),
           cursorHeight: SizeConfig.sH! * 3,
           cursorColor: primary,
@@ -514,9 +515,9 @@ class PlainTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: text!,
             prefixIcon:
-                Icon(icon, size: SizeConfig.sH! * 4, color: Colors.black),
+                Icon(icon, size: SizeConfig.sW! * 8, color: Colors.black),
           ),
-          onChanged: (value) {},
+          onChanged: onchanged,
         ),
       ],
     );
@@ -548,7 +549,7 @@ class PlainTextFieldWithoutIcon extends StatelessWidget {
           child: TextField(
             style: TextStyle(
               color: Colors.black,
-              fontSize: SizeConfig.sH! * 2.7,
+              fontSize: SizeConfig.sW! * 5,
             ),
             cursorHeight: SizeConfig.sH! * 3,
             cursorColor: primary,
@@ -570,29 +571,29 @@ class MenuListTile extends StatelessWidget {
   final IconData? leading;
   final String? title;
   final IconData? trailing;
-  final String ontap;
+  final Function()? onPressed;
   const MenuListTile({
     Key? key,
     this.leading,
     this.title,
     this.trailing,
-    required this.ontap,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () => Navigator.pushNamed(context, ontap),
+      onTap: onPressed!,
       leading: Icon(
         leading,
         color: Colors.white,
-        size: SizeConfig.sH! * 5,
+        size: SizeConfig.sW! * 8,
       ),
       title: Text(
         title!,
         style: TextStyle(
           color: Colors.white,
-          fontSize: SizeConfig.sH! * 4,
+          fontSize: SizeConfig.sW! * 6,
         ),
       ),
       trailing: Icon(trailing, color: primaryDark),
@@ -617,40 +618,39 @@ class ProfileListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        top: SizeConfig.sH! * 3,
+        top: 8,
       ),
       child: ListTile(
         onTap: () => Navigator.pushNamed(context, ontap!),
         leading: Icon(
           leading,
           color: primaryDark,
-          size: SizeConfig.sH! * 5,
+          size: 24,
         ),
         title: Text(
           title!,
           style: TextStyle(
             color: Colors.black,
-            fontSize: SizeConfig.sH! * 3,
+            fontSize: 18,
           ),
         ),
-        trailing: Icon(trailing, color: primaryDark),
+        trailing: Icon(trailing, size: 24, color: primaryDark),
       ),
     );
   }
 }
 
-Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
-    StateSetter setState, List<int> quantity) {
-  if (Provider.of<CartData>(context, listen: false).getCartItems().isEmpty) {
-    Provider.of<CartData>(context, listen: false).clearTotal();
-    // quantity.clear();
-  }
+Future<void> showSizeSheet(
+    BuildContext context,
+    QueryDocumentSnapshot<Object?>? widget,
+    StateSetter setState,
+    List<int> quanty) {
+  List<int> quantity = List<int>.filled(5, 0, growable: true);
   return showModalBottomSheet<void>(
     backgroundColor: Colors.transparent,
     isScrollControlled: true,
     context: context,
     builder: (BuildContext context) {
-      print(quantity);
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
         return Wrap(
@@ -683,7 +683,7 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                               child: Text(
                                 "Select Options",
                                 style: TextStyle(
-                                  fontSize: SizeConfig.sH! * 3,
+                                  fontSize: SizeConfig.sW! * 6,
                                 ),
                               ),
                             ),
@@ -695,28 +695,43 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                               },
                               icon: Icon(
                                 FontAwesomeIcons.times,
-                                size: SizeConfig.sH! * 4,
+                                size: SizeConfig.sW! * 8,
                               ),
                             )
                           ],
                         ),
-                        SizedBox(
-                          height: SizeConfig.sH! * 2,
-                        ),
                         ListView.builder(
-                            itemCount: widget!.size!.length,
+                            itemCount: widget!["size"].length,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              final item = widget.size;
+                              final item = widget["size"];
                               final items = widget;
+                              final cartItems =
+                                  Provider.of<CartData>(context, listen: false)
+                                      .getCartItems();
+
+                              //checks the cart for products already in it and fill the sizes with it's
+                              //quantity already added
+                              for (int i = 0; i < cartItems.length; i++) {
+                                if (cartItems[i].cartDetails!["id"] ==
+                                    items["id"]) {
+                                  int dex = 0;
+                                  item.forEach((element) {
+                                    if (cartItems[i].size != element) dex++;
+                                    if (cartItems[i].size == element) {
+                                      quantity[dex] = cartItems[i].quantity!;
+                                    }
+                                  });
+                                }
+                              }
                               return Container(
-                                height: SizeConfig.sH! * 10,
+                                height: SizeConfig.sW! * 19,
                                 width: double.infinity,
                                 child: ListTile(
                                   title: Text(
                                     "${item![index]}",
                                     style: TextStyle(
-                                        fontSize: SizeConfig.sH! * 3,
+                                        fontSize: SizeConfig.sW! * 5,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black),
                                   ),
@@ -725,9 +740,9 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                                         top: SizeConfig.sH! * 1,
                                         bottom: SizeConfig.sH! * 2),
                                     child: Text(
-                                      "₦ ${widget.price}",
+                                      "₦ ${widget["price"]}",
                                       style: TextStyle(
-                                          fontSize: SizeConfig.sH! * 2.5,
+                                          fontSize: SizeConfig.sW! * 5,
                                           fontWeight: FontWeight.bold),
                                     ),
                                   ),
@@ -738,148 +753,121 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Container(
-                                            height: SizeConfig.sH! * 6,
-                                            width: SizeConfig.sH! * 6,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.bottomLeft,
-                                                end: Alignment.topRight,
-                                                colors: [
-                                                  primary,
-                                                  secondary,
-                                                ],
+                                        Expanded(
+                                          child: Container(
+                                              height: SizeConfig.sW! * 10,
+                                              width: SizeConfig.sW! * 6,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        SizeConfig.sH! * 1),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  end: Alignment.topRight,
+                                                  colors: [
+                                                    primary,
+                                                    secondary,
+                                                  ],
+                                                ),
+                                                color: primary,
                                               ),
-                                              color: primary,
-                                            ),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setModalState(() {
-                                                    if (quantity[index] > 0) {
-                                                      quantity[index]--;
-                                                      items.setQuantity(
-                                                          0 - quantity[index]);
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setModalState(() {
+                                                      if (quantity[index] > 0) {
+                                                        quantity[index]--;
+                                                        Provider.of<CartData>(
+                                                                context,
+                                                                listen: false)
+                                                            .removeFromCart(
+                                                                items,
+                                                                items["size"]
+                                                                    [index]);
+                                                        setModalState(() {
+                                                          showInSnackBar(
+                                                              "${items["name"]} Removed to Cart",
+                                                              context);
+                                                        });
+                                                        print(Provider.of<
+                                                                    CartData>(
+                                                                context,
+                                                                listen: false)
+                                                            .getCartItems()
+                                                            .length);
+                                                      }
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    FontAwesomeIcons.minus,
+                                                    color: Colors.white,
+                                                    size: SizeConfig.sW! * 6,
+                                                  ))),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: SizeConfig.sH! * 10,
+                                              width: SizeConfig.sH! * 6,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white),
+                                              child: Center(
+                                                child: Text(
+                                                  "${quantity[index]}",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        SizeConfig.sW! * 5,
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: SizeConfig.sW! * 10,
+                                              width: SizeConfig.sW! * 6,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        SizeConfig.sH! * 1),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.bottomLeft,
+                                                  end: Alignment.topRight,
+                                                  colors: [
+                                                    primary,
+                                                    secondary,
+                                                  ],
+                                                ),
+                                                color: primary,
+                                              ),
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setModalState(() {
+                                                      quantity[index]++;
                                                       Provider.of<CartData>(
                                                               context,
                                                               listen: false)
-                                                          .removeFromCart(
-                                                              items);
-                                                      Provider.of<CartData>(
-                                                              context,
-                                                              listen: false)
-                                                          .decreaseTotal(
-                                                              items.price!);
-                                                      setModalState(() {
-                                                        showInSnackBar(
-                                                            "${items.name} Removed to Cart",
-                                                            context);
-                                                      });
+                                                          .addToCart(
+                                                              items,
+                                                              quantity[index]
+                                                                  .toInt(),
+                                                              items["size"]
+                                                                  [index]);
+                                                      showInSnackBar(
+                                                          "${items["name"]} Added to Cart",
+                                                          context);
                                                       print(
                                                           Provider.of<CartData>(
                                                                   context,
                                                                   listen: false)
                                                               .getCartItems()
                                                               .length);
-                                                      if (quantity[index] > 0)
-                                                        print(Provider.of<
-                                                                    CartData>(
-                                                                context,
-                                                                listen: false)
-                                                            .getCartItem(Provider.of<
-                                                                            CartData>(
-                                                                        context,
-                                                                        listen:
-                                                                            false)
-                                                                    .getCartItems()
-                                                                    .length -
-                                                                1)
-                                                            .selectedSize);
-                                                    }
-                                                    print(quantity);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  FontAwesomeIcons.minus,
-                                                  color: Colors.white,
-                                                  size: SizeConfig.sH! * 3,
-                                                ))),
-                                        Container(
-                                            height: SizeConfig.sH! * 6,
-                                            width: SizeConfig.sH! * 6,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white),
-                                            child: Center(
-                                              child: Text(
-                                                "${quantity[index]}",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: SizeConfig.sH! * 3,
-                                                ),
-                                              ),
-                                            )),
-                                        Container(
-                                            height: SizeConfig.sH! * 6,
-                                            width: SizeConfig.sH! * 6,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.bottomLeft,
-                                                end: Alignment.topRight,
-                                                colors: [
-                                                  primary,
-                                                  secondary,
-                                                ],
-                                              ),
-                                              color: primary,
-                                            ),
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setModalState(() {
-                                                    quantity[index]++;
-                                                    print(quantity);
-                                                    items.selectedSize =
-                                                        item[index];
-                                                    items.setSizeQuantity(
-                                                        quantity[index]);
-                                                    Provider.of<CartData>(
-                                                            context,
-                                                            listen: false)
-                                                        .addToCart(items);
-
-                                                    Provider.of<CartData>(
-                                                            context,
-                                                            listen: false)
-                                                        .addToTotal(
-                                                            items.price!);
-                                                    showInSnackBar(
-                                                        "${items.name} Added to Cart",
-                                                        context);
-                                                    if (quantity[index] > 0)
-                                                      print(Provider.of<
-                                                                  CartData>(
-                                                              context,
-                                                              listen: false)
-                                                          .getCartItem(Provider.of<
-                                                                          CartData>(
-                                                                      context,
-                                                                      listen:
-                                                                          false)
-                                                                  .getCartItems()
-                                                                  .length -
-                                                              1)
-                                                          .selectedSize);
-                                                    print(Provider.of<CartData>(
-                                                            context,
-                                                            listen: false)
-                                                        .getCartItems()
-                                                        .length);
-                                                    print(quantity);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  FontAwesomeIcons.plus,
-                                                  color: Colors.white,
-                                                  size: SizeConfig.sH! * 3,
-                                                ))),
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    FontAwesomeIcons.plus,
+                                                    color: Colors.white,
+                                                    size: SizeConfig.sW! * 6,
+                                                  ))),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -906,3 +894,367 @@ Future<void> showSizeSheet(BuildContext context, ClothesModel? widget,
     },
   );
 }
+
+class CatCard extends StatelessWidget {
+  const CatCard(
+      {Key? key,
+      required this.height,
+      required this.icon,
+      required this.onpressed,
+      required this.text})
+      : super(key: key);
+
+  final double height;
+  final IconData icon;
+  final String text;
+  final Function onpressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onpressed as void Function()?,
+      child: Container(
+        padding: EdgeInsets.all(10),
+        height: SizeConfig.sW! * 18,
+        width: SizeConfig.sW! * 21,
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(
+            SizeConfig.sH! * 1.5,
+          ),
+          boxShadow: [
+            shadows(),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Icon(
+                icon,
+                size: SizeConfig.sW! * 5.5,
+                color: Colors.black,
+              ),
+            ),
+            Flexible(
+              child: Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: SizeConfig.sH! * 2,
+                    fontWeight: FontWeight.bold,
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SecondLayer extends StatefulWidget {
+  @override
+  SecondLayerState createState() => SecondLayerState();
+}
+
+late SecondLayerState secondLayerState;
+
+class SecondLayerState extends State<SecondLayer> {
+  // SecondLayerState secondLayerState;
+  double xoffSet = 0;
+  double yoffSet = 0;
+  double angle = 0;
+  bool isOpen = false;
+  @override
+  Widget build(BuildContext context) {
+    secondLayerState = this;
+    return AnimatedContainer(
+        transform: Matrix4Transform()
+            .translate(x: xoffSet, y: yoffSet)
+            .rotate(angle)
+            .matrix4,
+        duration: Duration(milliseconds: 550),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: secondary.withOpacity(0.9)),
+        child: Column(
+          children: [
+            Row(
+              children: [],
+            )
+          ],
+        ));
+  }
+}
+
+class HomeCarousel extends StatelessWidget {
+  const HomeCarousel({
+    Key? key,
+    required this.height,
+    required this.width,
+    required this.text1,
+    required this.text2,
+    required this.textColor,
+    this.backgroundColor,
+    this.imagePath,
+    this.text2Color,
+    this.text3Color,
+  }) : super(key: key);
+
+  final double height;
+  final double width;
+  final String text1;
+  final String text2;
+  final Color? text2Color;
+  final Color? text3Color;
+  final Color textColor;
+  final Color? backgroundColor;
+  final String? imagePath;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: backgroundColor,
+      width: double.infinity,
+      height: SizeConfig.sH!,
+      child: Row(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: SizeConfig.sH! * 3,
+                left: SizeConfig.sW! * 3,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      text1,
+                      style: TextStyle(
+                        color: text2Color,
+                        fontSize: SizeConfig.sH! * 3.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: SizeConfig.sH! * 2,
+                        bottom: SizeConfig.sH! * 2,
+                      ),
+                      child: Text(
+                        text2,
+                        style: TextStyle(
+                          color: text3Color,
+                          fontSize: SizeConfig.sH! * 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: InkWell(
+                      child: Text(
+                        "Discover Collection ->",
+                        style: TextStyle(
+                            fontSize: SizeConfig.sH! * 2.8,
+                            fontWeight: FontWeight.bold,
+                            color: textColor),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.only(left: SizeConfig.sH! * 1),
+              height: SizeConfig.sH! * 15,
+              width: SizeConfig.sW! * 30,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(imagePath!), fit: BoxFit.cover),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FirstLayer extends StatefulWidget {
+  @override
+  _FirstLayerState createState() => _FirstLayerState();
+}
+
+class _FirstLayerState extends State<FirstLayer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(color: primary),
+    );
+  }
+}
+
+class ThirdLayer extends StatefulWidget {
+  static String id = 'ThirdLayer';
+  @override
+  _ThirdLayerState createState() => _ThirdLayerState();
+}
+
+class _ThirdLayerState extends State<ThirdLayer> {
+  final auth = FirebaseAuth.instance;
+  bool? isloggedIn = false;
+  bool? isLoading = false;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    auth.authStateChanges().listen((User? user) {
+      if (user == null) {
+        setState(() {
+          isloggedIn = false;
+        });
+      } else {
+        setState(() {
+          isloggedIn = true;
+        });
+      }
+    });
+    SizeConfig().init(context);
+    return ModalProgressHUD(
+      inAsyncCall: isLoading!,
+      progressIndicator: CircularProgressIndicator(
+        backgroundColor: primary,
+      ),
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/BubbleDesign.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.sH! * 8, right: SizeConfig.sW! * 55),
+                    child: Image.asset("images/WHITE.png"),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: SizeConfig.sH! * 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MenuListTile(
+                          leading: Icons.home_outlined,
+                          title: "Home",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, FancyDraw.id),
+                        ),
+                        MenuListTile(
+                          leading: Icons.shopping_cart_outlined,
+                          title: "Cart",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, CartScreen.id),
+                        ),
+                        MenuListTile(
+                          leading: Icons.person_outline,
+                          title: "Profile",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, ProfileScreen.id),
+                        ),
+                        MenuListTile(
+                          leading: FontAwesomeIcons.heartbeat,
+                          title: "Wishlist",
+                          onPressed: () =>
+                              Navigator.pushNamed(context, FavScreen.id),
+                        ),
+                        MenuListTile(
+                          leading: FontAwesomeIcons.question,
+                          title: "Help",
+                          onPressed: () {},
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: SizeConfig.sH! * 20),
+                    child: MenuListTile(
+                      leading: Icons.logout,
+                      title: (isloggedIn! == true) ? "Log Out" : "Log In",
+                      onPressed: () async {
+                        if (isloggedIn! == true) {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await auth.signOut();
+                          showInSnackBar("Log Out Successful", context);
+                          setState(() {
+                            isLoading = false;
+                          });
+                          // Navigator.popAndPushNamed(context, FancyDraw.id);
+                        } else {
+                          Navigator.pushNamed(context, SignInScreen.id);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+BoxShadow shadows() {
+  return BoxShadow(
+      color: primary.withOpacity(0.2), offset: Offset.fromDirection(20.0, 4.0));
+}
+
+const _shimmerGradient = LinearGradient(
+  colors: [
+    Color(0xFFEBEBF4),
+    Color(0xFFF4F4F4),
+    Color(0xFFEBEBF4),
+  ],
+  stops: [
+    0.1,
+    0.3,
+    0.4,
+  ],
+  begin: Alignment(-0.9, -0.5),
+  end: Alignment(0.9, 0.5),
+  tileMode: TileMode.clamp,
+);
